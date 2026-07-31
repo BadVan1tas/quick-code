@@ -785,17 +785,93 @@ export default function AdminDashboardPage() {
                     </button>
                   </div>
 
-                  {/* Client Details Summary */}
-                  <div style={{ padding: 14, borderRadius: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontSize: "0.85rem", color: "var(--text-muted)" }}>
+                  {/* Client Details Summary & UTR Verification Box */}
+                  <div style={{ padding: 16, borderRadius: "14px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "0.85rem", color: "var(--text-muted)" }}>
                     <div>Client: <strong style={{ color: "#fff" }}>{selectedOrder.customerName}</strong> ({selectedOrder.customerEmail})</div>
                     <div>Service: <strong style={{ color: "#a5b4fc" }}>{selectedOrder.service}</strong></div>
                     <div>Budget & Timeline: <strong style={{ color: "#fff" }}>{selectedOrder.budget} ({selectedOrder.timeline})</strong></div>
+                    <div>Submitted UTR / Txn ID: <strong style={{ color: "#fbbf24", fontFamily: "var(--font-mono)", fontSize: "0.95rem" }}>{selectedOrder.paymentId || "N/A"}</strong> ({selectedOrder.gateway?.toUpperCase() || "UPI_QR"})</div>
                     {selectedOrder.details && (
                       <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.8rem" }}>
                         <em>"{selectedOrder.details}"</em>
                       </div>
                     )}
                   </div>
+
+                  {/* High Priority UTR Approval / Rejection Action Panel */}
+                  {selectedOrder.status === "VERIFICATION_PENDING" && (
+                    <div
+                      style={{
+                        padding: "16px 20px",
+                        borderRadius: "14px",
+                        background: "rgba(245, 158, 11, 0.12)",
+                        border: "1px solid rgba(245, 158, 11, 0.4)",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}
+                    >
+                      <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#fbbf24", display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span>⏳ Action Required: Verify Client Payment Reference</span>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#fde68a" }}>
+                        Client submitted UTR: <strong style={{ color: "#fff", fontFamily: "var(--font-mono)", fontSize: "0.9rem" }}>{selectedOrder.paymentId}</strong>. Verify against your MobiKwik / bank account.
+                      </div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <button
+                          type="button"
+                          disabled={updating}
+                          onClick={async () => {
+                            setUpdating(true);
+                            await updateOrderStatus(selectedOrder.id!, "PAID", "Payment verified by Admin via UTR");
+                            setSelectedOrder({ ...selectedOrder, status: "PAID" });
+                            setUpdating(false);
+                            const updated = await getAllOrders();
+                            setOrders(updated as any);
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: "10px 14px",
+                            borderRadius: "10px",
+                            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                            border: "none",
+                            color: "#fff",
+                            fontWeight: 700,
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                            boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+                          }}
+                        >
+                          ✅ APPROVE PAYMENT (Mark Paid)
+                        </button>
+                        <button
+                          type="button"
+                          disabled={updating}
+                          onClick={async () => {
+                            setUpdating(true);
+                            await updateOrderStatus(selectedOrder.id!, "REJECTED", "Invalid UTR ID or transaction not received");
+                            setSelectedOrder({ ...selectedOrder, status: "REJECTED" });
+                            setUpdating(false);
+                            const updated = await getAllOrders();
+                            setOrders(updated as any);
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: "10px 14px",
+                            borderRadius: "10px",
+                            background: "rgba(239,68,68,0.2)",
+                            border: "1px solid rgba(239,68,68,0.4)",
+                            color: "#fca5a5",
+                            fontWeight: 700,
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          ❌ REJECT PAYMENT
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Order Status Form */}
                   <form onSubmit={handleUpdateStatus} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -818,10 +894,12 @@ export default function AdminDashboardPage() {
                             fontSize: "0.85rem",
                           }}
                         >
-                          <option value="PAID">PAID (Order Confirmed)</option>
-                          <option value="IN_PROGRESS">IN_PROGRESS (Development Started)</option>
-                          <option value="COMPLETED">COMPLETED (Project Delivered)</option>
-                          <option value="CANCELLED">CANCELLED (Refunded)</option>
+                          <option value="VERIFICATION_PENDING">⏳ VERIFICATION_PENDING (Payment Pending Admin Review)</option>
+                          <option value="PAID">✅ PAID (Order & Payment Verified)</option>
+                          <option value="IN_PROGRESS">⚡ IN_PROGRESS (Development Active)</option>
+                          <option value="COMPLETED">🎉 COMPLETED (Project Delivered)</option>
+                          <option value="REJECTED">❌ REJECTED (Invalid UTR ID)</option>
+                          <option value="CANCELLED">🚫 CANCELLED (Refunded)</option>
                         </select>
                       </div>
 

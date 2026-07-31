@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CashfreePaymentModal } from "@/components/CashfreePaymentModal";
+import { UPIPaymentModal } from "@/components/UPIPaymentModal";
 import { QrCode, CreditCard, ShieldCheck } from "lucide-react";
 import { createFirestoreOrder } from "@/lib/db";
 import { useAuth } from "@/context/AuthContext";
@@ -102,8 +102,7 @@ export default function BookPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [timeline, setTimeline] = useState("Standard (7 days)");
-  const [gateway, setGateway] = useState<"stripe" | "cashfree">("cashfree");
-  const [showCashfreeModal, setShowCashfreeModal] = useState(false);
+  const [showUpiModal, setShowUpiModal] = useState(false);
   const [txnRef, setTxnRef] = useState("");
   const [firestoreId, setFirestoreId] = useState("");
 
@@ -118,44 +117,20 @@ export default function BookPage() {
       e.preventDefault();
 
       if (isEmailUnverified) {
-        setVerifyingMsg("⚠️ Mandatory Email Verification Required! Please verify your email before completing payment.");
+        setVerifyingMsg("⚠️ Mandatory Email Verification Required! Please verify your email before submitting your payment.");
         return;
       }
 
-      if (gateway === "cashfree") {
-        setShowCashfreeModal(true);
-      } else {
-        setLoading(true);
-        const stripePayId = `tx_stripe_${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
-
-        // Save order document directly to Firebase Firestore
-        const docId = await createFirestoreOrder({
-          userId: user?.uid,
-          customerName: name || "Client",
-          customerEmail: email || "user@company.com",
-          service: selectedService.label,
-          budget,
-          timeline,
-          details,
-          gateway: "stripe",
-          amount: selectedService.deposit,
-          paymentId: stripePayId,
-          status: "PAID",
-        });
-
-        setLoading(false);
-        setTxnRef(stripePayId);
-        setFirestoreId(docId);
-        setSuccess(true);
-      }
+      setShowUpiModal(true);
     },
-    [gateway, user, name, email, selectedService, budget, timeline, details, isEmailUnverified]
+    [isEmailUnverified]
   );
 
-  const handleCashfreeSuccess = async (cfPayId: string) => {
-    setShowCashfreeModal(false);
+  const handleUpiSubmit = async (utrId: string) => {
+    setShowUpiModal(false);
+    setLoading(true);
 
-    // Save order document directly to Firebase Firestore
+    // Save order document directly to Firebase Firestore with status VERIFICATION_PENDING
     const docId = await createFirestoreOrder({
       userId: user?.uid,
       customerName: name || "Client",
@@ -164,13 +139,14 @@ export default function BookPage() {
       budget,
       timeline,
       details,
-      gateway: "cashfree",
+      gateway: "upi_qr",
       amount: selectedService.deposit,
-      paymentId: cfPayId,
-      status: "PAID",
+      paymentId: utrId,
+      status: "VERIFICATION_PENDING",
     });
 
-    setTxnRef(cfPayId);
+    setLoading(false);
+    setTxnRef(utrId);
     setFirestoreId(docId);
     setSuccess(true);
   };
@@ -236,15 +212,15 @@ export default function BookPage() {
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Navbar />
 
-      {/* Cashfree Payment Gateway Modal */}
-      {showCashfreeModal && (
-        <CashfreePaymentModal
+      {/* QuickCode UPI QR Payment Modal */}
+      {showUpiModal && (
+        <UPIPaymentModal
           amount={selectedService.deposit}
           serviceName={selectedService.label}
-          customerName={name || "Alex Morgan"}
-          customerEmail={email || "alex@company.com"}
-          onSuccess={handleCashfreeSuccess}
-          onClose={() => setShowCashfreeModal(false)}
+          customerName={name || "Client"}
+          customerEmail={email || "user@company.com"}
+          onSubmitTxnId={handleUpiSubmit}
+          onClose={() => setShowUpiModal(false)}
         />
       )}
 
@@ -286,7 +262,7 @@ export default function BookPage() {
                 boxShadow: "0 0 8px #6366f1",
               }}
             />
-            Firebase Firestore & Cashfree Enabled
+            Firebase Firestore & UPI Payment Portal
           </div>
           <h1
             style={{
@@ -309,20 +285,20 @@ export default function BookPage() {
             </span>
           </h1>
           <p style={{ color: "#8b9ec7", fontSize: "1rem", lineHeight: 1.6 }}>
-            Pay deposit via Cashfree (UPI/INR) or Stripe. Orders are saved directly to Firebase Firestore!
+            Scan the QuickCode UPI QR Code, enter your 12-digit UTR ID, and submit for Admin Verification!
           </p>
         </div>
 
         {success ? (
-          /* ─── SUCCESS STATE ─── */
+          /* ─── SUCCESS / VERIFICATION PENDING STATE ─── */
           <div
             style={{
               padding: "56px 48px",
               borderRadius: "20px",
-              background: "rgba(16,185,129,0.05)",
-              border: "1px solid rgba(16,185,129,0.3)",
+              background: "rgba(245,158,11,0.08)",
+              border: "1px solid rgba(245,158,11,0.35)",
               textAlign: "center",
-              boxShadow: "0 0 60px rgba(16,185,129,0.08)",
+              boxShadow: "0 0 60px rgba(245,158,11,0.1)",
             }}
           >
             <div
@@ -330,37 +306,35 @@ export default function BookPage() {
                 width: "72px",
                 height: "72px",
                 borderRadius: "50%",
-                background: "rgba(16,185,129,0.15)",
-                border: "2px solid rgba(16,185,129,0.4)",
+                background: "rgba(245,158,11,0.18)",
+                border: "2px solid rgba(245,158,11,0.45)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: "0 auto 24px",
               }}
             >
-              <svg viewBox="0 0 24 24" width="32" height="32">
-                <path d="M5 12l5 5 9-9" stroke="#10b981" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <span style={{ fontSize: "2rem" }}>⏳</span>
             </div>
-            <h2 style={{ fontSize: "1.8rem", fontWeight: 800, color: "#10b981", marginBottom: "12px", fontFamily: "'Space Grotesk', sans-serif" }}>
-              Order Saved to Firebase!
+            <h2 style={{ fontSize: "1.8rem", fontWeight: 800, color: "#fbbf24", marginBottom: "12px", fontFamily: "'Space Grotesk', sans-serif" }}>
+              Payment Under Verification!
             </h2>
             <p style={{ color: "#8b9ec7", lineHeight: 1.7, marginBottom: "8px" }}>
-              Thank you, <strong style={{ color: "#f1f5f9" }}>{name || "Client"}</strong>! Your deposit for{" "}
-              <strong style={{ color: "#f1f5f9" }}>{selectedService.label}</strong> has been processed via {gateway.toUpperCase()} PG.
+              Thank you, <strong style={{ color: "#f1f5f9" }}>{name || "Client"}</strong>! Your payment reference{" "}
+              <strong style={{ color: "#fbbf24" }}>#{txnRef}</strong> for <strong style={{ color: "#f1f5f9" }}>{selectedService.label}</strong> has been submitted to Admin.
             </p>
             <p style={{ color: "#8b9ec7", marginBottom: "28px" }}>
-              Our team will reach out to <strong style={{ color: "#f1f5f9" }}>{email}</strong> within 2 hours.
+              Our Admin team is reviewing your transaction ID. Status will update to <strong style={{ color: "#10b981" }}>VERIFIED & ACTIVE</strong> as soon as admin approves!
             </p>
             <div
               style={{
                 padding: "14px 20px",
                 borderRadius: "10px",
-                background: "rgba(16,185,129,0.08)",
-                border: "1px solid rgba(16,185,129,0.2)",
+                background: "rgba(245,158,11,0.1)",
+                border: "1px solid rgba(245,158,11,0.25)",
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "0.82rem",
-                color: "#6ee7b7",
+                color: "#fde68a",
                 marginBottom: "28px",
                 textAlign: "left",
                 display: "flex",
@@ -369,26 +343,14 @@ export default function BookPage() {
               }}
             >
               <div>🔥 Firestore Doc ID: <span style={{ color: "#fff" }}>{firestoreId}</span></div>
-              <div>🔒 Payment Ref ID: <span style={{ color: "#a7f3d0" }}>{txnRef}</span></div>
+              <div>🔑 Submitted UTR / Txn ID: <span style={{ color: "#fbbf24", fontWeight: 700 }}>{txnRef}</span></div>
+              <div>⏳ Current Status: <span style={{ color: "#fbbf24", fontWeight: 700 }}>VERIFICATION PENDING</span></div>
             </div>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-              <button
-                onClick={() => { setSuccess(false); setStep(1); setName(""); setEmail(""); setDetails(""); }}
-                style={{
-                  padding: "12px 28px",
-                  borderRadius: "9999px",
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  color: "#f1f5f9",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                }}
-              >
-                Book Another
-              </button>
-              <Link href="/" className="btn-primary" style={{ padding: "12px 28px" }}>
+              <Link href="/profile" className="btn-primary" style={{ padding: "12px 28px" }}>
+                View Order in Profile →
+              </Link>
+              <Link href="/" style={{ padding: "12px 28px", borderRadius: "9999px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff" }}>
                 Back to Home
               </Link>
             </div>
@@ -554,64 +516,43 @@ export default function BookPage() {
               {/* ─── STEP 3 ─── */}
               {step === 3 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                  {/* Step 3: Payment Section */}
                   <div>
                     <h2 style={{ fontSize: "1.2rem", fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", marginBottom: "4px" }}>
-                      Select Payment Gateway
+                      QuickCode UPI QR Payment
                     </h2>
-                    <p style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>Pay deposit via Cashfree (UPI/INR) or Stripe (USD). Saved to Firebase.</p>
+                    <p style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>Scan our QR Code with any UPI app (GPay/PhonePe/Paytm), enter your 12-digit UTR ID, and submit for Admin Verification.</p>
                   </div>
 
-                  {/* Payment Gateway Toggle */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                    <button
-                      type="button"
-                      onClick={() => setGateway("cashfree")}
+                  {/* UPI Method Card */}
+                  <div
+                    style={{
+                      padding: "20px",
+                      borderRadius: "14px",
+                      background: "rgba(99,102,241,0.12)",
+                      border: "1px solid rgba(99,102,241,0.3)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "16px",
+                    }}
+                  >
+                    <div
                       style={{
-                        padding: "16px",
+                        padding: "12px",
                         borderRadius: "12px",
-                        border: `2px solid ${gateway === "cashfree" ? "#06b6d4" : "rgba(255,255,255,0.08)"}`,
-                        background: gateway === "cashfree" ? "rgba(6,182,212,0.15)" : "rgba(255,255,255,0.02)",
+                        background: "linear-gradient(135deg, #6366f1, #ec4899)",
                         color: "#fff",
-                        cursor: "pointer",
-                        textAlign: "left",
                         display: "flex",
-                        flexDirection: "column",
-                        gap: "6px",
-                        transition: "all 0.2s ease",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700, fontSize: "0.95rem" }}>
-                        <QrCode size={18} color="#06b6d4" /> Cashfree PG
-                      </div>
-                      <div style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>
-                        UPI (GPay/PhonePe), NetBanking, Cards (INR)
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setGateway("stripe")}
-                      style={{
-                        padding: "16px",
-                        borderRadius: "12px",
-                        border: `2px solid ${gateway === "stripe" ? "#6366f1" : "rgba(255,255,255,0.08)"}`,
-                        background: gateway === "stripe" ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.02)",
-                        color: "#fff",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "6px",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700, fontSize: "0.95rem" }}>
-                        <CreditCard size={18} color="#818cf8" /> Stripe PG
-                      </div>
-                      <div style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>
-                        Global Cards & Subscriptions (USD)
-                      </div>
-                    </button>
+                      <QrCode size={24} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, color: "#fff", fontSize: "1.05rem" }}>UPI ID: 9992145372@mbkns</div>
+                      <div style={{ fontSize: "0.8rem", color: "#a5b4fc" }}>Scan QR code on next screen or copy UPI ID to pay via any UPI app</div>
+                    </div>
                   </div>
 
                   {/* Order Summary */}
@@ -619,8 +560,8 @@ export default function BookPage() {
                     style={{
                       padding: "20px",
                       borderRadius: "14px",
-                      background: "rgba(99,102,241,0.08)",
-                      border: "1px solid rgba(99,102,241,0.25)",
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.08)",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
@@ -634,9 +575,9 @@ export default function BookPage() {
                       <div style={{ fontSize: "0.82rem", color: "#8b9ec7" }}>{budget} · {timeline}</div>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: "0.78rem", color: "#8b9ec7", fontFamily: "'JetBrains Mono', monospace", marginBottom: "4px" }}>DEPOSIT DUE</div>
-                      <div style={{ fontSize: "1.6rem", fontWeight: 800, color: gateway === "cashfree" ? "#06b6d4" : "#6366f1", fontFamily: "'Space Grotesk', sans-serif" }}>
-                        {gateway === "cashfree" ? `₹${selectedService.deposit * 83}` : `$${selectedService.deposit}.00`}
+                      <div style={{ fontSize: "0.78rem", color: "#8b9ec7", fontFamily: "'JetBrains Mono', monospace", marginBottom: "4px" }}>DEPOSIT DUE NOW</div>
+                      <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#a5b4fc", fontFamily: "'Space Grotesk', sans-serif" }}>
+                        ₹{(selectedService.deposit * 83).toLocaleString()} <span style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>(${selectedService.deposit}.00)</span>
                       </div>
                     </div>
                   </div>
@@ -725,12 +666,10 @@ export default function BookPage() {
                       style={{
                         flex: 2,
                         padding: "14px",
-                        background: gateway === "cashfree" ? "linear-gradient(135deg, #06b6d4, #6366f1)" : undefined,
+                        background: "linear-gradient(135deg, #6366f1, #ec4899)",
                       }}
                     >
-                      {gateway === "cashfree"
-                        ? `Launch Cashfree Portal (₹${selectedService.deposit * 83}) →`
-                        : `Pay $${selectedService.deposit} & Save to Firebase 🔒`}
+                      Open UPI QR Code & Enter UTR ID →
                     </button>
                   </div>
                 </div>
