@@ -36,8 +36,8 @@ export default function AdminDashboardPage() {
 
   // Admin Login Form State
   const [adminAuthMode, setAdminAuthMode] = useState<"signin" | "create" | "reset">("signin");
-  const [adminEmailInput, setAdminEmailInput] = useState("shauryashashi30@gmail.com");
-  const [adminPasswordInput, setAdminPasswordInput] = useState("simpalgupta@1409");
+  const [adminEmailInput, setAdminEmailInput] = useState("");
+  const [adminPasswordInput, setAdminPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
   const [authSuccess, setAuthSuccess] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
