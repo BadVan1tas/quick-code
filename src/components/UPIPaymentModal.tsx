@@ -159,27 +159,36 @@ export function UPIPaymentModal({
           </div>
         </div>
 
-        {/* QR Code Container */}
+        {/* Dark Neon Theme QR Code Container */}
         <div
           style={{
-            background: "#ffffff",
-            padding: "18px",
-            borderRadius: "20px",
+            background: "rgba(5, 7, 13, 0.95)",
+            border: "1px solid rgba(99, 102, 241, 0.4)",
+            padding: "20px",
+            borderRadius: "22px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
+            boxShadow: "0 0 40px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.08)",
             marginBottom: "18px",
+            position: "relative",
           }}
         >
           <img
-            src="/upi-qr-custom.png"
-            alt="QuickCode UPI Payment QR Code"
-            style={{ width: "210px", height: "210px", display: "block", borderRadius: "10px" }}
+            src="/upi-qr-dark-neon.png"
+            alt="QuickCode Dark Neon UPI Payment QR Code"
+            style={{
+              width: "210px",
+              height: "210px",
+              display: "block",
+              borderRadius: "14px",
+              boxShadow: "0 0 25px rgba(129, 140, 248, 0.3)",
+              border: "1px solid rgba(129, 140, 248, 0.3)",
+            }}
           />
-          <div style={{ marginTop: "10px", fontSize: "0.78rem", color: "#475569", fontWeight: 600, fontFamily: "var(--font-mono)" }}>
-            Scan with Google Pay / PhonePe / Paytm / BHIM
+          <div style={{ marginTop: "12px", fontSize: "0.78rem", color: "#a5b4fc", fontWeight: 600, fontFamily: "var(--font-mono)", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span>⚡</span> Scan with Google Pay / PhonePe / Paytm / BHIM
           </div>
         </div>
 
