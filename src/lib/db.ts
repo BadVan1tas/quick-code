@@ -54,6 +54,7 @@ export interface UserProfile {
 
 // Configured default admin emails
 export const DEFAULT_ADMIN_EMAILS = [
+  "shauryashashi30@gmail.com",
   "admin@quickcode.com",
   "admin@quick-code.com",
   process.env.NEXT_PUBLIC_ADMIN_EMAIL?.toLowerCase() || "",
