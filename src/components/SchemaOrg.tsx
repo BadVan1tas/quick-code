@@ -8,7 +8,7 @@ export default function SchemaOrg() {
     "url": baseUrl,
     "logo": `${baseUrl}/logo.png`,
     "image": `${baseUrl}/logo.png`,
-    "description": "Premier full-stack web development agency specializing in Next.js 16, React 19, Firebase, Cashfree, and Stripe custom application engineering.",
+    "description": "Premier full-stack web development agency specializing in Next.js 16, React 19, Firebase, UPI, and Stripe custom application engineering.",
     "founder": {
       "@type": "Person",
       "name": "Shaurya Shashi"

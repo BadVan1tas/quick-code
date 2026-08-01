@@ -155,14 +155,14 @@ export default function CatBot() {
       return {
         id: generateId("bot"),
         sender: "bot",
-        text: "🐱 Purrfect! For online stores, our **E-Commerce & Payment Portal** plan is tailor-made for you. It includes Cashfree & Stripe integration, product catalogs, shopping cart, and automated order tracking!",
+        text: "🐱 Purrfect! For online stores, our **E-Commerce & Payment Portal** plan is tailor-made for you. It includes Instant UPI QR & Stripe integration, product catalogs, shopping cart, and automated order tracking!",
         recommendation: {
           serviceKey: "ecommerce",
           title: "E-Commerce & Payment Portal",
           price: "$999+",
           deposit: 200,
           timeline: "5 – 7 Days Delivery",
-          features: ["Cashfree & Stripe Payments", "Product & Cart System", "Firestore Order Tracking", "SEO & Mobile Optimized"],
+          features: ["UPI & Stripe Payments", "Product & Cart System", "Firestore Order Tracking", "SEO & Mobile Optimized"],
         },
         options: ["How do payments work?", "What if I need custom features?", "Book This Plan"],
         timestamp: timeStr,
@@ -219,11 +219,11 @@ export default function CatBot() {
     }
 
     // 5. PAYMENT GATEWAYS
-    if (q.includes("payment") || q.includes("gateway") || q.includes("stripe") || q.includes("cashfree") || q.includes("upi") || q.includes("card")) {
+    if (q.includes("payment") || q.includes("gateway") || q.includes("stripe") || q.includes("upi") || q.includes("card")) {
       return {
         id: generateId("bot"),
         sender: "bot",
-        text: "💳 We support seamless instant global & domestic payment gateways:\n\n1. **Cashfree PG**: UPI (GPay, PhonePe, Paytm), NetBanking, & Cards (INR)\n2. **Stripe PG**: Credit/Debit Cards, Apple Pay, International (USD)\n\nAll payments automatically save your order in Firebase Firestore!",
+        text: "💳 We support seamless instant global & domestic payment gateways:\n\n1. **UPI Instant QR**: UPI (GPay, PhonePe, Paytm, BHIM) (INR)\n2. **Stripe PG**: Credit/Debit Cards, Apple Pay, International (USD)\n\nAll payments automatically save your order in Firebase Firestore!",
         options: ["Recommend a plan for me", "Book Project Now"],
         timestamp: timeStr,
       };

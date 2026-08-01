@@ -11,7 +11,7 @@ const STATS = [
   { label: "Completed Projects", value: "100+", detail: "Web apps & custom portals delivered" },
   { label: "Average Delivery Time", value: "3 - 7 Days", detail: "Ultra-fast turnaround guarantee" },
   { label: "Client Satisfaction", value: "99.8%", detail: "Verified by client ratings" },
-  { label: "Supported Payment Gateways", value: "Cashfree + Stripe", detail: "Global USD & Domestic INR (UPI)" },
+  { label: "Supported Payment Gateways", value: "UPI Instant + Stripe", detail: "Global USD & Domestic INR (UPI)" },
 ];
 
 const VALUES = [

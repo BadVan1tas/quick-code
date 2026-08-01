@@ -504,7 +504,7 @@ export default function ProfilePage() {
                           </div>
 
                           <div style={{ fontSize: "0.82rem", color: "var(--text-muted)", display: "flex", gap: 16, flexWrap: "wrap" }}>
-                            <span>Gateway: <strong style={{ color: "#a5b4fc" }}>{ord.gateway ? ord.gateway.toUpperCase() : "CASHFREE"}</strong></span>
+                            <span>Gateway: <strong style={{ color: "#a5b4fc" }}>{ord.gateway ? ord.gateway.toUpperCase() : "UPI_QR"}</strong></span>
                             <span>Txn ID: <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-main)" }}>{ord.paymentId}</span></span>
                           </div>
                         </div>
@@ -512,7 +512,7 @@ export default function ProfilePage() {
                         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                           <div style={{ textAlign: "right" }}>
                             <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#6366f1", fontFamily: "var(--font-heading)" }}>
-                              {ord.gateway === "cashfree" ? `₹${(ord.amount || 150) * 83}` : `$${ord.amount || 150}.00`}
+                              {ord.gateway === "upi_qr" ? `₹${(ord.amount || 150) * 83}` : `$${ord.amount || 150}.00`}
                             </div>
                           </div>
 

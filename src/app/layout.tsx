@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Quick Code | High-Impact Software & Web Development",
   description:
     "Quick Code engineers custom software, web applications, and secure payment platforms with lightning speed. Premium design, A+ security, and 72-hour delivery.",
-  keywords: ["web development", "custom software", "Next.js", "Stripe payments", "Cashfree PG", "Firebase", "quick delivery"],
+  keywords: ["web development", "custom software", "Next.js", "Stripe payments", "UPI payments", "Firebase", "quick delivery"],
   authors: [{ name: "Quick Code Inc." }],
   openGraph: {
     title: "Quick Code | High-Impact Software & Web Development",

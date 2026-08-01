@@ -23,7 +23,7 @@ export interface OrderData {
   budget: string;
   timeline: string;
   details?: string;
-  gateway: "upi_qr" | "cashfree" | "stripe";
+  gateway: "upi_qr" | "stripe";
   amount: number;
   paymentId: string; // UTR or Txn Ref ID
   status: "VERIFICATION_PENDING" | "PAID" | "REJECTED" | "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";

@@ -24,12 +24,18 @@ export async function POST(req: Request) {
           }),
         });
 
-        if (!fbRes.ok) {
+        if (fbRes.ok) {
+          const fbData = await fbRes.json();
+          if (fbData.oobLink) {
+            resetLink = fbData.oobLink;
+          }
+        } else {
           const errData = await fbRes.json();
           const msg = errData?.error?.message || "";
           if (msg.includes("EMAIL_NOT_FOUND")) {
             return NextResponse.json({ error: "No account found with this email address." }, { status: 404 });
           }
+          return NextResponse.json({ error: errData?.error?.message || "Failed to generate password reset link." }, { status: 400 });
         }
       }
     } catch (fbErr) {
