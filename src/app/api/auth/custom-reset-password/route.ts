@@ -9,8 +9,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 });
     }
 
-    const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-    let resetLink = `http://localhost:3000/login`;
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+    const proto = req.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+    const origin = host ? `${proto}://${host}` : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+    const redirectUrl = `${origin}/login`;
+
+    const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY;
+    let resetLink = redirectUrl;
 
     // 1. Generate Firebase Password Reset Link via Firebase Auth REST API
     try {
@@ -21,6 +26,7 @@ export async function POST(req: Request) {
           body: JSON.stringify({
             requestType: "PASSWORD_RESET",
             email: email,
+            continueUrl: redirectUrl,
           }),
         });
 
