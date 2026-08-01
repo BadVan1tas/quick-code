@@ -1,10 +1,12 @@
 'use client';
-import { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth, formatFirebaseAuthError } from '@/context/AuthContext';
+import { confirmPasswordReset } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 // ─── Tech orbit icons ─────────────────────────────────────────────
 const ICONS = [
@@ -171,35 +173,81 @@ function AuthInput({
 }
 
 // ─── Main Login Page ───────────────────────────────────────────────
-export default function LoginPage() {
-  const { user, isAdmin, signInWithGoogle, signInWithEmail, signUpWithEmail, logout } = useAuth();
+function LoginContent() {
+  const { user, isAdmin, signInWithGoogle, signInWithEmail, signUpWithEmail, resetPasswordEmail, logout } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [mode, setMode] = useState<'signin' | 'signup' | 'forgot' | 'resetPassword'>('signin');
+  const [oobCode, setOobCode] = useState<string | null>(null);
   const [status, setStatus] = useState<{ type: 'success' | 'error' | null; msg: string }>({ type: null, msg: '' });
   const [busy, setBusy] = useState(false);
 
-  // If already logged in, redirect to /profile
+  // Detect Firebase OOB password reset mode from URL parameters
   useEffect(() => {
-    if (user) {
+    const paramMode = searchParams.get('mode');
+    const paramCode = searchParams.get('oobCode');
+    if (paramMode === 'resetPassword' && paramCode) {
+      setMode('resetPassword');
+      setOobCode(paramCode);
+    }
+  }, [searchParams]);
+
+  // If already logged in (and not currently resetting password), redirect to /profile
+  useEffect(() => {
+    if (user && mode !== 'resetPassword') {
       router.push('/profile');
     }
-  }, [user, router]);
+  }, [user, mode, router]);
 
-  const handleEmailAuth = async (e: FormEvent) => {
+  const handleAuthSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
     setBusy(true);
     setStatus({ type: null, msg: '' });
+
     try {
       if (mode === 'signin') {
+        if (!email || !password) return;
         await signInWithEmail(email, password);
-      } else {
+        setStatus({ type: 'success', msg: '🔥 Redirecting to Profile Dashboard...' });
+        setTimeout(() => router.push('/profile'), 600);
+      } else if (mode === 'signup') {
+        if (!email || !password) return;
         await signUpWithEmail(email, password);
+        setStatus({ type: 'success', msg: '🔥 Account created! Redirecting to Profile...' });
+        setTimeout(() => router.push('/profile'), 600);
+      } else if (mode === 'forgot') {
+        if (!email) return;
+        await resetPasswordEmail(email);
+        setStatus({ type: 'success', msg: '📧 Reset password email sent! Please check your inbox.' });
+      } else if (mode === 'resetPassword') {
+        if (!password || !confirmPassword) return;
+        if (password !== confirmPassword) {
+          setStatus({ type: 'error', msg: 'Passwords do not match.' });
+          setBusy(false);
+          return;
+        }
+        if (password.length < 6) {
+          setStatus({ type: 'error', msg: 'Password must be at least 6 characters long.' });
+          setBusy(false);
+          return;
+        }
+        if (!oobCode) {
+          setStatus({ type: 'error', msg: 'Invalid or missing reset code.' });
+          setBusy(false);
+          return;
+        }
+        await confirmPasswordReset(auth, oobCode, password);
+        setStatus({ type: 'success', msg: '✅ Password updated successfully! Please sign in with your new password.' });
+        setTimeout(() => {
+          setMode('signin');
+          setPassword('');
+          setConfirmPassword('');
+        }, 2000);
       }
-      setStatus({ type: 'success', msg: '🔥 Redirecting to Profile Dashboard...' });
-      setTimeout(() => router.push('/profile'), 600);
     } catch (err: any) {
       const errorMsg = formatFirebaseAuthError(err);
       setStatus({ type: 'error', msg: errorMsg });
@@ -339,17 +387,21 @@ export default function LoginPage() {
                 fontFamily: "'Space Grotesk', sans-serif",
                 letterSpacing: '-0.04em', color: '#f1f5f9', lineHeight: 1.1,
               }}>
-                {mode === 'signin' ? 'Welcome back' : 'Create account'}
+                {mode === 'signin' && 'Welcome back'}
+                {mode === 'signup' && 'Create account'}
+                {mode === 'forgot' && 'Reset password'}
+                {mode === 'resetPassword' && 'Set new password'}
               </h1>
               <p style={{ fontSize: '0.88rem', color: '#4b5680', marginTop: 4 }}>
-                {mode === 'signin'
-                  ? 'Sign in to manage your projects & invoices'
-                  : 'Join QuickCode and start building today'}
+                {mode === 'signin' && 'Sign in to manage your projects & invoices'}
+                {mode === 'signup' && 'Join QuickCode and start building today'}
+                {mode === 'forgot' && 'Enter your email to receive a password reset link'}
+                {mode === 'resetPassword' && 'Enter a new password for your account'}
               </p>
             </div>
 
             {/* Signed-in state */}
-            {user && (
+            {user && mode !== 'resetPassword' && (
               <div className="login-anim login-anim-1" style={{
                 padding: '16px 20px',
                 borderRadius: 12,
@@ -411,65 +463,113 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* Google Sign In */}
-            <div className="login-anim login-anim-2">
-              <button
-                type="button"
-                onClick={handleGoogle}
-                disabled={busy}
-                className="google-btn"
-                style={{
-                  width: '100%', height: 46,
-                  borderRadius: 10,
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  background: 'rgba(255,255,255,0.05)',
-                  color: '#f1f5f9', fontWeight: 600, fontSize: '0.9rem',
-                  cursor: busy ? 'not-allowed' : 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  opacity: busy ? 0.6 : 1,
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-                Continue with Google
-              </button>
-            </div>
+            {/* Google Sign In (only for signin / signup) */}
+            {(mode === 'signin' || mode === 'signup') && (
+              <>
+                <div className="login-anim login-anim-2">
+                  <button
+                    type="button"
+                    onClick={handleGoogle}
+                    disabled={busy}
+                    className="google-btn"
+                    style={{
+                      width: '100%', height: 46,
+                      borderRadius: 10,
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      background: 'rgba(255,255,255,0.05)',
+                      color: '#f1f5f9', fontWeight: 600, fontSize: '0.9rem',
+                      cursor: busy ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                      opacity: busy ? 0.6 : 1,
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Continue with Google
+                  </button>
+                </div>
 
-            {/* Divider */}
-            <div className="login-anim login-anim-3" style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
-              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
-              <span style={{ fontSize: '0.75rem', color: '#2d3660', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.06em' }}>OR</span>
-              <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
-            </div>
+                <div className="login-anim login-anim-3" style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
+                  <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
+                  <span style={{ fontSize: '0.75rem', color: '#2d3660', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.06em' }}>OR</span>
+                  <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
+                </div>
+              </>
+            )}
 
-            {/* Email / Password Form */}
-            <form onSubmit={handleEmailAuth} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div className="login-anim login-anim-3">
-                <AuthInput
-                  label="Email address"
-                  type="email"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={setEmail}
-                  required
-                />
-              </div>
+            {/* Email Auth Form */}
+            <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {(mode === 'signin' || mode === 'signup' || mode === 'forgot') && (
+                <div className="login-anim login-anim-3">
+                  <AuthInput
+                    label="Email address"
+                    type="email"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={setEmail}
+                    required
+                  />
+                </div>
+              )}
 
-              <div className="login-anim login-anim-4">
-                <AuthInput
-                  label="Password"
-                  type="password"
-                  placeholder={mode === 'signup' ? 'Min. 6 characters' : 'Enter your password'}
-                  value={password}
-                  onChange={setPassword}
-                  required
-                />
-              </div>
+              {(mode === 'signin' || mode === 'signup') && (
+                <div className="login-anim login-anim-4">
+                  <AuthInput
+                    label="Password"
+                    type="password"
+                    placeholder={mode === 'signup' ? 'Min. 6 characters' : 'Enter your password'}
+                    value={password}
+                    onChange={setPassword}
+                    required
+                  />
+                  {mode === 'signin' && (
+                    <div style={{ textAlign: 'right', marginTop: 6 }}>
+                      <button
+                        type="button"
+                        onClick={() => { setMode('forgot'); setStatus({ type: null, msg: '' }); }}
+                        style={{
+                          background: 'none', border: 'none',
+                          color: '#6366f1', fontSize: '0.8rem',
+                          fontWeight: 600, cursor: 'pointer',
+                          fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        }}
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {mode === 'resetPassword' && (
+                <>
+                  <div className="login-anim login-anim-3">
+                    <AuthInput
+                      label="New Password"
+                      type="password"
+                      placeholder="Enter new password (min. 6 characters)"
+                      value={password}
+                      onChange={setPassword}
+                      required
+                    />
+                  </div>
+                  <div className="login-anim login-anim-4">
+                    <AuthInput
+                      label="Confirm New Password"
+                      type="password"
+                      placeholder="Re-enter your new password"
+                      value={confirmPassword}
+                      onChange={setConfirmPassword}
+                      required
+                    />
+                  </div>
+                </>
+              )}
 
               <div className="login-anim login-anim-5">
                 <button
@@ -496,9 +596,14 @@ export default function LoginPage() {
                   }}
                 >
                   {busy ? (
-                    <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Authenticating...</>
+                    <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</>
                   ) : (
-                    mode === 'signin' ? 'Sign in →' : 'Create account →'
+                    <>
+                      {mode === 'signin' && 'Sign in →'}
+                      {mode === 'signup' && 'Create account →'}
+                      {mode === 'forgot' && 'Send Reset Link →'}
+                      {mode === 'resetPassword' && 'Update Password →'}
+                    </>
                   )}
                 </button>
               </div>
@@ -506,23 +611,44 @@ export default function LoginPage() {
 
             {/* Mode toggle */}
             <div className="login-anim login-anim-5" style={{ textAlign: 'center', marginTop: 20 }}>
-              <span style={{ fontSize: '0.85rem', color: '#4b5680' }}>
-                {mode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
-              </span>
-              <button
-                type="button"
-                onClick={() => { setMode(m => m === 'signin' ? 'signup' : 'signin'); setStatus({ type: null, msg: '' }); }}
-                className="mode-link"
-                style={{
-                  background: 'none', border: 'none',
-                  color: '#6366f1', fontSize: '0.85rem',
-                  fontWeight: 700, cursor: 'pointer',
-                  textDecoration: 'none', transition: 'color 0.2s',
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                }}
-              >
-                {mode === 'signin' ? 'Sign up' : 'Sign in'}
-              </button>
+              {mode === 'signin' && (
+                <>
+                  <span style={{ fontSize: '0.85rem', color: '#4b5680' }}>Don't have an account? </span>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('signup'); setStatus({ type: null, msg: '' }); }}
+                    className="mode-link"
+                    style={{ background: 'none', border: 'none', color: '#6366f1', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Sign up
+                  </button>
+                </>
+              )}
+
+              {mode === 'signup' && (
+                <>
+                  <span style={{ fontSize: '0.85rem', color: '#4b5680' }}>Already have an account? </span>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('signin'); setStatus({ type: null, msg: '' }); }}
+                    className="mode-link"
+                    style={{ background: 'none', border: 'none', color: '#6366f1', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Sign in
+                  </button>
+                </>
+              )}
+
+              {(mode === 'forgot' || mode === 'resetPassword') && (
+                <button
+                  type="button"
+                  onClick={() => { setMode('signin'); setStatus({ type: null, msg: '' }); }}
+                  className="mode-link"
+                  style={{ background: 'none', border: 'none', color: '#6366f1', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                >
+                  ← Back to Sign in
+                </button>
+              )}
             </div>
 
             {/* Back to home & Admin link if Admin */}
@@ -553,5 +679,13 @@ export default function LoginPage() {
         }
       `}</style>
     </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#05070d' }} />}>
+      <LoginContent />
+    </Suspense>
   );
 }
