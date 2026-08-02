@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { UPIPaymentModal } from "@/components/UPIPaymentModal";
@@ -91,7 +92,9 @@ function InputField({
 }
 
 export default function BookPage() {
-  const { user, sendVerificationEmail, reloadUser } = useAuth();
+  const { user, loading: authLoading, sendVerificationEmail, reloadUser } = useAuth();
+  const router = useRouter();
+
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState(services[0]);
   const [budget, setBudget] = useState(budgets[1]);
@@ -105,6 +108,21 @@ export default function BookPage() {
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [txnRef, setTxnRef] = useState("");
   const [firestoreId, setFirestoreId] = useState("");
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login?redirect=/book");
+    }
+  }, [authLoading, user, router]);
+
+  // Keep name & email synced with Firebase user
+  useEffect(() => {
+    if (user) {
+      if (user.displayName && !name) setName(user.displayName);
+      if (user.email && !email) setEmail(user.email);
+    }
+  }, [user]);
 
   // Email verification state
   const [verificationSent, setVerificationSent] = useState(false);
@@ -133,8 +151,8 @@ export default function BookPage() {
     // Save order document directly to Firebase Firestore with status VERIFICATION_PENDING
     const docId = await createFirestoreOrder({
       userId: user?.uid,
-      customerName: name || "Client",
-      customerEmail: email || "user@company.com",
+      customerName: name || user?.displayName || user?.email?.split("@")[0] || "Customer",
+      customerEmail: email || user?.email || "",
       service: selectedService.label,
       budget,
       timeline,
@@ -208,6 +226,36 @@ export default function BookPage() {
     </div>
   );
 
+  if (authLoading || !user) {
+    return (
+      <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <Navbar />
+        <div style={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "80px 24px" }}>
+          <div style={{ textAlign: "center", color: "#8b9ec7", maxWidth: "420px" }}>
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                border: "3px solid rgba(99,102,241,0.2)",
+                borderTopColor: "#6366f1",
+                borderRadius: "50%",
+                margin: "0 auto 20px",
+                animation: "spin 1s linear infinite",
+              }}
+            />
+            <h2 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#fff", marginBottom: "10px", fontFamily: "'Space Grotesk', sans-serif" }}>
+              Account Sign-In Required
+            </h2>
+            <p style={{ fontSize: "0.92rem", color: "#8b9ec7", lineHeight: 1.6 }}>
+              Please log in to your Quik Code account to select plans and proceed to checkout. Redirecting you to login...
+            </p>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Navbar />
@@ -217,8 +265,8 @@ export default function BookPage() {
         <UPIPaymentModal
           amount={selectedService.deposit}
           serviceName={selectedService.label}
-          customerName={name || "Client"}
-          customerEmail={email || "user@company.com"}
+          customerName={name || user?.displayName || user?.email?.split("@")[0] || "Customer"}
+          customerEmail={email || user?.email || ""}
           onSubmitTxnId={handleUpiSubmit}
           onClose={() => setShowUpiModal(false)}
         />
@@ -479,11 +527,11 @@ export default function BookPage() {
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                    <InputField label="Full Name" placeholder="Alex Morgan" value={name} onChange={setName} required />
+                    <InputField label="Full Name" placeholder="John Doe" value={name} onChange={setName} required />
                     <InputField label="Company (optional)" placeholder="Acme Corp" value={company} onChange={setCompany} />
                   </div>
 
-                  <InputField label="Work Email" type="email" placeholder="alex@company.com" value={email} onChange={setEmail} required />
+                  <InputField label="Work Email" type="email" placeholder="john@example.com" value={email} onChange={setEmail} required />
 
                   <InputField
                     label="Project Overview"
@@ -500,8 +548,8 @@ export default function BookPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        if (!name) setName(user?.displayName || "Alex Morgan");
-                        if (!email) setEmail(user?.email || "alex@company.com");
+                        if (!name && user?.displayName) setName(user.displayName);
+                        if (!email && user?.email) setEmail(user.email);
                         setStep(3);
                       }}
                       className="btn-primary"

@@ -196,29 +196,33 @@ function LoginContent() {
     }
   }, [searchParams]);
 
-  // If already logged in (and not currently resetting password), redirect to /profile
+  // If already logged in (and not currently resetting password), redirect to target route
   useEffect(() => {
     if (user && mode !== 'resetPassword') {
-      router.push('/profile');
+      const redirectTarget = searchParams.get('redirect') || '/profile';
+      router.push(redirectTarget);
     }
-  }, [user, mode, router]);
+  }, [user, mode, router, searchParams]);
 
   const handleAuthSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setStatus({ type: null, msg: '' });
 
+    const redirectTarget = searchParams.get('redirect') || '/profile';
+    const destinationName = redirectTarget === '/book' ? 'Checkout' : 'Profile';
+
     try {
       if (mode === 'signin') {
         if (!email || !password) return;
         await signInWithEmail(email, password);
-        setStatus({ type: 'success', msg: '🔥 Redirecting to Profile Dashboard...' });
-        setTimeout(() => router.push('/profile'), 600);
+        setStatus({ type: 'success', msg: `🔥 Redirecting to ${destinationName}...` });
+        setTimeout(() => router.push(redirectTarget), 600);
       } else if (mode === 'signup') {
         if (!email || !password) return;
         await signUpWithEmail(email, password);
-        setStatus({ type: 'success', msg: '🔥 Account created! Redirecting to Profile...' });
-        setTimeout(() => router.push('/profile'), 600);
+        setStatus({ type: 'success', msg: `🔥 Account created! Redirecting to ${destinationName}...` });
+        setTimeout(() => router.push(redirectTarget), 600);
       } else if (mode === 'forgot') {
         if (!email) return;
         await resetPasswordEmail(email);
@@ -259,11 +263,13 @@ function LoginContent() {
   const handleGoogle = async () => {
     setBusy(true);
     setStatus({ type: null, msg: '' });
+    const redirectTarget = searchParams.get('redirect') || '/profile';
+    const destinationName = redirectTarget === '/book' ? 'Checkout' : 'Profile';
     try {
       const googleUser = await signInWithGoogle();
       if (googleUser) {
-        setStatus({ type: 'success', msg: `🌐 Redirecting to Profile...` });
-        setTimeout(() => router.push('/profile'), 600);
+        setStatus({ type: 'success', msg: `🌐 Redirecting to ${destinationName}...` });
+        setTimeout(() => router.push(redirectTarget), 600);
       }
     } catch (err: any) {
       const errorMsg = err?.message || err?.code || 'Google popup error';
