@@ -271,7 +271,7 @@ export default function Footer() {
         }}
       >
         <p style={{ color: "var(--text-subtle)", fontSize: "0.82rem" }}>
-          © {new Date().getFullYear()} Quick Code Inc. All rights reserved.
+          © {new Date().getFullYear()} Quik Code Inc. All rights reserved.
         </p>
 
         <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#a5b4fc", display: "flex", alignItems: "center", gap: "6px", background: "rgba(99,102,241,0.08)", padding: "6px 14px", borderRadius: "9999px", border: "1px solid rgba(99,102,241,0.2)" }}>

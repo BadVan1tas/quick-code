@@ -122,7 +122,7 @@ export function UPIPaymentModal({
               gap: "6px",
             }}
           >
-            <QrCode size={16} /> QUICKCODE PAYMENT
+            <QrCode size={16} /> QUIKCODE PAYMENT
           </div>
           <div>
             <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
@@ -177,7 +177,7 @@ export function UPIPaymentModal({
         >
           <img
             src="/upi-qr-dark-neon.png"
-            alt="QuickCode Dark Neon UPI Payment QR Code"
+            alt="QuikCode Dark Neon UPI Payment QR Code"
             style={{
               width: "210px",
               height: "210px",

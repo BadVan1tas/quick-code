@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function generateCustomQR() {
-  const upiString = "upi://pay?pa=9992145372@mbkns&pn=QuickCode%20Agency&cu=INR";
+  const upiString = "upi://pay?pa=9992145372@mbkns&pn=QuikCode%20Agency&cu=INR";
   const outputPath = path.join(__dirname, '../public/upi-qr-custom.png');
 
   await QRCode.toFile(outputPath, upiString, {

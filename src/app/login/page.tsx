@@ -394,7 +394,7 @@ function LoginContent() {
               </h1>
               <p style={{ fontSize: '0.88rem', color: '#4b5680', marginTop: 4 }}>
                 {mode === 'signin' && 'Sign in to manage your projects & invoices'}
-                {mode === 'signup' && 'Join QuickCode and start building today'}
+                {mode === 'signup' && 'Join QuikCode and start building today'}
                 {mode === 'forgot' && 'Enter your email to receive a password reset link'}
                 {mode === 'resetPassword' && 'Enter a new password for your account'}
               </p>
@@ -654,7 +654,7 @@ function LoginContent() {
             {/* Back to home & Admin link if Admin */}
             <div style={{ textAlign: 'center', marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'center', gap: 20 }}>
               <Link href="/" style={{ fontSize: '0.82rem', color: '#2d3660', textDecoration: 'none', transition: 'color 0.2s' }}>
-                ← Back to QuickCode
+                ← Back to QuikCode
               </Link>
               {user && isAdmin && (
                 <>

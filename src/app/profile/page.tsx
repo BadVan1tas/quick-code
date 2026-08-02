@@ -143,7 +143,7 @@ export default function ProfilePage() {
             Access Your Account Profile
           </h1>
           <p style={{ color: "var(--text-muted)", maxWidth: 420, marginBottom: 28 }}>
-            Please sign in to view your account details, purchase history, and active QuickCode project orders.
+            Please sign in to view your account details, purchase history, and active QuikCode project orders.
           </p>
           <Link href="/login" className="btn-primary" style={{ padding: "12px 32px" }}>
             Sign In with Firebase →
@@ -257,7 +257,7 @@ export default function ProfilePage() {
               </div>
 
               <h2 style={{ fontSize: "1.3rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: 4 }}>
-                {user.displayName || "QuickCode Client"}
+                {user.displayName || "QuikCode Client"}
               </h2>
 
               <p style={{ color: "var(--text-muted)", fontSize: "0.88rem", display: "flex", alignItems: "center", gap: 6, marginBottom: 20 }}>
@@ -567,7 +567,7 @@ export default function ProfilePage() {
                           >
                             {messages.length === 0 ? (
                               <div style={{ textAlign: "center", color: "var(--text-dim)", fontSize: "0.8rem", padding: "16px 0" }}>
-                                No project messages yet. Leave a note or question for the QuickCode Admin below!
+                                No project messages yet. Leave a note or question for the QuikCode Admin below!
                               </div>
                             ) : (
                               messages.map((msg, mIdx) => (
@@ -584,7 +584,7 @@ export default function ProfilePage() {
                                   }}
                                 >
                                   <div style={{ fontSize: "0.68rem", color: msg.isAdmin ? "#a5b4fc" : "#a7f3d0", marginBottom: 2, fontWeight: 600 }}>
-                                    {msg.isAdmin ? "QuickCode Admin Support" : "You"}
+                                    {msg.isAdmin ? "QuikCode Admin Support" : "You"}
                                   </div>
                                   <div>{msg.text}</div>
                                 </div>
@@ -596,7 +596,7 @@ export default function ProfilePage() {
                           <form onSubmit={handleSendReply} style={{ display: "flex", gap: 8 }}>
                             <input
                               type="text"
-                              placeholder="Reply to QuickCode team..."
+                              placeholder="Reply to QuikCode team..."
                               value={replyText}
                               onChange={(e) => setReplyText(e.target.value)}
                               style={{

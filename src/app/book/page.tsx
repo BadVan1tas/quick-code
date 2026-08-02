@@ -212,7 +212,7 @@ export default function BookPage() {
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Navbar />
 
-      {/* QuickCode UPI QR Payment Modal */}
+      {/* QuikCode UPI QR Payment Modal */}
       {showUpiModal && (
         <UPIPaymentModal
           amount={selectedService.deposit}
@@ -281,11 +281,11 @@ export default function BookPage() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Quick Code Project
+              Quik Code Project
             </span>
           </h1>
           <p style={{ color: "#8b9ec7", fontSize: "1rem", lineHeight: 1.6 }}>
-            Scan the QuickCode UPI QR Code, enter your 12-digit UTR ID, and submit for Admin Verification!
+            Scan the QuikCode UPI QR Code, enter your 12-digit UTR ID, and submit for Admin Verification!
           </p>
         </div>
 
@@ -519,7 +519,7 @@ export default function BookPage() {
                   {/* Step 3: Payment Section */}
                   <div>
                     <h2 style={{ fontSize: "1.2rem", fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", marginBottom: "4px" }}>
-                      QuickCode UPI QR Payment
+                      QuikCode UPI QR Payment
                     </h2>
                     <p style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>Scan our QR Code with any UPI app (GPay/PhonePe/Paytm), enter your 12-digit UTR ID, and submit for Admin Verification.</p>
                   </div>

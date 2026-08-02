@@ -199,7 +199,7 @@ export const BentoGridSection: React.FC = () => {
           </div>
 
           <div style={{ marginTop: "24px", padding: "12px 18px", borderRadius: "8px", background: "rgba(255, 255, 255, 0.03)", border: "1px solid var(--border)", fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "var(--text-muted)" }}>
-            git clone git@github.com:quickcode/your-app.git
+            git clone git@github.com:quikcode/your-app.git
           </div>
         </SpotlightCard>
       </div>

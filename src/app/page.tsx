@@ -14,7 +14,7 @@ import SpliteHeroDemo from "@/components/ui/splite";
 
 const testimonials = [
   {
-    quote: "Quick Code delivered our full-stack crypto telemetry dashboard in 72 hours flat. Outstanding UI quality and bulletproof WebSockets.",
+    quote: "Quik Code delivered our full-stack crypto telemetry dashboard in 72 hours flat. Outstanding UI quality and bulletproof WebSockets.",
     author: "Marcus Vance",
     role: "CTO",
     company: "Apex Analytics",

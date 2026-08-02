@@ -20,7 +20,7 @@ export async function sendOrderNotification({
     const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
     const interaktApiKey = process.env.INTERAKT_API_KEY;
 
-    const messageText = `⚡ QuickCode Update: Hi ${customerName}, your order #${orderId.slice(-6)} for "${serviceName}" status has been updated to "${status}". Check progress at: ${process.env.NEXT_PUBLIC_APP_URL || "https://quickcode.com"}/profile`;
+    const messageText = `⚡ QuikCode Update: Hi ${customerName}, your order #${orderId.slice(-6)} for "${serviceName}" status has been updated to "${status}". Check progress at: ${process.env.NEXT_PUBLIC_APP_URL || "https://quikcode.com"}/profile`;
 
     // 1. Twilio SMS / WhatsApp API Integration
     if (twilioSid && twilioAuthToken && customerPhone) {

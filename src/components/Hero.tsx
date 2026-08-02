@@ -131,7 +131,7 @@ export default function Hero() {
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
           }}
         >
-          Quick Code turns complex requirements into high-converting web applications, payment portals, and enterprise software — backed by modern architecture and bulletproof security.
+          Quik Code turns complex requirements into high-converting web applications, payment portals, and enterprise software — backed by modern architecture and bulletproof security.
         </p>
 
         {/* CTAs */}

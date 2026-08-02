@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 3. Branded QuickCode HTML Email Template
+    // 3. Branded QuikCode HTML Email Template
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -100,10 +100,10 @@ export async function POST(req: Request) {
       </head>
       <body>
         <div class="card">
-          <div class="logo">⚡ QuickCode</div>
+          <div class="logo">⚡ QuikCode</div>
           <div class="title">Reset Your Password</div>
           <p class="text">
-            We received a request to reset your password for your <strong>QuickCode</strong> account (<code>${email}</code>).
+            We received a request to reset your password for your <strong>QuikCode</strong> account (<code>${email}</code>).
             Click the button below to set a new password.
           </p>
           <div style="text-align: center; margin: 32px 0;">
@@ -113,7 +113,7 @@ export async function POST(req: Request) {
             If you did not request a password reset, you can safely ignore this email.
           </p>
           <div class="footer">
-            © ${new Date().getFullYear()} QuickCode Agency. All rights reserved.
+            © ${new Date().getFullYear()} QuikCode Agency. All rights reserved.
           </div>
         </div>
       </body>
@@ -121,9 +121,9 @@ export async function POST(req: Request) {
     `;
 
     const info = await transporter.sendMail({
-      from: `"QuickCode Team" <${smtpUser || "noreply@quick-code.com"}>`,
+      from: `"QuikCode Team" <${smtpUser || "noreply@quik-code.com"}>`,
       to: email,
-      subject: "Reset your password for QuickCode",
+      subject: "Reset your password for QuikCode",
       html: htmlContent,
     });
 

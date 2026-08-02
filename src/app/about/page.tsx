@@ -68,7 +68,7 @@ export default function AboutPage() {
             marginBottom: 20,
           }}
         >
-          <Sparkles size={14} color="#6366f1" /> ABOUT QUICKCODE AGENCY
+          <Sparkles size={14} color="#6366f1" /> ABOUT QUIKCODE AGENCY
         </div>
 
         <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)", fontWeight: 800, fontFamily: "var(--font-heading)", letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 20 }}>
@@ -77,7 +77,7 @@ export default function AboutPage() {
         </h1>
 
         <p style={{ fontSize: "1.1rem", color: "var(--text-muted)", maxWidth: 720, margin: "0 auto 36px", lineHeight: 1.7 }}>
-          QuickCode is a premier software development studio. We build lightning-fast web applications, e-commerce portals, and enterprise AI integrations tailored for founders, startups, and modern businesses worldwide.
+          QuikCode is a premier software development studio. We build lightning-fast web applications, e-commerce portals, and enterprise AI integrations tailored for founders, startups, and modern businesses worldwide.
         </p>
 
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
@@ -123,7 +123,7 @@ export default function AboutPage() {
               OFFICIAL BRAND EMBLEM
             </div>
             <h2 style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginBottom: 12 }}>
-              The QuickCode Identity
+              The QuikCode Identity
             </h2>
             <p style={{ color: "var(--text-muted)", fontSize: "0.92rem", lineHeight: 1.6 }}>
               Our logo combines the sharp geometric lightning bolt of ultra-fast execution with digital code brackets. It represents our core promise: speed, clean architecture, and modern digital dominance.
@@ -145,7 +145,7 @@ export default function AboutPage() {
               boxShadow: "0 0 30px rgba(99,102,241,0.3)",
             }}
           >
-            <img src="/logo.png" alt="QuickCode Official Logo" style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "12px" }} />
+            <img src="/logo.png" alt="QuikCode Official Logo" style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "12px" }} />
           </div>
         </div>
       </section>

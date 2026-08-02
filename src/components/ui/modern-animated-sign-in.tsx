@@ -279,7 +279,7 @@ type TechnologyOrbitDisplayProps = {
 
 const TechOrbitDisplay = memo(function TechOrbitDisplay({
   iconsArray,
-  text = 'Quick Code Auth',
+  text = 'Quik Code Auth',
 }: TechnologyOrbitDisplayProps) {
   return (
     <section className='relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg min-h-[400px]'>

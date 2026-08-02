@@ -1,10 +1,10 @@
 export default function SchemaOrg() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickcode.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quikcode.com";
 
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "QuickCode Agency",
+    "name": "QuikCode Agency",
     "url": baseUrl,
     "logo": `${baseUrl}/logo.png`,
     "image": `${baseUrl}/logo.png`,

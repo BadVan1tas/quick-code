@@ -83,7 +83,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          aria-label="Quick Code Home"
+          aria-label="Quik Code Home"
           style={{
             display: "flex",
             alignItems: "center",
@@ -104,7 +104,7 @@ export default function Navbar() {
               flexShrink: 0,
             }}
           >
-            <img src="/logo.png" alt="QuickCode Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src="/logo.png" alt="QuikCode Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <span
             style={{

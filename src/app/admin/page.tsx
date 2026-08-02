@@ -163,8 +163,8 @@ export default function AdminDashboardPage() {
     if (!newMessageText.trim() || !selectedOrder?.id) return;
     setSendingMsg(true);
 
-    const senderEmail = user?.email || "admin@quickcode.com";
-    const senderName = user?.displayName || "QuickCode Support Team";
+    const senderEmail = user?.email || "admin@quikcode.com";
+    const senderName = user?.displayName || "QuikCode Support Team";
 
     await addOrderMessage(selectedOrder.id, senderEmail, senderName, newMessageText.trim(), true);
     setNewMessageText("");
@@ -258,7 +258,7 @@ export default function AdminDashboardPage() {
                 Admin Portal Login
               </h1>
               <p style={{ color: "var(--text-muted)", fontSize: "0.88rem", lineHeight: 1.5 }}>
-                Restricted Access. Authenticate with your Admin credentials to access QuickCode Master Dashboard.
+                Restricted Access. Authenticate with your Admin credentials to access QuikCode Master Dashboard.
               </p>
             </div>
 
@@ -379,7 +379,7 @@ export default function AdminDashboardPage() {
                   <input
                     type="email"
                     required
-                    placeholder="admin@quickcode.com"
+                    placeholder="admin@quikcode.com"
                     value={adminEmailInput}
                     onChange={(e) => setAdminEmailInput(e.target.value)}
                     style={{
@@ -470,7 +470,7 @@ export default function AdminDashboardPage() {
             </button>
 
             <div style={{ marginTop: 24, textAlign: "center", fontSize: "0.78rem", color: "var(--text-dim)" }}>
-              Default Admin Email: <code style={{ color: "#a5b4fc" }}>admin@quickcode.com</code>
+              Default Admin Email: <code style={{ color: "#a5b4fc" }}>admin@quikcode.com</code>
             </div>
           </div>
         </section>
@@ -493,7 +493,7 @@ export default function AdminDashboardPage() {
               <ShieldCheck size={14} color="#6366f1" /> AUTHORIZED ADMIN MASTER CONTROL PANEL
             </div>
             <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 800, fontFamily: "var(--font-heading)", letterSpacing: "-0.03em" }}>
-              QuickCode <span className="text-gradient">Admin Dashboard</span>
+              QuikCode <span className="text-gradient">Admin Dashboard</span>
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginTop: 4 }}>
               Logged in as <strong style={{ color: "#fff" }}>{user.email}</strong> · Real-time Firestore Sync Active

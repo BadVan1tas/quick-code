@@ -41,7 +41,7 @@ export default function CatBot() {
     {
       id: generateId("bot_init"),
       sender: "bot",
-      text: "Meow! 🐾 Welcome to QuickCode! I'm **CatBot**, your AI Project Advisor. Tell me what you're planning to build, your budget, or timeline, and I'll recommend the exact best plan for you!",
+      text: "Meow! 🐾 Welcome to QuikCode! I'm **CatBot**, your AI Project Advisor. Tell me what you're planning to build, your budget, or timeline, and I'll recommend the exact best plan for you!",
       options: QUICK_QUESTIONS,
       timestamp: "Just now",
     },
@@ -133,7 +133,7 @@ export default function CatBot() {
       return {
         id: generateId("bot"),
         sender: "bot",
-        text: "I'm **CatBot** 🐱, QuickCode's AI Project Advisor! My job is to help you figure out the exact best development package for your idea, calculate deposit costs, estimate turnaround time, and answer any technical questions you have!",
+        text: "I'm **CatBot** 🐱, QuikCode's AI Project Advisor! My job is to help you figure out the exact best development package for your idea, calculate deposit costs, estimate turnaround time, and answer any technical questions you have!",
         options: ["Recommend a plan for me", "What payment gateways do you support?", "Show me pricing"],
         timestamp: timeStr,
       };
@@ -212,7 +212,7 @@ export default function CatBot() {
       return {
         id: generateId("bot"),
         sender: "bot",
-        text: "⏱️ QuickCode builds at ultra-speed! Our turnaround times are:\n\n- 🎨 **Landing Page**: 3 to 5 Days\n- 🛒 **E-Commerce Portal**: 5 to 7 Days\n- 🚀 **Full-Stack Web App**: 7 to 10 Days\n\nNeed ASAP delivery? We also offer **Rush 2-3 Day Delivery**!",
+        text: "⏱️ QuikCode builds at ultra-speed! Our turnaround times are:\n\n- 🎨 **Landing Page**: 3 to 5 Days\n- 🛒 **E-Commerce Portal**: 5 to 7 Days\n- 🚀 **Full-Stack Web App**: 7 to 10 Days\n\nNeed ASAP delivery? We also offer **Rush 2-3 Day Delivery**!",
         options: ["Which plan is best for me?", "What payment gateways are supported?", "Book Project Now"],
         timestamp: timeStr,
       };
@@ -234,7 +234,7 @@ export default function CatBot() {
       return {
         id: generateId("bot"),
         sender: "bot",
-        text: "💰 Here is a summary of QuickCode pricing & plans:\n\n1. **Landing Page**: $499+ (Deposit: $150)\n2. **E-Commerce Portal**: $999+ (Deposit: $200)\n3. **Full-Stack Web App**: $1,499+ (Deposit: $250)\n4. **Custom Enterprise AI**: $2,499+ (Deposit: $500)\n\nYou only pay a small initial deposit to kick off development!",
+        text: "💰 Here is a summary of QuikCode pricing & plans:\n\n1. **Landing Page**: $499+ (Deposit: $150)\n2. **E-Commerce Portal**: $999+ (Deposit: $200)\n3. **Full-Stack Web App**: $1,499+ (Deposit: $250)\n4. **Custom Enterprise AI**: $2,499+ (Deposit: $500)\n\nYou only pay a small initial deposit to kick off development!",
         options: ["Help me pick the right plan", "Book Project Now"],
         timestamp: timeStr,
       };
@@ -333,7 +333,7 @@ export default function CatBot() {
                 <div style={{ fontWeight: 800, fontSize: "0.95rem", color: "#fff", fontFamily: "var(--font-heading)", display: "flex", alignItems: "center", gap: 6 }}>
                   CatBot AI <span style={{ padding: "2px 6px", borderRadius: 9999, background: "rgba(16,185,129,0.2)", color: "#6ee7b7", fontSize: "0.65rem" }}>ONLINE</span>
                 </div>
-                <div style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>QuickCode Smart Plan & Price Advisor</div>
+                <div style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>QuikCode Smart Plan & Price Advisor</div>
               </div>
             </div>
 

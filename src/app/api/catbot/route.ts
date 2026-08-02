@@ -52,7 +52,7 @@ export async function POST(req: Request) {
       // Wikipedia Live REST Summary API
       try {
         const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanedTerm)}`;
-        const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "QuickCodeCatBot/1.0" } });
+        const wikiRes = await fetch(wikiUrl, { headers: { "User-Agent": "QuikCodeCatBot/1.0" } });
 
         if (wikiRes.ok) {
           const wikiData = await wikiRes.json();
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
 
     if (q.includes("javascript") || q.includes("js")) {
       return NextResponse.json({
-        text: `🐱 **CatBot Tech AI**: JavaScript is the programming language of the Web! Powered by V8 and Node.js engines, it runs frontend frameworks like React/Next.js and backend services. QuickCode builds full-stack apps using JS/TypeScript!`,
+        text: `🐱 **CatBot Tech AI**: JavaScript is the programming language of the Web! Powered by V8 and Node.js engines, it runs frontend frameworks like React/Next.js and backend services. QuikCode builds full-stack apps using JS/TypeScript!`,
       });
     }
 
@@ -106,13 +106,13 @@ export async function POST(req: Request) {
 
     if (q.includes("next.js") || q.includes("nextjs")) {
       return NextResponse.json({
-        text: `🐱 **CatBot Tech AI**: Next.js is Vercel's React framework for production! It provides App Router, React Server Components (RSC), automatic code splitting, static site generation (SSG), and server-side rendering (SSR). QuickCode is built on Next.js 16!`,
+        text: `🐱 **CatBot Tech AI**: Next.js is Vercel's React framework for production! It provides App Router, React Server Components (RSC), automatic code splitting, static site generation (SSG), and server-side rendering (SSR). QuikCode is built on Next.js 16!`,
       });
     }
 
     if (q.includes("ai") || q.includes("artificial intelligence") || q.includes("llm") || q.includes("gpt")) {
       return NextResponse.json({
-        text: `🐱 **CatBot AI Knowledge**: Artificial Intelligence (AI) and Large Language Models (LLMs) process natural language, perform reasoning, and generate content. QuickCode builds custom AI Agents, LLM pipelines, and chat assistants for businesses!`,
+        text: `🐱 **CatBot AI Knowledge**: Artificial Intelligence (AI) and Large Language Models (LLMs) process natural language, perform reasoning, and generate content. QuikCode builds custom AI Agents, LLM pipelines, and chat assistants for businesses!`,
       });
     }
 

@@ -9,11 +9,11 @@ const files = [
     name: "page.tsx",
     icon: <Code2 size={14} color="#6366f1" />,
     language: "tsx",
-    code: `import { QuickCodeEngine } from "@quickcode/core";
-import { StripeCheckout } from "@quickcode/payments";
+    code: `import { QuikCodeEngine } from "@quikcode/core";
+import { StripeCheckout } from "@quikcode/payments";
 
 export default async function App() {
-  const engine = await QuickCodeEngine.init({
+  const engine = await QuikCodeEngine.init({
     speed: "72h",
     securityGrade: "A+",
     pciCompliant: true,
@@ -43,7 +43,7 @@ export async function createCheckoutSession(serviceId: string) {
     payment_method_types: ["card", "us_bank_account"],
     line_items: [{ price: serviceId, quantity: 1 }],
     mode: "subscription",
-    success_url: "https://quickcode.dev/success",
+    success_url: "https://quikcode.dev/success",
   });
 }`,
   },
