@@ -182,7 +182,7 @@ export default function Footer() {
               QC
             </div>
             <span style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "1.15rem", letterSpacing: "-0.04em" }}>
-              Quick<span style={{ color: "#6366f1" }}>Code</span>
+              Quik<span style={{ color: "#6366f1" }}>Code</span>
             </span>
           </div>
           <p style={{ color: "var(--text-dim)", fontSize: "0.85rem", lineHeight: 1.7, maxWidth: "280px", marginBottom: "24px" }}>

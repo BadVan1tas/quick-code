@@ -378,7 +378,7 @@ function LoginContent() {
                   boxShadow: '0 0 20px rgba(99,102,241,0.4)',
                 }}>QC</div>
                 <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.04em', color: '#f1f5f9' }}>
-                  Quick<span style={{ color: '#6366f1' }}>Code</span>
+                  Quik<span style={{ color: '#6366f1' }}>Code</span>
                 </span>
               </Link>
 

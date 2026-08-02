@@ -115,7 +115,7 @@ export default function Navbar() {
               color: "var(--text-main)",
             }}
           >
-            Quick<span style={{ color: "#6366f1" }}>Code</span>
+            Quik<span style={{ color: "#6366f1" }}>Code</span>
           </span>
         </Link>
 
