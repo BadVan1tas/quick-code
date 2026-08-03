@@ -107,7 +107,7 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={sectionRef}
-      style={{ padding: "100px 24px", maxWidth: "1240px", margin: "0 auto" }}
+      style={{ padding: "60px 16px", maxWidth: "1240px", margin: "0 auto" }}
     >
       {/* Header */}
       <div

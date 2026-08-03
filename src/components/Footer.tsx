@@ -149,16 +149,7 @@ export default function Footer() {
       </div>
 
       {/* Links grid */}
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "0 24px 48px",
-          display: "grid",
-          gridTemplateColumns: "2fr repeat(3, 1fr)",
-          gap: "48px",
-        }}
-      >
+      <div className="footer-links-grid">
         {/* Brand column */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "18px" }}>
@@ -255,6 +246,23 @@ export default function Footer() {
           </div>
         ))}
       </div>
+
+      <style>{`
+        .footer-links-grid {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px 48px;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        @media (min-width: 769px) {
+          .footer-links-grid {
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 48px;
+          }
+        }
+      `}</style>
 
       {/* Bottom bar */}
       <div

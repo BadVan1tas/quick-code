@@ -107,7 +107,7 @@ export default function Portfolio() {
     <section
       id="portfolio"
       ref={sectionRef}
-      style={{ padding: "100px 24px", maxWidth: "1200px", margin: "0 auto" }}
+      style={{ padding: "60px 16px", maxWidth: "1200px", margin: "0 auto" }}
     >
       {/* Header */}
       <div
@@ -167,7 +167,7 @@ export default function Portfolio() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           gap: "24px",
         }}
       >

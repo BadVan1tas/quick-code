@@ -52,9 +52,15 @@ export default function OrbitingCirclesGlobeDemo() {
           from { transform: rotate(var(--counter-offset, 0deg)) }
           to   { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)) }
         }
-        .orbit-ring-1 { width: 220px; height: 220px; }
-        .orbit-ring-2 { width: 290px; height: 290px; }
-        .orbit-ring-3 { width: 350px; height: 350px; }
+        .orbit-ring-1 { width: 200px; height: 200px; }
+        .orbit-ring-2 { width: 260px; height: 260px; }
+        .orbit-ring-3 { width: 310px; height: 310px; }
+
+        @media (max-width: 480px) {
+          .orbit-ring-1 { width: 160px; height: 160px; }
+          .orbit-ring-2 { width: 220px; height: 220px; }
+          .orbit-ring-3 { width: 270px; height: 270px; }
+        }
 
         @media (min-width: 768px) {
           .orbit-ring-1 { width: 280px; height: 280px; }

@@ -95,7 +95,7 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      style={{ padding: "100px 24px", maxWidth: "1200px", margin: "0 auto" }}
+      style={{ padding: "60px 16px", maxWidth: "1200px", margin: "0 auto" }}
     >
       {/* Header */}
       <div
