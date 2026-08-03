@@ -107,9 +107,9 @@ export default function Hero() {
         {/* Headline with FlipWords Animation */}
         <h1
           style={{
-            fontSize: "clamp(1.35rem, 5vw, 4.8rem)",
+            fontSize: "clamp(1.35rem, 5.2vw, 4.8rem)",
             fontWeight: 800,
-            lineHeight: 1.2,
+            lineHeight: 1.25,
             letterSpacing: "-0.035em",
             marginBottom: "20px",
             wordBreak: "break-word",
@@ -120,12 +120,12 @@ export default function Hero() {
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
           }}
         >
-          We Engineer{" "}
+          <span style={{ display: "inline" }}>We Engineer </span>
           <span style={{ display: "inline-block" }}>
             <FlipWords words={["Next.js Apps", "Payment Portals", "Custom Systems", "SaaS Platforms"]} duration={2800} />
           </span>
-          <br />
-          <span className="text-gradient">With Military Precision</span>
+          <br className="hide-mobile" />{" "}
+          <span className="text-gradient" style={{ display: "inline" }}>With Military Precision</span>
         </h1>
 
         {/* Subtitle */}
@@ -158,8 +158,8 @@ export default function Hero() {
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s",
           }}
         >
-          <Link href="/book">
-            <ConfettiButton style={{ fontSize: "0.95rem", padding: "14px 28px" }}>
+          <Link href="/book" style={{ textDecoration: "none" }}>
+            <ConfettiButton style={{ fontSize: "0.95rem", padding: "14px 28px", width: "100%" }}>
               Get Instant Quote & Book <ArrowRight size={18} />
             </ConfettiButton>
           </Link>
@@ -229,28 +229,42 @@ export default function Hero() {
         @media (max-width: 768px) {
           .hero-section {
             text-align: left !important;
-            padding: 70px 16px 40px !important;
+            padding: 60px 16px 40px !important;
+            overflow-x: hidden !important;
           }
           .hero-content-wrapper {
             display: flex !important;
             flex-direction: column !important;
             align-items: flex-start !important;
             text-align: left !important;
+            width: 100% !important;
           }
           .hero-content-wrapper * {
             text-align: left !important;
           }
           .hero-cta-container {
-            justify-content: flex-start !important;
+            display: flex !important;
+            flex-direction: column !important;
             align-items: stretch !important;
             width: 100% !important;
+            gap: 12px !important;
           }
-          .hero-cta-container a, .hero-cta-container button {
+          .hero-cta-container a, 
+          .hero-cta-container button,
+          .hero-cta-container .btn-primary,
+          .hero-cta-container .btn-secondary {
             width: 100% !important;
             max-width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            box-sizing: border-box !important;
           }
           span.show-mobile {
             display: inline !important;
+          }
+          br.hide-mobile {
+            display: none !important;
           }
         }
       `}</style>
