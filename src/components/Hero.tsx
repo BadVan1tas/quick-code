@@ -91,7 +91,6 @@ export default function Hero() {
             border: "1px solid rgba(16,185,129,0.25)",
             marginBottom: "24px",
             maxWidth: "100%",
-            flexWrap: "wrap",
             justifyContent: "center",
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(16px)",
@@ -99,21 +98,23 @@ export default function Hero() {
           }}
         >
           <span className="dot-live" />
-          <span style={{ fontSize: "clamp(0.68rem, 2.5vw, 0.8rem)", fontWeight: 600, color: "#6ee7b7", letterSpacing: "0.04em", fontFamily: "var(--font-mono)", textAlign: "center" }}>
-            NEXT-GEN SOFTWARE & WEB DEVELOPMENT — BOOKINGS OPEN
+          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6ee7b7", letterSpacing: "0.04em", fontFamily: "var(--font-mono)" }}>
+            <span className="hide-mobile">NEXT-GEN SOFTWARE & WEB DEVELOPMENT — BOOKINGS OPEN</span>
+            <span className="show-mobile" style={{ display: "none" }}>NEXT-GEN SOFTWARE & WEB DEV</span>
           </span>
         </div>
 
         {/* Headline with FlipWords Animation */}
         <h1
           style={{
-            fontSize: "clamp(1.5rem, 5.5vw, 4.8rem)",
+            fontSize: "clamp(1.35rem, 5vw, 4.8rem)",
             fontWeight: 800,
-            lineHeight: 1.18,
+            lineHeight: 1.2,
             letterSpacing: "-0.035em",
             marginBottom: "20px",
             wordBreak: "break-word",
             overflowWrap: "break-word",
+            maxWidth: "100%",
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(24px)",
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
@@ -222,6 +223,22 @@ export default function Hero() {
           </div>
         ))}
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          span.show-mobile {
+            display: inline !important;
+          }
+          .hero-cta-container {
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+          .hero-cta-container a, .hero-cta-container button {
+            width: 100% !important;
+            max-width: 320px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

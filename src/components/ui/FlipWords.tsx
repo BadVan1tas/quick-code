@@ -30,33 +30,17 @@ export const FlipWords: React.FC<FlipWordsProps> = ({
     <AnimatePresence mode="wait">
       <motion.span
         key={currentWord}
-        initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+        initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+        exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
         transition={{ duration: 0.35, ease: "easeOut" }}
         className={className}
         style={{
           display: "inline-block",
-          whiteSpace: "normal",
-          wordBreak: "break-word",
+          whiteSpace: "nowrap",
         }}
       >
-        {currentWord.split(" ").map((word, wordIdx) => (
-          <span key={wordIdx} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
-            {word.split("").map((letter, letterIdx) => (
-              <motion.span
-                key={letterIdx}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (wordIdx * 4 + letterIdx) * 0.04, duration: 0.3 }}
-                style={{ display: "inline-block" }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-            {wordIdx < currentWord.split(" ").length - 1 && <span>&nbsp;</span>}
-          </span>
-        ))}
+        {currentWord}
       </motion.span>
     </AnimatePresence>
   );
