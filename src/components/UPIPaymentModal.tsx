@@ -65,15 +65,15 @@ export function UPIPaymentModal({
         justifyContent: "center",
         background: "rgba(5, 7, 13, 0.88)",
         backdropFilter: "blur(20px)",
-        padding: "24px",
+        padding: "clamp(16px, 4vw, 24px)",
         overflowY: "auto",
       }}
     >
       <SpotlightCard
         style={{
           width: "100%",
-          maxWidth: "520px",
-          padding: "32px",
+          maxWidth: "calc(100vw - 32px)",
+          padding: "clamp(16px, 4vw, 32px)",
           background: "rgba(11, 17, 35, 0.96)",
           border: "1px solid rgba(99, 102, 241, 0.35)",
           boxShadow: "0 32px 80px rgba(0, 0, 0, 0.85), 0 0 60px rgba(99, 102, 241, 0.2)",
@@ -87,15 +87,16 @@ export function UPIPaymentModal({
         {/* Close Button */}
         <button
           onClick={onClose}
+          className="touch-target"
           style={{
             position: "absolute",
-            top: "20px",
-            right: "20px",
+            top: "16px",
+            right: "16px",
             background: "rgba(255, 255, 255, 0.05)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "50%",
-            width: "32px",
-            height: "32px",
+            width: "48px",
+            height: "48px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -103,7 +104,7 @@ export function UPIPaymentModal({
             cursor: "pointer",
           }}
         >
-          <X size={16} />
+          <X size={20} />
         </button>
 
         {/* Header */}
@@ -164,14 +165,14 @@ export function UPIPaymentModal({
           style={{
             background: "rgba(5, 7, 13, 0.95)",
             border: "1px solid rgba(99, 102, 241, 0.4)",
-            padding: "20px",
+            padding: "clamp(16px, 4vw, 20px)",
             borderRadius: "22px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             boxShadow: "0 0 40px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.08)",
-            marginBottom: "18px",
+            marginBottom: "clamp(12px, 3vw, 18px)",
             position: "relative",
           }}
         >
@@ -179,8 +180,8 @@ export function UPIPaymentModal({
             src="/upi-qr-dark-neon.png"
             alt="QuikCode Dark Neon UPI Payment QR Code"
             style={{
-              width: "210px",
-              height: "210px",
+              width: "min(210px, 80vw)",
+              height: "min(210px, 80vw)",
               display: "block",
               borderRadius: "14px",
               boxShadow: "0 0 25px rgba(129, 140, 248, 0.3)",
@@ -245,7 +246,8 @@ export function UPIPaymentModal({
               required
               style={{
                 width: "100%",
-                padding: "14px 16px",
+                padding: "16px",
+                minHeight: "48px",
                 borderRadius: "12px",
                 background: "rgba(255, 255, 255, 0.05)",
                 border: "1px solid rgba(99, 102, 241, 0.4)",
@@ -253,6 +255,7 @@ export function UPIPaymentModal({
                 outline: "none",
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.95rem",
+                boxSizing: "border-box",
               }}
             />
             <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "6px" }}>
@@ -281,10 +284,11 @@ export function UPIPaymentModal({
           <button
             type="submit"
             disabled={submitting}
-            className="btn-primary"
+            className="btn-primary touch-target"
             style={{
               width: "100%",
-              padding: "15px",
+              padding: "16px",
+              minHeight: "48px",
               background: "linear-gradient(135deg, #6366f1 0%, #ec4899 100%)",
               fontSize: "0.98rem",
               fontWeight: 700,

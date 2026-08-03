@@ -250,7 +250,7 @@ export default function Navbar() {
 
         {/* Hamburger (mobile) */}
         <button
-          className="show-mobile"
+          className="show-mobile touch-target"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -259,8 +259,8 @@ export default function Navbar() {
             background: "rgba(255,255,255,0.05)",
             border: "1px solid var(--border)",
             borderRadius: "var(--r-sm)",
-            width: "40px",
-            height: "40px",
+            width: "48px",
+            height: "48px",
             cursor: "pointer",
             alignItems: "center",
             justifyContent: "center",
@@ -297,9 +297,10 @@ export default function Navbar() {
       <div
         style={{
           overflow: "hidden",
-          maxHeight: menuOpen ? "340px" : "0",
+          maxHeight: menuOpen ? "calc(100vh - 100px)" : "0",
           transition: "max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
           borderTop: menuOpen ? "1px solid var(--border)" : "none",
+          overflowY: menuOpen ? "auto" : "hidden",
         }}
       >
         <div
@@ -315,8 +316,9 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
+              className="touch-target"
               style={{
-                padding: "12px 16px",
+                padding: "16px",
                 borderRadius: "var(--r-sm)",
                 color: "var(--text-muted)",
                 fontSize: "1rem",
@@ -324,6 +326,9 @@ export default function Navbar() {
                 textDecoration: "none",
                 background: "rgba(255,255,255,0.03)",
                 border: "1px solid var(--border)",
+                minHeight: "48px",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               {link.label}
@@ -333,8 +338,8 @@ export default function Navbar() {
             {user ? (
               <Link
                 href="/profile"
-                className="btn-secondary"
-                style={{ flex: 1, textAlign: "center" }}
+                className="btn-secondary touch-target"
+                style={{ flex: 1, textAlign: "center", minHeight: "48px", display: "flex", alignItems: "center", justifyContent: "center" }}
                 onClick={() => setMenuOpen(false)}
               >
                 My Profile
@@ -342,8 +347,8 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="btn-secondary"
-                style={{ flex: 1, textAlign: "center" }}
+                className="btn-secondary touch-target"
+                style={{ flex: 1, textAlign: "center", minHeight: "48px", display: "flex", alignItems: "center", justifyContent: "center" }}
                 onClick={() => setMenuOpen(false)}
               >
                 Sign In
@@ -351,8 +356,8 @@ export default function Navbar() {
             )}
             <Link
               href="/book"
-              className="btn-primary"
-              style={{ flex: 1, textAlign: "center" }}
+              className="btn-primary touch-target"
+              style={{ flex: 1, textAlign: "center", minHeight: "48px", display: "flex", alignItems: "center", justifyContent: "center" }}
               onClick={() => setMenuOpen(false)}
             >
               Start Project →

@@ -11,6 +11,12 @@ export const ParticlesCanvas: React.FC = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      return;
+    }
+
     let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
@@ -37,7 +43,7 @@ export const ParticlesCanvas: React.FC = () => {
     }
 
     // Create particles
-    const particleCount = isMobile ? 18 : Math.min(Math.floor((width * height) / 25000), 45);
+    const particleCount = isMobile ? 12 : Math.min(Math.floor((width * height) / 25000), 45);
     const particles: Array<{
       x: number;
       y: number;
@@ -135,11 +141,13 @@ export const ParticlesCanvas: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
+      className="reduce-motion-pause"
       style={{
         position: "fixed",
         inset: 0,
         pointerEvents: "none",
         zIndex: 0,
+        willChange: "transform",
       }}
     />
   );

@@ -765,6 +765,68 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ================================================
+   MOBILE-SPECIFIC UTILITIES
+   ================================================ */
+@media (max-width: 480px) {
+  .four-card-grid {
+    gap: 16px;
+    padding: 0 12px;
+  }
+  
+  .four-card-grid > * {
+    padding: clamp(20px, 5vw, 36px) clamp(16px, 4vw, 24px) !important;
+  }
+}
+
+/* Safe-area inset support for notched devices */
+:root {
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-right: env(safe-area-inset-right, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+  --safe-left: env(safe-area-inset-left, 0);
+}
+
+/* Touch target minimum (48x48px) */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Focus-visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion for canvas animations */
+@media (prefers-reduced-motion: reduce) {
+  .reduce-motion-pause {
+    animation-play-state: paused !important;
+  }
+  canvas.reduce-motion-pause {
+    display: none !important;
+  }
+}
+
+/* ================================================
+   BENTO GRID TABLET BREAKPOINT
+   ================================================ */
+@media (min-width: 640px) {
+  .bento-span-2 {
+    grid-column: span 2 !important;
+  }
+}
+
+/* ================================================
+   ORBITING CIRCLES SMALL SCREEN
+   ================================================ */
+@media (max-width: 360px) {
+  .orbit-ring-1 { width: 140px; height: 140px; }
+  .orbit-ring-2 { width: 190px; height: 190px; }
+  .orbit-ring-3 { width: 240px; height: 240px; }
+}
+
+/* ================================================
    REDUCED MOTION & PERFORMANCE
    ================================================ */
 @media (prefers-reduced-motion: reduce) {

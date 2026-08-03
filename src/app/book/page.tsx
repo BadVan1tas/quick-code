@@ -40,6 +40,7 @@ function InputField({
   onChange,
   required,
   rows,
+  inputMode,
 }: {
   label: string;
   type?: string;
@@ -48,6 +49,7 @@ function InputField({
   onChange: (v: string) => void;
   required?: boolean;
   rows?: number;
+  inputMode?: "search" | "none" | "text" | "numeric" | "email" | "tel" | "url" | "decimal";
 }) {
   const [focused, setFocused] = useState(false);
   const focusStyle: React.CSSProperties = focused
@@ -82,10 +84,11 @@ function InputField({
         <textarea
           {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           rows={rows}
+          inputMode={inputMode}
           style={{ ...props.style, resize: "vertical", minHeight: "100px" }}
         />
       ) : (
-        <input type={type} {...(props as React.InputHTMLAttributes<HTMLInputElement>)} />
+        <input type={type} inputMode={inputMode} {...(props as React.InputHTMLAttributes<HTMLInputElement>)} />
       )}
     </div>
   );
@@ -170,9 +173,9 @@ export default function BookPage() {
   };
 
   const StepIndicator = () => (
-    <div style={{ display: "flex", alignItems: "center", gap: "0", marginBottom: "40px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0", marginBottom: "40px", overflowX: "auto", scrollSnapType: "x mandatory", paddingBottom: "8px", WebkitOverflowScrolling: "touch" }}>
       {[1, 2, 3].map((s, i) => (
-        <div key={s} style={{ display: "flex", alignItems: "center", flex: i < 2 ? 1 : "none" }}>
+        <div key={s} style={{ display: "flex", alignItems: "center", flex: "0 0 auto", scrollSnapAlign: "center" }}>
           <div
             style={{
               width: "36px",
@@ -415,11 +418,11 @@ export default function BookPage() {
               overflow: "hidden",
             }}
           >
-            <div style={{ padding: "36px 36px 0" }}>
+            <div style={{ padding: "clamp(24px, 5vw, 36px) clamp(24px, 5vw, 36px) 0" }}>
               <StepIndicator />
             </div>
 
-            <form onSubmit={handlePayment} style={{ padding: "0 36px 36px" }}>
+            <form onSubmit={handlePayment} style={{ padding: "0 clamp(16px, 4vw, 36px) clamp(16px, 4vw, 36px)" }}>
               {/* ─── STEP 1 ─── */}
               {step === 1 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -470,7 +473,7 @@ export default function BookPage() {
                     <label style={{ display: "block", marginBottom: "12px", fontWeight: 600, fontSize: "0.88rem", color: "#8b9ec7" }}>
                       Budget Range <span style={{ color: "#6366f1" }}>*</span>
                     </label>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "clamp(8px, 2vw, 16px)" }}>
                       {budgets.map((b) => (
                         <button
                           type="button"
@@ -527,11 +530,11 @@ export default function BookPage() {
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                    <InputField label="Full Name" placeholder="John Doe" value={name} onChange={setName} required />
-                    <InputField label="Company (optional)" placeholder="Acme Corp" value={company} onChange={setCompany} />
+                    <InputField label="Full Name" placeholder="John Doe" value={name} onChange={setName} required inputMode="text" />
+                    <InputField label="Company (optional)" placeholder="Acme Corp" value={company} onChange={setCompany} inputMode="text" />
                   </div>
 
-                  <InputField label="Work Email" type="email" placeholder="john@example.com" value={email} onChange={setEmail} required />
+                  <InputField label="Work Email" type="email" placeholder="john@example.com" value={email} onChange={setEmail} required inputMode="email" />
 
                   <InputField
                     label="Project Overview"
@@ -539,6 +542,7 @@ export default function BookPage() {
                     value={details}
                     onChange={setDetails}
                     rows={5}
+                    inputMode="text"
                   />
 
                   <div style={{ display: "flex", gap: "12px" }}>

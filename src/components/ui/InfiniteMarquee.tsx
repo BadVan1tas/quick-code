@@ -25,7 +25,7 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> = ({
         width: "100%",
         maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
         WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-        padding: "20px 0",
+        padding: "clamp(12px, 3vw, 20px) 0",
       }}
     >
       <motion.div
@@ -39,16 +39,17 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> = ({
         }}
         style={{
           display: "flex",
-          gap: "24px",
+          gap: "clamp(12px, 3vw, 24px)",
           width: "max-content",
+          willChange: "transform",
         }}
       >
         {items.concat(items).map((item, idx) => (
           <div
             key={idx}
             style={{
-              width: "360px",
-              padding: "24px",
+              width: "min(360px, calc(100vw - 48px))",
+              padding: "clamp(16px, 4vw, 24px)",
               borderRadius: "var(--r-md)",
               background: "rgba(15, 23, 42, 0.65)",
               backdropFilter: "blur(16px)",
@@ -56,8 +57,9 @@ export const InfiniteMarquee: React.FC<InfiniteMarqueeProps> = ({
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap: "16px",
+              gap: "clamp(12px, 3vw, 16px)",
               flexShrink: 0,
+              boxSizing: "border-box",
             }}
           >
             <p style={{ color: "var(--text-main)", fontSize: "0.92rem", lineHeight: 1.6, fontStyle: "italic" }}>

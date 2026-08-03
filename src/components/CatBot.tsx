@@ -253,7 +253,7 @@ export default function CatBot() {
   return (
     <>
       {/* Floating Trigger Widget Button */}
-      <div style={{ position: "fixed", bottom: 28, right: 28, zIndex: 9999 }}>
+      <div style={{ position: "fixed", bottom: "calc(28px + var(--safe-bottom, 0px))", right: "calc(28px + var(--safe-right, 0px))", zIndex: 9999 }}>
         {!isOpen && (
           <button
             onClick={() => setIsOpen(true)}
@@ -286,11 +286,13 @@ export default function CatBot() {
         <div
           style={{
             position: "fixed",
-            bottom: 28,
-            right: 28,
-            width: "calc(100vw - 40px)",
+            bottom: "calc(28px + var(--safe-bottom, 0px))",
+            right: "calc(28px + var(--safe-right, 0px))",
+            left: "calc(28px + var(--safe-left, 0px))",
+            width: "calc(100vw - 56px - var(--safe-left, 0px) - var(--safe-right, 0px))",
             maxWidth: 420,
-            height: 580,
+            height: "calc(100vh - 56px - var(--safe-top, 0px) - var(--safe-bottom, 0px))",
+            maxHeight: 580,
             borderRadius: "24px",
             background: "#080c17",
             border: "1px solid rgba(99, 102, 241, 0.35)",
@@ -300,6 +302,7 @@ export default function CatBot() {
             flexDirection: "column",
             overflow: "hidden",
             backdropFilter: "blur(24px)",
+            margin: "0 auto",
           }}
         >
           {/* Top Header */}
@@ -373,7 +376,7 @@ export default function CatBot() {
                 key={msg.id}
                 style={{
                   alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
-                  maxWidth: "90%",
+                  maxWidth: "85%",
                   display: "flex",
                   flexDirection: "column",
                   gap: 6,

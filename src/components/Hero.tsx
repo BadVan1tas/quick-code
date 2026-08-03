@@ -171,11 +171,13 @@ export default function Hero() {
 
       {/* ─── 21st.dev Interactive Code Terminal Showcase ─── */}
       <div
+        className="codeterminal-container"
         style={{
           position: "relative",
           zIndex: 1,
           maxWidth: "920px",
           margin: "0 auto 80px",
+          width: "100%",
           opacity: heroVisible ? 1 : 0,
           transform: heroVisible ? "translateY(0) scale(1)" : "translateY(30px) scale(0.97)",
           transition: "all 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s",
@@ -228,19 +230,19 @@ export default function Hero() {
       <style>{`
         @media (max-width: 768px) {
           .hero-section {
-            text-align: left !important;
+            text-align: center !important;
             padding: 60px 16px 40px !important;
             overflow-x: hidden !important;
           }
           .hero-content-wrapper {
             display: flex !important;
             flex-direction: column !important;
-            align-items: flex-start !important;
-            text-align: left !important;
+            align-items: center !important;
+            text-align: center !important;
             width: 100% !important;
           }
           .hero-content-wrapper * {
-            text-align: left !important;
+            text-align: center !important;
           }
           .hero-cta-container {
             display: flex !important;
@@ -265,6 +267,12 @@ export default function Hero() {
           }
           br.hide-mobile {
             display: none !important;
+          }
+          .codeterminal-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
           }
         }
       `}</style>

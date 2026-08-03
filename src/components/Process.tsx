@@ -158,13 +158,13 @@ function ProcessStep({
           transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 100}ms`,
         }}
       >
-        {/* Left content (odd indices are blank on desktop) */}
-        <div className="process-side-left">
-          {!isRight ? <StepCard step={step} hovered={hovered} /> : <div className="hide-mobile" />}
+        {/* Left content */}
+        <div className={`process-side-left ${isRight ? "hide-mobile-col" : ""}`}>
+          {!isRight && <StepCard step={step} hovered={hovered} />}
         </div>
 
         {/* Center node */}
-        <div style={{ display: "flex", justifyContent: "center" }} className="hide-mobile">
+        <div style={{ display: "flex", justifyContent: "center" }} className="hide-mobile-col">
           <div
             style={{
               width: "48px",
@@ -187,9 +187,9 @@ function ProcessStep({
           </div>
         </div>
 
-        {/* Right content (even indices are blank on desktop) */}
-        <div className="process-side-right">
-          {isRight ? <StepCard step={step} hovered={hovered} /> : <div className="hide-mobile" />}
+        {/* Right content */}
+        <div className={`process-side-right ${!isRight ? "hide-mobile-col" : ""}`}>
+          {isRight && <StepCard step={step} hovered={hovered} />}
         </div>
       </div>
 
@@ -202,9 +202,10 @@ function ProcessStep({
         }
         @media (max-width: 768px) {
           .process-step-row {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 16px !important;
+            display: block !important;
+          }
+          .hide-mobile-col {
+            display: none !important;
           }
           .process-side-left, .process-side-right {
             width: 100% !important;
@@ -219,7 +220,7 @@ function StepCard({ step, hovered }: { step: (typeof steps)[0]; hovered: boolean
   return (
     <div
       style={{
-        padding: "24px",
+        padding: "clamp(16px, 4vw, 24px)",
         borderRadius: "var(--r-md)",
         background: hovered ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.02)",
         border: `1px solid ${hovered ? step.color + "40" : "rgba(255,255,255,0.06)"}`,

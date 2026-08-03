@@ -68,13 +68,13 @@ export default function Footer() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "64px 24px 48px",
+          padding: "clamp(32px, 8vw, 64px) clamp(16px, 4vw, 24px) clamp(24px, 6vw, 48px)",
         }}
       >
         <div
           style={{
             borderRadius: "var(--r-xl)",
-            padding: "56px 48px",
+            padding: "clamp(24px, 6vw, 56px) clamp(16px, 4vw, 48px)",
             background: "linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(236,72,153,0.1) 50%, rgba(6,182,212,0.08) 100%)",
             border: "1px solid rgba(99,102,241,0.3)",
             boxShadow: "0 0 80px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.07)",
