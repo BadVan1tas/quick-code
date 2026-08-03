@@ -147,57 +147,71 @@ function ProcessStep({
   const isRight = index % 2 === 1;
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 64px 1fr",
-        gap: "24px",
-        alignItems: "center",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 100}ms`,
-      }}
-    >
-      {/* Left content (odd indices are blank) */}
-      {!isRight ? (
-        <StepCard step={step} hovered={hovered} />
-      ) : (
-        <div />
-      )}
+    <>
+      <div
+        className="process-step-row"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(24px)",
+          transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 100}ms`,
+        }}
+      >
+        {/* Left content (odd indices are blank on desktop) */}
+        <div className="process-side-left">
+          {!isRight ? <StepCard step={step} hovered={hovered} /> : <div className="hide-mobile" />}
+        </div>
 
-      {/* Center node */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            background: hovered ? step.color : "rgba(255,255,255,0.05)",
-            border: `2px solid ${hovered ? step.color : "rgba(255,255,255,0.15)"}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: hovered ? "#fff" : step.color,
-            transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-            boxShadow: hovered ? `0 0 24px ${step.color}60, 0 0 48px ${step.color}20` : "none",
-            zIndex: 1,
-            position: "relative",
-            flexShrink: 0,
-          }}
-        >
-          {step.icon}
+        {/* Center node */}
+        <div style={{ display: "flex", justifyContent: "center" }} className="hide-mobile">
+          <div
+            style={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              background: hovered ? step.color : "rgba(255,255,255,0.05)",
+              border: `2px solid ${hovered ? step.color : "rgba(255,255,255,0.15)"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: hovered ? "#fff" : step.color,
+              transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+              boxShadow: hovered ? `0 0 24px ${step.color}60, 0 0 48px ${step.color}20` : "none",
+              zIndex: 1,
+              position: "relative",
+              flexShrink: 0,
+            }}
+          >
+            {step.icon}
+          </div>
+        </div>
+
+        {/* Right content (even indices are blank on desktop) */}
+        <div className="process-side-right">
+          {isRight ? <StepCard step={step} hovered={hovered} /> : <div className="hide-mobile" />}
         </div>
       </div>
 
-      {/* Right content (even indices are blank) */}
-      {isRight ? (
-        <StepCard step={step} hovered={hovered} />
-      ) : (
-        <div />
-      )}
-    </div>
+      <style>{`
+        .process-step-row {
+          display: grid;
+          grid-template-columns: 1fr 64px 1fr;
+          gap: 24px;
+          align-items: center;
+        }
+        @media (max-width: 768px) {
+          .process-step-row {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+          }
+          .process-side-left, .process-side-right {
+            width: 100% !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }
 

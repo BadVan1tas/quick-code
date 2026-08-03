@@ -35,10 +35,12 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
         maskClip: "padding-box, border-box",
         maskComposite: "intersect",
         WebkitMaskComposite: "destination-out",
+        overflow: "hidden",
       }}
-      className={className}
+      className={`border-beam-wrapper ${className}`}
     >
       <div
+        className="border-beam-glow"
         style={{
           position: "absolute",
           aspectRatio: "1/1",
@@ -56,6 +58,11 @@ export const BorderBeam: React.FC<BorderBeamProps> = ({
           }
           100% {
             offset-distance: 100%;
+          }
+        }
+        @media (max-width: 768px) {
+          .border-beam-wrapper {
+            display: none !important;
           }
         }
       `}</style>
