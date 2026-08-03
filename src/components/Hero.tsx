@@ -69,9 +69,10 @@ export default function Hero() {
 
   return (
     <section
+      className="hero-section"
       style={{
         position: "relative",
-        padding: "110px 24px 80px",
+        padding: "100px 16px 60px",
         maxWidth: "1200px",
         margin: "0 auto",
         textAlign: "center",
@@ -88,7 +89,7 @@ export default function Hero() {
             borderRadius: "var(--r-full)",
             background: "rgba(16,185,129,0.08)",
             border: "1px solid rgba(16,185,129,0.25)",
-            marginBottom: "28px",
+            marginBottom: "24px",
             maxWidth: "100%",
             flexWrap: "wrap",
             justifyContent: "center",
@@ -106,9 +107,9 @@ export default function Hero() {
         {/* Headline with FlipWords Animation */}
         <h1
           style={{
-            fontSize: "clamp(1.75rem, 5.5vw, 4.8rem)",
+            fontSize: "clamp(1.5rem, 5.5vw, 4.8rem)",
             fontWeight: 800,
-            lineHeight: 1.15,
+            lineHeight: 1.18,
             letterSpacing: "-0.035em",
             marginBottom: "20px",
             wordBreak: "break-word",
@@ -118,7 +119,10 @@ export default function Hero() {
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
           }}
         >
-          We Engineer <FlipWords words={["Next.js Apps", "Payment Portals", "Custom Systems", "SaaS Platforms"]} duration={2800} />
+          We Engineer{" "}
+          <span style={{ display: "inline-block" }}>
+            <FlipWords words={["Next.js Apps", "Payment Portals", "Custom Systems", "SaaS Platforms"]} duration={2800} />
+          </span>
           <br />
           <span className="text-gradient">With Military Precision</span>
         </h1>
@@ -126,10 +130,10 @@ export default function Hero() {
         {/* Subtitle */}
         <p
           style={{
-            fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
+            fontSize: "clamp(0.92rem, 2vw, 1.2rem)",
             color: "var(--text-muted)",
             maxWidth: "680px",
-            margin: "0 auto 36px",
+            margin: "0 auto 32px",
             lineHeight: 1.65,
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(24px)",
@@ -143,21 +147,21 @@ export default function Hero() {
         <div
           style={{
             display: "flex",
-            gap: "16px",
+            gap: "14px",
             justifyContent: "center",
             flexWrap: "wrap",
-            marginBottom: "64px",
+            marginBottom: "56px",
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(16px)",
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s",
           }}
         >
           <Link href="/book">
-            <ConfettiButton style={{ fontSize: "1rem", padding: "15px 36px" }}>
+            <ConfettiButton style={{ fontSize: "0.95rem", padding: "14px 28px" }}>
               Get Instant Quote & Book <ArrowRight size={18} />
             </ConfettiButton>
           </Link>
-          <a href="#portfolio" className="btn-secondary" style={{ fontSize: "1rem", padding: "15px 36px" }}>
+          <a href="#portfolio" className="btn-secondary" style={{ fontSize: "0.95rem", padding: "14px 28px" }}>
             Explore Our Work
           </a>
         </div>

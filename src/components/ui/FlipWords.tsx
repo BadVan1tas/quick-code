@@ -27,16 +27,16 @@ export const FlipWords: React.FC<FlipWordsProps> = ({
   }, [currentWord, words, duration]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.span
         key={currentWord}
-        initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+        initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, y: -10, filter: "blur(6px)", position: "absolute" }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
         className={className}
         style={{
-          display: "inline",
+          display: "inline-block",
           whiteSpace: "normal",
           wordBreak: "break-word",
         }}
