@@ -78,7 +78,7 @@ export default function Hero() {
         textAlign: "center",
       }}
     >
-      <div ref={heroRef} style={{ position: "relative", zIndex: 1 }}>
+      <div ref={heroRef} className="hero-content-wrapper" style={{ position: "relative", zIndex: 1 }}>
         {/* Live Badge */}
         <div
           style={{
@@ -146,6 +146,7 @@ export default function Hero() {
 
         {/* CTAs */}
         <div
+          className="hero-cta-container"
           style={{
             display: "flex",
             gap: "14px",
@@ -226,16 +227,30 @@ export default function Hero() {
 
       <style>{`
         @media (max-width: 768px) {
-          span.show-mobile {
-            display: inline !important;
+          .hero-section {
+            text-align: left !important;
+            padding: 70px 16px 40px !important;
+          }
+          .hero-content-wrapper {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            text-align: left !important;
+          }
+          .hero-content-wrapper * {
+            text-align: left !important;
           }
           .hero-cta-container {
-            flex-direction: column !important;
-            align-items: center !important;
+            justify-content: flex-start !important;
+            align-items: stretch !important;
+            width: 100% !important;
           }
           .hero-cta-container a, .hero-cta-container button {
             width: 100% !important;
-            max-width: 320px !important;
+            max-width: 100% !important;
+          }
+          span.show-mobile {
+            display: inline !important;
           }
         }
       `}</style>
