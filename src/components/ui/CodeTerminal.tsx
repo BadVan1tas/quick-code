@@ -201,8 +201,8 @@ export const CodeTerminal: React.FC = () => {
       </div>
 
       {/* Code Editor Body */}
-      <div style={{ padding: "20px", fontFamily: "var(--font-mono)", fontSize: "0.85rem", lineHeight: 1.7, color: "#e2e8f0" }}>
-        <pre style={{ margin: 0, overflowX: "auto" }}>
+      <div style={{ padding: "16px", fontFamily: "var(--font-mono)", fontSize: "0.8rem", lineHeight: 1.6, color: "#e2e8f0", width: "100%", overflowX: "auto" }}>
+        <pre style={{ margin: 0, overflowX: "auto", maxWidth: "100%", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
           <code>{files[activeTab].code}</code>
         </pre>
       </div>

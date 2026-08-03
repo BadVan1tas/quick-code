@@ -15,69 +15,49 @@ export const FlipWords: React.FC<FlipWordsProps> = ({
   className = "",
 }) => {
   const [currentWord, setCurrentWord] = useState(words[0]);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const currentIndex = words.indexOf(currentWord);
       const nextWord = words[(currentIndex + 1) % words.length];
       setCurrentWord(nextWord);
-      setIsAnimating(true);
     }, duration);
 
     return () => clearInterval(interval);
   }, [currentWord, words, duration]);
 
   return (
-    <AnimatePresence
-      onExitComplete={() => {
-        setIsAnimating(false);
-      }}
-    >
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 10,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 10,
-        }}
-        exit={{
-          opacity: 0,
-          y: -10,
-          x: 40,
-          filter: "blur(8px)",
-          scale: 2,
-          position: "absolute",
-        }}
+    <AnimatePresence>
+      <motion.span
         key={currentWord}
+        initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -10, filter: "blur(6px)", position: "absolute" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className={className}
         style={{
-          display: "inline-block",
-          position: "relative",
+          display: "inline",
+          whiteSpace: "normal",
+          wordBreak: "break-word",
         }}
       >
-        {currentWord.split("").map((letter, index) => (
-          <motion.span
-            key={currentWord + index}
-            initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-              delay: index * 0.08,
-              duration: 0.4,
-            }}
-            style={{ display: "inline-block" }}
-          >
-            {letter === " " ? "\u00A0" : letter}
-          </motion.span>
+        {currentWord.split(" ").map((word, wordIdx) => (
+          <span key={wordIdx} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+            {word.split("").map((letter, letterIdx) => (
+              <motion.span
+                key={letterIdx}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (wordIdx * 4 + letterIdx) * 0.04, duration: 0.3 }}
+                style={{ display: "inline-block" }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+            {wordIdx < currentWord.split(" ").length - 1 && <span>&nbsp;</span>}
+          </span>
         ))}
-      </motion.div>
+      </motion.span>
     </AnimatePresence>
   );
 };

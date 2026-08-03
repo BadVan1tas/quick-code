@@ -41,7 +41,7 @@ const testimonials = [
 
 export default function Home() {
   return (
-    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
+    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative", overflowX: "hidden", width: "100%", maxWidth: "100vw" }}>
       {/* 21st.dev Interactive Canvas Particles Background */}
       <ParticlesCanvas />
 

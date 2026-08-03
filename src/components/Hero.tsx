@@ -84,18 +84,21 @@ export default function Hero() {
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
-            padding: "6px 16px 6px 10px",
+            padding: "6px 14px",
             borderRadius: "var(--r-full)",
             background: "rgba(16,185,129,0.08)",
             border: "1px solid rgba(16,185,129,0.25)",
-            marginBottom: "32px",
+            marginBottom: "28px",
+            maxWidth: "100%",
+            flexWrap: "wrap",
+            justifyContent: "center",
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(16px)",
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           <span className="dot-live" />
-          <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#6ee7b7", letterSpacing: "0.04em", fontFamily: "var(--font-mono)" }}>
+          <span style={{ fontSize: "clamp(0.68rem, 2.5vw, 0.8rem)", fontWeight: 600, color: "#6ee7b7", letterSpacing: "0.04em", fontFamily: "var(--font-mono)", textAlign: "center" }}>
             NEXT-GEN SOFTWARE & WEB DEVELOPMENT — BOOKINGS OPEN
           </span>
         </div>
@@ -103,11 +106,13 @@ export default function Hero() {
         {/* Headline with FlipWords Animation */}
         <h1
           style={{
-            fontSize: "clamp(2.8rem, 6vw, 4.8rem)",
+            fontSize: "clamp(1.75rem, 5.5vw, 4.8rem)",
             fontWeight: 800,
-            lineHeight: 1.1,
+            lineHeight: 1.15,
             letterSpacing: "-0.035em",
             marginBottom: "20px",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(24px)",
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
