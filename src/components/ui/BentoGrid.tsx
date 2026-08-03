@@ -2,13 +2,13 @@
 
 import React from "react";
 import { SpotlightCard } from "./SpotlightCard";
-import { ShieldCheck, Zap, Layers, Cpu, Lock, Sparkles, Server, Code } from "lucide-react";
+import { ShieldCheck, Zap, Layers, Server, Sparkles } from "lucide-react";
 
 export const BentoGridSection: React.FC = () => {
   return (
-    <section id="features" style={{ padding: "100px 24px", maxWidth: "1200px", margin: "0 auto" }}>
+    <section id="features" style={{ padding: "80px 20px", maxWidth: "1200px", margin: "0 auto" }}>
       {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: "64px" }}>
+      <div style={{ textAlign: "center", marginBottom: "56px" }}>
         <div className="section-label" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
           <Sparkles size={14} color="#818cf8" />
           Architectural Edge
@@ -22,17 +22,11 @@ export const BentoGridSection: React.FC = () => {
       </div>
 
       {/* Bento Grid Layout */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-        }}
-      >
+      <div className="bento-grid-container">
         {/* Large Feature Card 1 */}
         <SpotlightCard
+          className="bento-span-2"
           style={{
-            gridColumn: "span 2",
             padding: "36px",
             display: "flex",
             flexDirection: "column",
@@ -160,8 +154,8 @@ export const BentoGridSection: React.FC = () => {
 
         {/* Feature Card 4 */}
         <SpotlightCard
+          className="bento-span-2"
           style={{
-            gridColumn: "span 2",
             padding: "36px",
             display: "flex",
             flexDirection: "column",
@@ -198,11 +192,24 @@ export const BentoGridSection: React.FC = () => {
             </p>
           </div>
 
-          <div style={{ marginTop: "24px", padding: "12px 18px", borderRadius: "8px", background: "rgba(255, 255, 255, 0.03)", border: "1px solid var(--border)", fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "var(--text-muted)" }}>
+          <div style={{ marginTop: "24px", padding: "12px 18px", borderRadius: "8px", background: "rgba(255, 255, 255, 0.03)", border: "1px solid var(--border)", fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "var(--text-muted)", wordBreak: "break-all" }}>
             git clone git@github.com:quikcode/your-app.git
           </div>
         </SpotlightCard>
       </div>
+
+      <style>{`
+        .bento-grid-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+        }
+        @media (min-width: 769px) {
+          .bento-span-2 {
+            grid-column: span 2 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

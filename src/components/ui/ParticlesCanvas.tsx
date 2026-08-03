@@ -15,6 +15,8 @@ export const ParticlesCanvas: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
+    const isMobile = window.innerWidth < 768;
+
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
@@ -23,17 +25,19 @@ export const ParticlesCanvas: React.FC = () => {
 
     window.addEventListener("resize", handleResize);
 
-    const mouse = { x: width / 2, y: height / 2, radius: 150 };
+    const mouse = { x: -1000, y: -1000, radius: 150 };
 
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    if (!isMobile) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
 
     // Create particles
-    const particleCount = Math.min(Math.floor((width * height) / 18000), 80);
+    const particleCount = isMobile ? 18 : Math.min(Math.floor((width * height) / 25000), 45);
     const particles: Array<{
       x: number;
       y: number;
@@ -50,8 +54,8 @@ export const ParticlesCanvas: React.FC = () => {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
         size: Math.random() * 2 + 1,
         alpha: Math.random() * 0.5 + 0.2,
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -71,28 +75,28 @@ export const ParticlesCanvas: React.FC = () => {
         if (p1.x < 0 || p1.x > width) p1.vx *= -1;
         if (p1.y < 0 || p1.y > height) p1.vy *= -1;
 
-        // Draw particle point
+        // Draw particle point (no shadowBlur for max performance)
         ctx.beginPath();
         ctx.arc(p1.x, p1.y, p1.size, 0, Math.PI * 2);
         ctx.fillStyle = p1.color;
         ctx.globalAlpha = p1.alpha;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = p1.color;
         ctx.fill();
 
-        // Check distance to mouse
-        const dx = mouse.x - p1.x;
-        const dy = mouse.y - p1.y;
-        const distToMouse = Math.sqrt(dx * dx + dy * dy);
+        // Check distance to mouse on desktop
+        if (!isMobile) {
+          const dx = mouse.x - p1.x;
+          const dy = mouse.y - p1.y;
+          const distToMouse = Math.sqrt(dx * dx + dy * dy);
 
-        if (distToMouse < mouse.radius) {
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = p1.color;
-          ctx.globalAlpha = (1 - distToMouse / mouse.radius) * 0.35;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
+          if (distToMouse < mouse.radius) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = p1.color;
+            ctx.globalAlpha = (1 - distToMouse / mouse.radius) * 0.3;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
         }
 
         // Connect nearby particles
@@ -100,14 +104,15 @@ export const ParticlesCanvas: React.FC = () => {
           const p2 = particles[j];
           const pdx = p1.x - p2.x;
           const pdy = p1.y - p2.y;
-          const dist = Math.sqrt(pdx * pdx + pdy * pdy);
+          const distSq = pdx * pdx + pdy * pdy;
 
-          if (dist < 110) {
+          if (distSq < 10000) {
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = p1.color;
-            ctx.globalAlpha = (1 - dist / 110) * 0.15;
+            ctx.globalAlpha = (1 - dist / 100) * 0.12;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }

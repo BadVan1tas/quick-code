@@ -736,7 +736,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ================================================
-   RESPONSIVE HELPERS
+   RESPONSIVE HELPERS & MOBILE PERFORMANCE
    ================================================ */
 @media (max-width: 768px) {
   .section {
@@ -744,6 +744,13 @@ h1, h2, h3, h4, h5, h6 {
   }
   .hide-mobile {
     display: none !important;
+  }
+  .ambient-bg {
+    animation: none !important;
+  }
+  .glass-card, .glass-card-elevated {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
   }
 }
 
@@ -754,7 +761,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ================================================
-   REDUCED MOTION
+   REDUCED MOTION & PERFORMANCE
    ================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

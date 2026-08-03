@@ -12,8 +12,10 @@ export default function ParticleSphereAnimation() {
     if (!ctx) return;
 
     let animId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 400);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 400);
+    let width = (canvas.width = canvas.parentElement?.clientWidth || 300);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || 300);
+
+    const isMobile = window.innerWidth < 768;
 
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
@@ -23,7 +25,7 @@ export default function ParticleSphereAnimation() {
 
     window.addEventListener("resize", handleResize);
 
-    const particleCount = 250;
+    const particleCount = isMobile ? 60 : 120;
     const radius = Math.min(width, height) * 0.4;
     const particles: Array<{
       x: number;
@@ -61,7 +63,14 @@ export default function ParticleSphereAnimation() {
     }
 
     let angleY = 0;
-    let angleX = 0.2;
+    const angleX = 0.2;
+
+    const projected: Array<{ projX: number; projY: number; scale: number; z2: number; color: string; size: number }> = 
+      new Array(particleCount);
+
+    for (let i = 0; i < particleCount; i++) {
+      projected[i] = { projX: 0, projY: 0, scale: 1, z2: 0, color: particles[i].color, size: particles[i].size };
+    }
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
@@ -76,53 +85,50 @@ export default function ParticleSphereAnimation() {
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Sort by Z for proper depth rendering
-      const projected = particles.map((p) => {
-        // Rotate around Y
+      for (let i = 0; i < particleCount; i++) {
+        const p = particles[i];
         const x1 = p.baseX * cosY - p.baseZ * sinY;
         const z1 = p.baseZ * cosY + p.baseX * sinY;
 
-        // Rotate around X
         const y1 = p.baseY * cosX - z1 * sinX;
         const z2 = z1 * cosX + p.baseY * sinX;
 
-        // Perspective projection
         const fov = 350;
         const scale = fov / (fov + z2);
-        const projX = centerX + x1 * scale;
-        const projY = centerY + y1 * scale;
 
-        return { projX, projY, scale, z2, color: p.color, size: p.size };
-      });
-
-      projected.sort((a, b) => b.z2 - a.z2);
+        projected[i].projX = centerX + x1 * scale;
+        projected[i].projY = centerY + y1 * scale;
+        projected[i].scale = scale;
+        projected[i].z2 = z2;
+      }
 
       // Draw 3D projected particles & connections
-      for (let i = 0; i < projected.length; i++) {
+      for (let i = 0; i < particleCount; i++) {
         const p = projected[i];
-        const alpha = Math.max(0.1, Math.min(1, (p.z2 + radius) / (radius * 2)));
+        const alpha = Math.max(0.15, Math.min(0.9, (p.z2 + radius) / (radius * 2)));
 
         ctx.beginPath();
         ctx.arc(p.projX, p.projY, p.size * p.scale, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.globalAlpha = alpha;
-        ctx.shadowBlur = 10 * p.scale;
-        ctx.shadowColor = p.color;
         ctx.fill();
 
-        // Connect near neighbors
-        for (let j = i + 1; j < projected.length; j += 4) {
+        // Connect near neighbors (less connections on mobile)
+        const step = isMobile ? 8 : 4;
+        for (let j = i + 1; j < particleCount; j += step) {
           const p2 = projected[j];
           const dx = p.projX - p2.projX;
           const dy = p.projY - p2.projY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
+          const maxDist = 40 * p.scale;
 
-          if (dist < 45 * p.scale) {
+          if (distSq < maxDist * maxDist) {
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(p.projX, p.projY);
             ctx.lineTo(p2.projX, p2.projY);
             ctx.strokeStyle = p.color;
-            ctx.globalAlpha = (1 - dist / (45 * p.scale)) * 0.25 * alpha;
+            ctx.globalAlpha = (1 - dist / maxDist) * 0.2 * alpha;
             ctx.lineWidth = 0.6 * p.scale;
             ctx.stroke();
           }

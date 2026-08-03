@@ -5,8 +5,7 @@ import ParticleSphereAnimation from "@/components/ui/orbiting-circles-02-utils/p
 
 const orbits = [
   {
-    size: "w-110 h-110 md:w-180 md:h-180",
-    sizePx: 280,
+    className: "orbit-ring-1",
     duration: 18,
     icons: [
       { src: "https://images.shadcnspace.com/assets/svgs/supabase.svg", alt: "Supabase", angle: -60 },
@@ -15,8 +14,7 @@ const orbits = [
     ],
   },
   {
-    size: "w-150 h-150 md:w-220 md:h-220",
-    sizePx: 380,
+    className: "orbit-ring-2",
     duration: 24,
     icons: [
       { src: "https://images.shadcnspace.com/assets/svgs/figma.svg", alt: "Figma", angle: 0 },
@@ -24,8 +22,7 @@ const orbits = [
     ],
   },
   {
-    size: "w-180 h-180 md:w-265 md:h-265",
-    sizePx: 480,
+    className: "orbit-ring-3",
     duration: 30,
     icons: [
       { src: "https://images.shadcnspace.com/assets/svgs/clude.svg", alt: "Claude", angle: -60 },
@@ -37,7 +34,7 @@ const orbits = [
 
 export default function OrbitingCirclesGlobeDemo() {
   return (
-    <div style={{ position: "relative", width: "100%", height: "420px", overflow: "hidden", display: "flex", justifyContent: "center" }}>
+    <div style={{ position: "relative", width: "100%", height: "360px", overflow: "hidden", display: "flex", justifyContent: "center" }}>
       <style>{`
         @keyframes orbit-cw {
           from { transform: rotate(var(--start-angle)) }
@@ -55,6 +52,15 @@ export default function OrbitingCirclesGlobeDemo() {
           from { transform: rotate(var(--counter-offset, 0deg)) }
           to   { transform: rotate(calc(var(--counter-offset, 0deg) + 360deg)) }
         }
+        .orbit-ring-1 { width: 220px; height: 220px; }
+        .orbit-ring-2 { width: 290px; height: 290px; }
+        .orbit-ring-3 { width: 350px; height: 350px; }
+
+        @media (min-width: 768px) {
+          .orbit-ring-1 { width: 280px; height: 280px; }
+          .orbit-ring-2 { width: 380px; height: 380px; }
+          .orbit-ring-3 { width: 480px; height: 480px; }
+        }
       `}</style>
 
       {/* Center particle globe */}
@@ -66,8 +72,8 @@ export default function OrbitingCirclesGlobeDemo() {
           transform: "translate(-50%, 50%)",
           aspectRatio: "1/1",
           pointerEvents: "none",
-          width: "300px",
-          height: "300px",
+          width: "240px",
+          height: "240px",
           zIndex: 10,
         }}
       >
@@ -92,6 +98,7 @@ export default function OrbitingCirclesGlobeDemo() {
         return (
           <div
             key={index}
+            className={orbit.className}
             style={{
               position: "absolute",
               bottom: 0,
@@ -100,8 +107,6 @@ export default function OrbitingCirclesGlobeDemo() {
               borderRadius: "50%",
               border: "1px solid rgba(99, 102, 241, 0.25)",
               boxShadow: "0 0 30px rgba(99, 102, 241, 0.08)",
-              width: `${orbit.sizePx}px`,
-              height: `${orbit.sizePx}px`,
             }}
           >
             {allIcons.map((iconData, iconIndex) => (
@@ -127,13 +132,13 @@ export default function OrbitingCirclesGlobeDemo() {
                 <div
                   style={
                     {
-                      padding: "10px",
+                      padding: "8px",
                       border: "1px solid rgba(255, 255, 255, 0.12)",
                       borderRadius: "50%",
                       background: "rgba(11, 17, 35, 0.9)",
                       backdropFilter: "blur(12px)",
                       boxShadow: "0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.3)",
-                      marginTop: "-20px",
+                      marginTop: "-16px",
                       position: "relative",
                       zIndex: 10,
                       "--counter-offset": `${-iconData.angle}deg`,
@@ -144,11 +149,10 @@ export default function OrbitingCirclesGlobeDemo() {
                   <img
                     src={iconData.src}
                     alt={iconData.alt}
-                    width={28}
-                    height={28}
-                    style={{ width: "24px", height: "24px", display: "block" }}
+                    width={24}
+                    height={24}
+                    style={{ width: "20px", height: "20px", display: "block" }}
                     onError={(e) => {
-                      // Fallback icon styling if external SVG is blocked
                       (e.currentTarget as HTMLElement).style.display = "none";
                     }}
                   />

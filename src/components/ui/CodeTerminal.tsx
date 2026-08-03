@@ -113,18 +113,20 @@ export const CodeTerminal: React.FC = () => {
           padding: "10px 16px",
           background: "rgba(255, 255, 255, 0.03)",
           borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          flexWrap: "wrap",
+          gap: "10px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", overflowX: "auto", maxWidth: "100%" }}>
           {/* Mac controls */}
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
             <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ef4444" }} />
             <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#eab308" }} />
             <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#22c55e" }} />
           </div>
 
           {/* Tabs */}
-          <div style={{ display: "flex", gap: "4px" }}>
+          <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
             {files.map((file, idx) => (
               <button
                 key={file.name}
@@ -133,15 +135,16 @@ export const CodeTerminal: React.FC = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "4px 12px",
+                  padding: "4px 10px",
                   borderRadius: "6px",
                   border: "none",
                   background: activeTab === idx ? "rgba(99, 102, 241, 0.2)" : "transparent",
                   color: activeTab === idx ? "#ffffff" : "var(--text-muted)",
-                  fontSize: "0.8rem",
+                  fontSize: "0.78rem",
                   fontFamily: "var(--font-mono)",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {file.icon}
@@ -152,7 +155,7 @@ export const CodeTerminal: React.FC = () => {
         </div>
 
         {/* Action Controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
           <button
             onClick={handleRun}
             disabled={executing}
@@ -168,6 +171,7 @@ export const CodeTerminal: React.FC = () => {
               fontSize: "0.75rem",
               fontFamily: "var(--font-mono)",
               cursor: "pointer",
+              whiteSpace: "nowrap",
             }}
           >
             <Play size={12} fill="#6ee7b7" />
@@ -187,6 +191,7 @@ export const CodeTerminal: React.FC = () => {
               fontSize: "0.75rem",
               fontFamily: "var(--font-mono)",
               cursor: "pointer",
+              whiteSpace: "nowrap",
             }}
           >
             {copied ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
