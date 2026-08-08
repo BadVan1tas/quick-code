@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SpotlightCard } from "./ui/SpotlightCard";
 import { BorderBeam } from "./ui/BorderBeam";
 import { Code, ShoppingBag, Palette, Cpu, CheckCircle2, ArrowRight } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const services = [
   {
@@ -84,6 +85,7 @@ const services = [
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const { formatPriceString } = useCurrency();
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
@@ -200,7 +202,7 @@ export default function Services() {
             {/* Price & CTA */}
             <div style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)", paddingTop: "20px" }}>
               <div style={{ fontSize: "1.6rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: s.accentColor, marginBottom: "16px" }}>
-                {s.price}
+                {formatPriceString(s.price)}
               </div>
               <Link
                 href="/book"

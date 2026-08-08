@@ -5,6 +5,7 @@ import Image from "next/image";
 import { QrCode, Lock, X, Copy, CheckCircle2, ShieldCheck, AlertCircle } from "lucide-react";
 import { SpotlightCard } from "./ui/SpotlightCard";
 import { BorderBeam } from "./ui/BorderBeam";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface UPIPaymentModalProps {
   amount: number; // Deposit amount in USD
@@ -23,13 +24,14 @@ export function UPIPaymentModal({
   onSubmitTxnId,
   onClose,
 }: UPIPaymentModalProps) {
+  const { rate } = useCurrency();
   const [utrId, setUtrId] = useState("");
   const [copied, setCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const upiId = "9992145372@mbkns";
-  const amountInr = amount * 83;
+  const amountInr = Math.round(amount * rate);
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(upiId);

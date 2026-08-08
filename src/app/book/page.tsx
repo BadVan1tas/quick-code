@@ -9,6 +9,8 @@ import { UPIPaymentModal } from "@/components/UPIPaymentModal";
 import { QrCode, CreditCard, ShieldCheck } from "lucide-react";
 import { createFirestoreOrder } from "@/lib/db";
 import { useAuth } from "@/context/AuthContext";
+import { useCurrency } from "@/context/CurrencyContext";
+import { CurrencyToggle } from "@/components/ui/CurrencyToggle";
 
 const services = [
   { value: "fullstack", label: "Full-Stack Web Application", price: "$1,499+", deposit: 250 },
@@ -96,6 +98,7 @@ function InputField({
 
 export default function BookPage() {
   const { user, loading: authLoading, sendVerificationEmail, reloadUser } = useAuth();
+  const { formatPriceString, formatAmount, rate, currency } = useCurrency();
   const router = useRouter();
 
   const [step, setStep] = useState(1);
@@ -461,7 +464,7 @@ export default function BookPage() {
                         >
                           <span style={{ fontWeight: 600, fontSize: "0.92rem" }}>{s.label}</span>
                           <span style={{ fontSize: "0.82rem", fontFamily: "'JetBrains Mono', monospace", color: selectedService.value === s.value ? "#818cf8" : "#4b5680" }}>
-                            {s.price}
+                            {formatPriceString(s.price)}
                           </span>
                         </button>
                       ))}
@@ -629,7 +632,7 @@ export default function BookPage() {
                     <div style={{ textAlign: "right" }}>
                       <div style={{ fontSize: "0.78rem", color: "#8b9ec7", fontFamily: "'JetBrains Mono', monospace", marginBottom: "4px" }}>DEPOSIT DUE NOW</div>
                       <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#a5b4fc", fontFamily: "'Space Grotesk', sans-serif" }}>
-                        ₹{(selectedService.deposit * 83).toLocaleString()} <span style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>(${selectedService.deposit}.00)</span>
+                        ₹{Math.round(selectedService.deposit * rate).toLocaleString("en-IN")} <span style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>(${selectedService.deposit}.00 USD)</span>
                       </div>
                     </div>
                   </div>

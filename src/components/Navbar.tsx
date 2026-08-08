@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { User, LogOut } from "lucide-react";
+import { CurrencyToggle } from "./ui/CurrencyToggle";
 
 const navLinks = [
   { label: "Services", href: "/#services" },
@@ -156,6 +157,7 @@ export default function Navbar() {
 
         {/* Desktop CTA & Profile State */}
         <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <CurrencyToggle size="sm" />
           {user ? (
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               {isAdmin && (
@@ -334,6 +336,10 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: "var(--r-sm)", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)" }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Currency:</span>
+            <CurrencyToggle size="sm" />
+          </div>
           <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
             {user ? (
               <Link

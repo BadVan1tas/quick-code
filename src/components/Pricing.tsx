@@ -5,6 +5,8 @@ import Link from "next/link";
 import { SpotlightCard } from "./ui/SpotlightCard";
 import { BorderBeam } from "./ui/BorderBeam";
 import { Check, ShieldCheck, Lock, RefreshCw, Zap, Sparkles, ArrowRight } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
+import { CurrencyToggle } from "./ui/CurrencyToggle";
 
 const plans = [
   {
@@ -96,6 +98,7 @@ const plans = [
 export default function Pricing() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const { formatPriceString } = useCurrency();
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
@@ -126,9 +129,17 @@ export default function Pricing() {
         <h2 className="section-heading">
           Select Your <span className="text-gradient">Production Package</span>
         </h2>
-        <p className="section-subheading" style={{ margin: "0 auto" }}>
+        <p className="section-subheading" style={{ margin: "0 auto 20px" }}>
           No hidden fees, no scope creep. 4 specialized plans engineered for every scale.
         </p>
+
+        {/* Currency Switcher Toggle */}
+        <div style={{ marginTop: "16px", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "0.82rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+            Select Currency:
+          </span>
+          <CurrencyToggle size="md" />
+        </div>
       </div>
 
       {/* 4 Cards Grid */}
@@ -189,10 +200,10 @@ export default function Pricing() {
 
               {/* Price */}
               <div style={{ marginBottom: "28px", paddingBottom: "20px", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-                <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "6px", flexWrap: "wrap" }}>
                   <span
                     style={{
-                      fontSize: "2.5rem",
+                      fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
                       fontWeight: 800,
                       fontFamily: "var(--font-heading)",
                       color: plan.color,
@@ -201,14 +212,14 @@ export default function Pricing() {
                       filter: `drop-shadow(0 0 12px ${plan.glowColor})`,
                     }}
                   >
-                    {plan.price}
+                    {formatPriceString(plan.price)}
                   </span>
                   <span style={{ fontSize: "0.8rem", color: "var(--text-dim)", fontFamily: "var(--font-mono)" }}>
                     {plan.priceNote}
                   </span>
                 </div>
                 <div style={{ fontSize: "0.76rem", color: "var(--text-dim)", marginTop: "6px", fontFamily: "var(--font-mono)" }}>
-                  ${plan.deposit} deposit to lock slot
+                  {formatPriceString(plan.deposit)} deposit to lock slot
                 </div>
               </div>
 

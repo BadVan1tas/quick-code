@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import Analytics from "@/components/Analytics";
 import SchemaOrg from "@/components/SchemaOrg";
 
@@ -46,11 +47,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <AuthProvider>
-          <Analytics />
-          <SchemaOrg />
-          <div className="ambient-bg" aria-hidden="true" />
-          <div className="grid-overlay" aria-hidden="true" />
-          {children}
+          <CurrencyProvider>
+            <Analytics />
+            <SchemaOrg />
+            <div className="ambient-bg" aria-hidden="true" />
+            <div className="grid-overlay" aria-hidden="true" />
+            {children}
+          </CurrencyProvider>
         </AuthProvider>
       </body>
     </html>
