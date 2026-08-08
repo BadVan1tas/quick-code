@@ -19,7 +19,7 @@ const services = [
   { value: "custom", label: "Custom Software / API Integration", price: "Quote", deposit: 250 },
 ];
 
-const budgets = ["$500 – $1,000", "$1,000 – $3,000", "$3,000 – $5,000", "$5,000 – $10,000", "$10,000+"];
+const usdBudgets = ["$500 – $1,000", "$1,000 – $3,000", "$3,000 – $5,000", "$5,000 – $10,000", "$10,000+"];
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
@@ -98,12 +98,13 @@ function InputField({
 
 export default function BookPage() {
   const { user, loading: authLoading, sendVerificationEmail, reloadUser } = useAuth();
-  const { formatPriceString, formatAmount, rate, currency } = useCurrency();
+  const { formatPriceString, formatAmount, currency } = useCurrency();
+  const budgets = usdBudgets.map((b) => formatPriceString(b));
   const router = useRouter();
 
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState(services[0]);
-  const [budget, setBudget] = useState(budgets[1]);
+  const [budgetIdx, setBudgetIdx] = useState(1);
   const [name, setName] = useState(user?.displayName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [company, setCompany] = useState("");
@@ -160,7 +161,7 @@ export default function BookPage() {
       customerName: name || user?.displayName || user?.email?.split("@")[0] || "Customer",
       customerEmail: email || user?.email || "",
       service: selectedService.label,
-      budget,
+      budget: budgets[budgetIdx],
       timeline,
       details,
       gateway: "upi_qr",
@@ -477,17 +478,17 @@ export default function BookPage() {
                       Budget Range <span style={{ color: "#6366f1" }}>*</span>
                     </label>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "clamp(8px, 2vw, 16px)" }}>
-                      {budgets.map((b) => (
+                       {budgets.map((b, idx) => (
                         <button
                           type="button"
                           key={b}
-                          onClick={() => setBudget(b)}
+                          onClick={() => setBudgetIdx(idx)}
                           style={{
                             padding: "10px 12px",
                             borderRadius: "10px",
-                            border: `1px solid ${budget === b ? "#6366f1" : "rgba(255,255,255,0.08)"}`,
-                            background: budget === b ? "rgba(99,102,241,0.12)" : "rgba(255,255,255,0.02)",
-                            color: budget === b ? "#a5b4fc" : "#8b9ec7",
+                            border: `1px solid ${budgetIdx === idx ? "#6366f1" : "rgba(255,255,255,0.08)"}`,
+                            background: budgetIdx === idx ? "rgba(99,102,241,0.12)" : "rgba(255,255,255,0.02)",
+                            color: budgetIdx === idx ? "#a5b4fc" : "#8b9ec7",
                             fontSize: "0.83rem",
                             fontWeight: 600,
                             cursor: "pointer",
@@ -496,7 +497,7 @@ export default function BookPage() {
                         >
                           {b}
                         </button>
-                      ))}
+                       ))}
                     </div>
                   </div>
 
@@ -627,12 +628,15 @@ export default function BookPage() {
                     <div>
                       <div style={{ fontSize: "0.78rem", color: "#8b9ec7", fontFamily: "'JetBrains Mono', monospace", marginBottom: "4px" }}>ORDER SUMMARY</div>
                       <div style={{ fontWeight: 700, color: "#f1f5f9", fontSize: "1rem" }}>{selectedService.label}</div>
-                      <div style={{ fontSize: "0.82rem", color: "#8b9ec7" }}>{budget} · {timeline}</div>
+                      <div style={{ fontSize: "0.82rem", color: "#8b9ec7" }}>{budgets[budgetIdx]} · {timeline}</div>
                     </div>
                     <div style={{ textAlign: "right" }}>
                       <div style={{ fontSize: "0.78rem", color: "#8b9ec7", fontFamily: "'JetBrains Mono', monospace", marginBottom: "4px" }}>DEPOSIT DUE NOW</div>
                       <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#a5b4fc", fontFamily: "'Space Grotesk', sans-serif" }}>
-                        ₹{Math.round(selectedService.deposit * rate).toLocaleString("en-IN")} <span style={{ fontSize: "0.85rem", color: "#8b9ec7" }}>(${selectedService.deposit}.00 USD)</span>
+                        {formatAmount(selectedService.deposit)}
+                        {currency === "INR" && (
+                          <span style={{ fontSize: "0.85rem", color: "#8b9ec7", marginLeft: "8px" }}>(${selectedService.deposit}.00 USD)</span>
+                        )}
                       </div>
                     </div>
                   </div>
