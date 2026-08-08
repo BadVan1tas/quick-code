@@ -51,6 +51,9 @@ export const formatFirebaseAuthError = (err: any): string => {
   const code = err?.code || "";
   const msg = err?.message || "";
 
+  if (code.includes("unauthorized-domain") || msg.includes("unauthorized-domain")) {
+    return `⚠️ Unauthorized Domain Error in Firebase!\n\nYour current domain is not authorized in Firebase Console.\n\nTo fix in 10 seconds:\n1. Open console.firebase.google.com\n2. Select your Firebase project\n3. Click Authentication → Settings (or Settings tab)\n4. Scroll to "Authorized domains"\n5. Click "Add domain" and add your current hostname (e.g. localhost, 127.0.0.1, or your production/Vercel domain)\n6. Click Save!`;
+  }
   if (code.includes("operation-not-allowed") || msg.includes("operation-not-allowed")) {
     return `⚠️ Email/Password Auth is disabled in Firebase Console!\n\nTo enable it:\n1. Open console.firebase.google.com\n2. Select your Firebase project\n3. Click "Authentication" → "Sign-in method"\n4. Click "Email/Password" → Toggle ENABLE & Save!`;
   }
