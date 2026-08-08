@@ -37,7 +37,9 @@ export const FlipWords: React.FC<FlipWordsProps> = ({
         className={className}
         style={{
           display: "inline-block",
-          whiteSpace: "nowrap",
+          whiteSpace: "normal",
+          wordBreak: "break-word",
+          overflowWrap: "break-word",
         }}
       >
         {currentWord}

@@ -74,8 +74,11 @@ export default function Hero() {
         position: "relative",
         padding: "100px 16px 60px",
         maxWidth: "1200px",
+        width: "100%",
+        boxSizing: "border-box",
         margin: "0 auto",
         textAlign: "center",
+        overflowX: "hidden",
       }}
     >
       <div ref={heroRef} className="hero-content-wrapper" style={{ position: "relative", zIndex: 1 }}>
@@ -99,8 +102,8 @@ export default function Hero() {
         >
           <span className="dot-live" />
           <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#6ee7b7", letterSpacing: "0.04em", fontFamily: "var(--font-mono)" }}>
-            <span className="hide-mobile">NEXT-GEN SOFTWARE & WEB DEVELOPMENT — BOOKINGS OPEN</span>
-            <span className="show-mobile" style={{ display: "none" }}>NEXT-GEN SOFTWARE & WEB DEV</span>
+            <span className="hide-mobile">NEXT-GEN SOFTWARE &amp; WEB DEVELOPMENT — BOOKINGS OPEN</span>
+            <span className="show-mobile">NEXT-GEN SOFTWARE &amp; WEB DEV</span>
           </span>
         </div>
 
@@ -121,7 +124,7 @@ export default function Hero() {
           }}
         >
           <span style={{ display: "inline" }}>We Engineer </span>
-          <span style={{ display: "inline-block" }}>
+          <span className="hero-headline-flipwords" style={{ display: "inline-block" }}>
             <FlipWords words={["Next.js Apps", "Payment Portals", "Custom Systems", "SaaS Platforms"]} duration={2800} />
           </span>
           <br className="hide-mobile" />{" "}
@@ -191,9 +194,11 @@ export default function Hero() {
         ref={statsRef}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gap: "16px",
           maxWidth: "920px",
+          width: "100%",
+          boxSizing: "border-box",
           margin: "0 auto 60px",
         }}
       >
@@ -228,11 +233,18 @@ export default function Hero() {
       </div>
 
       <style>{`
+        /* Always hide show-mobile by default */
+        span.show-mobile {
+          display: none;
+        }
+
         @media (max-width: 768px) {
           .hero-section {
             text-align: center !important;
-            padding: 60px 16px 40px !important;
+            padding: 80px 16px 40px !important;
             overflow-x: hidden !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
           .hero-content-wrapper {
             display: flex !important;
@@ -240,9 +252,11 @@ export default function Hero() {
             align-items: center !important;
             text-align: center !important;
             width: 100% !important;
+            box-sizing: border-box !important;
           }
           .hero-content-wrapper * {
-            text-align: center !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
           }
           .hero-cta-container {
             display: flex !important;
@@ -262,6 +276,9 @@ export default function Hero() {
             align-items: center !important;
             box-sizing: border-box !important;
           }
+          span.hide-mobile {
+            display: none !important;
+          }
           span.show-mobile {
             display: inline !important;
           }
@@ -271,8 +288,19 @@ export default function Hero() {
           .codeterminal-container {
             width: 100% !important;
             max-width: 100% !important;
-            overflow-x: auto !important;
+            overflow-x: hidden !important;
             -webkit-overflow-scrolling: touch !important;
+          }
+          /* Ensure FlipWords wraps on mobile */
+          .hero-headline-flipwords {
+            display: block !important;
+            width: 100% !important;
+          }
+          .hero-headline-flipwords > span {
+            display: inline !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
           }
         }
       `}</style>
