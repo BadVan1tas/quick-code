@@ -1,418 +1,1632 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CatBot from "@/components/CatBot";
-import { ExternalLink, Sparkles, ArrowUpRight, Code2, Rocket, Globe, Terminal } from "lucide-react";
+import Script from "next/script";
 
-export default function PortfolioPage() {
+export default function FuelPortfolioPage() {
+  const cursorDotRef = useRef<HTMLDivElement>(null);
+  const cursorRingRef = useRef<HTMLDivElement>(null);
+  const heroBgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // ── Custom Cursor ─────────────────────────────────
+    const dot = cursorDotRef.current;
+    const ring = cursorRingRef.current;
+    if (!dot || !ring) return;
+
+    let rx = 0, ry = 0, mx = 0, my = 0;
+    let animId: number;
+
+    const onMouseMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+    window.addEventListener("mousemove", onMouseMove);
+
+    function animCursor() {
+      if (dot && ring) {
+        dot.style.left = mx + "px";
+        dot.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+      }
+      animId = requestAnimationFrame(animCursor);
+    }
+    animCursor();
+
+    // ── Scroll Reveal ─────────────────────────────────
+    const reveals = document.querySelectorAll(".fuel-reveal");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("fuel-up");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    reveals.forEach((el) => obs.observe(el));
+
+    // ── Hero bg parallax ──────────────────────────────
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (heroBgRef.current) {
+        heroBgRef.current.style.transform = `translateY(${y * 0.35}px)`;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(animId);
+      obs.disconnect();
+    };
+  }, []);
+
   return (
-    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#07070f", color: "#f0f0ff" }}>
-      <Navbar />
+    <div className="fuel-portfolio-root">
+      {/* Google Fonts */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
 
-      {/* Hero Section */}
-      <section
-        style={{
-          position: "relative",
-          padding: "100px 24px 80px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-          width: "100%",
-        }}
-      >
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "48px", alignItems: "center" }}>
-          {/* Left Column */}
-          <div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 16px",
-                borderRadius: 9999,
-                background: "rgba(99,102,241,0.12)",
-                border: "1px solid rgba(99,102,241,0.3)",
-                fontSize: "0.8rem",
-                color: "#a5b4fc",
-                fontFamily: "var(--font-mono)",
-                marginBottom: "24px",
-              }}
-            >
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", display: "inline-block", animation: "pulse 2s infinite" }} />
-              AVAILABLE FOR NEW PROJECTS
-            </div>
+      {/* Custom Cursor */}
+      <div id="fuel-cursor-dot" ref={cursorDotRef} />
+      <div id="fuel-cursor-ring" ref={cursorRingRef} />
 
-            <h1
-              style={{
-                fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
-                fontWeight: 800,
-                fontFamily: "var(--font-heading)",
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
-                marginBottom: "20px",
-              }}
-            >
-              Hi, I'm <span className="text-gradient">Shaurya</span><br />
-              Full Stack Developer &amp; Founder
-            </h1>
+      {/* ─── NAV ─── */}
+      <nav className="fuel-nav">
+        <Link href="/" className="fuel-nav-logo">
+          QuikCode©
+        </Link>
+        <ul className="fuel-nav-links">
+          <li>
+            <a href="#hero">
+              <span className="fuel-nav-num">01</span>Home
+            </a>
+          </li>
+          <li>
+            <a href="#portfolio">
+              <span className="fuel-nav-num">02</span>Work
+            </a>
+          </li>
+          <li>
+            <a href="#services">
+              <span className="fuel-nav-num">03</span>Services
+            </a>
+          </li>
+          <li>
+            <Link href="/resume">
+              <span className="fuel-nav-num">04</span>Resume
+            </Link>
+          </li>
+          <li>
+            <a href="#contact">
+              <span className="fuel-nav-num">05</span>Contact
+            </a>
+          </li>
+        </ul>
+        <a href="#contact" className="fuel-nav-card" id="nav-meetme">
+          <img
+            src="/portfolio/avatar.jpg"
+            alt="Shaurya Shashi"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/logo.png";
+            }}
+          />
+          <div className="fuel-nav-card-text">
+            <span className="fuel-nav-card-name">Meet Shaurya</span>
+            <span className="fuel-nav-card-role">Full Stack Dev</span>
+          </div>
+        </a>
+      </nav>
 
-            <p style={{ fontSize: "1.1rem", color: "var(--text-muted)", lineHeight: 1.7, marginBottom: "32px", maxWidth: "540px" }}>
-              Lead Developer at <strong style={{ color: "#fff" }}>QuikCode</strong>. I build premium, high-converting digital web apps from wireframe to deployment.
+      {/* ─── HERO ─── */}
+      <section id="hero" className="fuel-hero">
+        <div className="fuel-hero-bg">
+          <img ref={heroBgRef} src="/portfolio/cheappc.jpg" alt="Hero Background" id="hero-img" />
+        </div>
+        <div className="fuel-hero-wordmark">QUIKCODE</div>
+
+        <div className="fuel-hero-content">
+          <div className="fuel-hero-left">
+            <p className="fuel-hero-tagline">
+              Pick a stack, ship a product,
+              <br />
+              and your <strong>vision</strong> will go live
+              <br />
+              within the deadline.
             </p>
-
-            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-              <a href="#featured-projects" className="btn-primary" style={{ padding: "14px 32px", fontSize: "0.95rem" }}>
-                Explore Shipped Work ↓
+            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
+              <a href="#portfolio" className="fuel-hero-cta" id="hero-explore-btn">
+                Explore Work
+                <span className="fuel-hero-cta-arrow">↗</span>
               </a>
-              <Link
-                href="/resume"
-                style={{
-                  padding: "14px 28px",
-                  borderRadius: "var(--r-sm)",
-                  background: "rgba(99,102,241,0.15)",
-                  border: "1px solid rgba(99,102,241,0.4)",
-                  color: "#a5b4fc",
-                  fontWeight: 700,
-                  fontSize: "0.95rem",
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <span>📄 View Resume</span>
+              <Link href="/resume" className="fuel-hero-cta" style={{ borderBottomColor: "rgba(255,255,255,0.7)" }}>
+                View Resume
+                <span className="fuel-hero-cta-arrow">↗</span>
               </Link>
-              <Link
-                href="/book"
-                style={{
-                  padding: "14px 28px",
-                  borderRadius: "var(--r-sm)",
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#fff",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                  textDecoration: "none",
-                }}
-              >
-                Hire / Contact
-              </Link>
-            </div>
-
-            {/* Quick Stats */}
-            <div style={{ display: "flex", gap: "36px", marginTop: "44px", paddingTop: "32px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-              <div>
-                <div style={{ fontSize: "2rem", fontWeight: 800, color: "#6366f1", fontFamily: "var(--font-heading)" }}>2+</div>
-                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Live Stores</div>
-              </div>
-              <div>
-                <div style={{ fontSize: "2rem", fontWeight: 800, color: "#06b6d4", fontFamily: "var(--font-heading)" }}>100%</div>
-                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Satisfaction</div>
-              </div>
-              <div>
-                <div style={{ fontSize: "2rem", fontWeight: 800, color: "#ec4899", fontFamily: "var(--font-heading)" }}>Fast</div>
-                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Turnaround</div>
-              </div>
             </div>
           </div>
+        </div>
 
-          {/* Right Column / Avatar Frame */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div
-              style={{
-                position: "relative",
-                width: "320px",
-                height: "380px",
-                borderRadius: "28px",
-                overflow: "hidden",
-                background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(6,182,212,0.1))",
-                border: "1px solid rgba(99,102,241,0.3)",
-                boxShadow: "0 24px 60px rgba(0,0,0,0.6), 0 0 50px rgba(99,102,241,0.2)",
-              }}
-            >
-              <img
-                src="/portfolio/avatar.jpg"
-                alt="Shaurya Shashi — Full Stack Developer"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "16px",
-                  left: "16px",
-                  right: "16px",
-                  padding: "12px 16px",
-                  borderRadius: "14px",
-                  background: "rgba(10, 10, 20, 0.85)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "#fff" }}>Shaurya Shashi</div>
-                  <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>Lead Developer · QuikCode</div>
-                </div>
-                <span style={{ fontSize: "0.75rem", padding: "4px 8px", borderRadius: "6px", background: "rgba(99,102,241,0.2)", color: "#818cf8", fontWeight: 700 }}>
-                  Active 🟢
-                </span>
-              </div>
+        <div className="fuel-hero-services">
+          <div className="fuel-hero-services-tag">01/ Capabilities</div>
+          <div className="fuel-hero-services-list">
+            Full Stack Development
+            <br />
+            UI / UX Design
+            <br />
+            Deployment &amp; DevOps
+          </div>
+        </div>
+
+        <div className="fuel-hero-year">© 2026</div>
+      </section>
+
+      {/* ─── ABOUT STRIP ─── */}
+      <section id="about-strip" className="fuel-about-strip">
+        <div className="fuel-about-strip-left fuel-reveal">
+          <div className="fuel-about-strip-num">01</div>
+          <h2 className="fuel-about-strip-title">
+            Building web
+            <br />
+            experiences that
+            <br />
+            actually ship.
+          </h2>
+        </div>
+        <div className="fuel-about-strip-right fuel-reveal">
+          <p className="fuel-about-strip-text">
+            I'm <strong>Shaurya Shashi</strong>, a full-stack developer and founder of <strong>QuikCode</strong>. I
+            specialize in turning ideas into production-ready products — fast. From artisan bakery stores to cyberpunk gaming
+            marketplaces, I build experiences that look stunning and perform flawlessly.
+          </p>
+          <p className="fuel-about-strip-text" style={{ marginBottom: "2.5rem" }}>
+            Every project starts with a deep understanding of the goal and ends with a product that makes both the client
+            and users genuinely happy.
+          </p>
+
+          <div className="fuel-stat-bar">
+            <span className="fuel-stat-lbl" style={{ whiteSpace: "nowrap" }}>
+              Projects Shipped
+            </span>
+            <div className="fuel-stat-bar-track" style={{ flex: 1 }}>
+              <div className="fuel-stat-bar-fill" style={{ width: "80%" }} />
+            </div>
+            <span className="fuel-stat-bar-val">2 Live</span>
+          </div>
+          <div className="fuel-stat-bar" style={{ marginTop: "1rem" }}>
+            <span className="fuel-stat-lbl" style={{ whiteSpace: "nowrap" }}>
+              Client Satisfaction
+            </span>
+            <div className="fuel-stat-bar-track" style={{ flex: 1 }}>
+              <div className="fuel-stat-bar-fill" style={{ width: "100%" }} />
+            </div>
+            <span className="fuel-stat-bar-val">100%</span>
+          </div>
+
+          <div className="fuel-stats-row">
+            <div className="fuel-stat-item">
+              <span className="fuel-stat-val">2+</span>
+              <span className="fuel-stat-lbl">Live Projects</span>
+            </div>
+            <div className="fuel-stat-item">
+              <span className="fuel-stat-val">5+</span>
+              <span className="fuel-stat-lbl">Tech Stacks</span>
+            </div>
+            <div className="fuel-stat-item">
+              <span className="fuel-stat-val">∞</span>
+              <span className="fuel-stat-lbl">Ambition</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Projects Section */}
-      <section
-        id="featured-projects"
-        style={{
-          padding: "80px 24px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-          width: "100%",
-        }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "60px" }}>
-          <div className="section-label" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-            <Sparkles size={14} color="#6366f1" /> PRODUCTION RELEASES
+      {/* ─── CLIENTS MARQUEE ─── */}
+      <div id="clients" className="fuel-clients">
+        <div className="fuel-clients-track">
+          <span className="fuel-client-item">Next.js</span>
+          <span className="fuel-client-item">React</span>
+          <span className="fuel-client-item">TypeScript</span>
+          <span className="fuel-client-item">Node.js</span>
+          <span className="fuel-client-item">Tailwind.</span>
+          <span className="fuel-client-item">PostgreSQL</span>
+          <span className="fuel-client-item">Prisma</span>
+          <span className="fuel-client-item">Vercel</span>
+          <span className="fuel-client-item">Next.js</span>
+          <span className="fuel-client-item">React</span>
+          <span className="fuel-client-item">TypeScript</span>
+          <span className="fuel-client-item">Node.js</span>
+          <span className="fuel-client-item">Tailwind.</span>
+          <span className="fuel-client-item">PostgreSQL</span>
+          <span className="fuel-client-item">Prisma</span>
+          <span className="fuel-client-item">Vercel</span>
+        </div>
+      </div>
+
+      {/* ─── PORTFOLIO ─── */}
+      <section id="portfolio" className="fuel-portfolio-section">
+        <div className="fuel-portfolio-header fuel-reveal">
+          <div>
+            <div className="fuel-section-label">(Portfolio)</div>
+            <h2 className="fuel-portfolio-title">Selected Work</h2>
           </div>
-          <h2 className="section-heading" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
-            Selected <span className="text-gradient">Projects</span>
-          </h2>
-          <p className="section-subheading" style={{ margin: "0 auto" }}>
-            Explore real live client projects crafted and shipped by QuikCode.
-          </p>
+          <a href="#contact" className="fuel-portfolio-action" id="see-all-btn">
+            See all (02)
+            <span>↗</span>
+          </a>
         </div>
 
-        {/* Project 1: Homechef Bakery */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-            gap: "40px",
-            alignItems: "center",
-            padding: "40px",
-            borderRadius: "28px",
-            background: "rgba(15, 20, 38, 0.7)",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-            marginBottom: "48px",
-          }}
-        >
-          <div style={{ borderRadius: "20px", overflow: "hidden", height: "300px", position: "relative" }}>
-            <img
-              src="/portfolio/homechef.jpg"
-              alt="Homechef Bakery Showcase"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <div style={{ fontSize: "0.78rem", color: "#f59e0b", fontFamily: "var(--font-mono)", fontWeight: 700, marginBottom: "8px" }}>
-              PROJECT 01 // E-COMMERCE BAKERY
+        {/* Project 01 */}
+        <div className="fuel-project-row">
+          <div className="fuel-project-image-wrap">
+            <img src="/portfolio/homechef.jpg" alt="Homechef Bakery" />
+            <div className="fuel-project-meta-footer">
+              <span className="fuel-project-meta-footer-name">Homechef Bakery</span>
+              <span className="fuel-project-meta-footer-year">© 2026</span>
             </div>
-            <h3 style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginBottom: "12px", color: "#fff" }}>
-              Homechef Bakery
-            </h3>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "20px" }}>
-              A full-stack gourmet bakery storefront with Next.js App Router, 100% eggless menu showcases (Black Forest, Alphonso Mango, Belgian Truffle), and seamless WhatsApp direct custom ordering.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "24px" }}>
-              {["Next.js 15", "TypeScript", "Tailwind CSS", "Vercel", "WhatsApp Business API"].map((tag) => (
-                <span key={tag} style={{ fontSize: "0.75rem", padding: "4px 12px", borderRadius: "6px", background: "rgba(245,158,11,0.12)", color: "#fbbf24", border: "1px solid rgba(245,158,11,0.25)" }}>
-                  {tag}
-                </span>
-              ))}
+          </div>
+          <div className="fuel-project-info fuel-reveal">
+            <div>
+              <span className="fuel-project-num">01</span>
+              <h3 className="fuel-project-name">
+                Homechef
+                <br />
+                Bakery
+              </h3>
+              <div className="fuel-project-type">E-Commerce · Next.js · Bakery</div>
+              <p className="fuel-project-desc">
+                A premium 100% eggless bakery platform with animated product showcases, custom cake ordering via
+                WhatsApp, and a warm editorial UI. Serving Hebbal, Bangalore — handcrafted daily.
+              </p>
+              <div className="fuel-project-tags-row">
+                <span className="fuel-ptag">Next.js</span>
+                <span className="fuel-ptag">TypeScript</span>
+                <span className="fuel-ptag">Tailwind CSS</span>
+                <span className="fuel-ptag">Vercel</span>
+              </div>
             </div>
             <a
               href="https://homechef-bakery.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
-              style={{
-                padding: "12px 28px",
-                fontSize: "0.9rem",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "linear-gradient(135deg, #d97706, #b45309)",
-              }}
+              className="fuel-project-cta"
+              id="homechef-btn"
             >
-              <span>Visit Live Website</span>
-              <ExternalLink size={16} />
+              Visit Live Site
+              <span>↗</span>
             </a>
           </div>
         </div>
 
-        {/* Project 2: Cheap PC Resident */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-            gap: "40px",
-            alignItems: "center",
-            padding: "40px",
-            borderRadius: "28px",
-            background: "rgba(15, 20, 38, 0.7)",
-            border: "1px solid rgba(6, 182, 212, 0.25)",
-            boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-          }}
-        >
-          <div style={{ borderRadius: "20px", overflow: "hidden", height: "300px", position: "relative" }}>
-            <img
-              src="/portfolio/cheappc.jpg"
-              alt="Cheap PC Resident Showcase"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <div style={{ fontSize: "0.78rem", color: "#06b6d4", fontFamily: "var(--font-mono)", fontWeight: 700, marginBottom: "8px" }}>
-              PROJECT 02 // GAMING ACCOUNT STORE
+        {/* Project 02 */}
+        <div className="fuel-project-row fuel-reverse">
+          <div className="fuel-project-image-wrap">
+            <img src="/portfolio/cheappc.jpg" alt="Cheap PC Resident" />
+            <div className="fuel-project-meta-footer">
+              <span className="fuel-project-meta-footer-name">Cheap PC Resident</span>
+              <span className="fuel-project-meta-footer-year">© 2026</span>
             </div>
-            <h3 style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginBottom: "12px", color: "#fff" }}>
-              Cheap PC Resident
-            </h3>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "20px" }}>
-              Cyberpunk-styled marketplace offering lifetime warranty gaming accounts for Steam, EA, Ubisoft, and Rockstar games with unique 3D perspective rotation scrolling and HUD-inspired system indicators.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "24px" }}>
-              {["HTML5", "Vanilla CSS", "JavaScript", "3D Perspective Scroll", "Cyberpunk HUD UI"].map((tag) => (
-                <span key={tag} style={{ fontSize: "0.75rem", padding: "4px 12px", borderRadius: "6px", background: "rgba(6,182,212,0.12)", color: "#67e8f9", border: "1px solid rgba(6,182,212,0.25)" }}>
-                  {tag}
-                </span>
-              ))}
+          </div>
+          <div className="fuel-project-info fuel-reveal">
+            <div>
+              <span className="fuel-project-num">02</span>
+              <h3 className="fuel-project-name">
+                Cheap PC
+                <br />
+                Resident
+              </h3>
+              <div className="fuel-project-type">Gaming Store · HTML/CSS/JS · Cyberpunk</div>
+              <p className="fuel-project-desc">
+                A cyberpunk-themed premium gaming account store featuring horizontal 3D scroll experience, holographic HUD
+                animations, and neon aesthetics. Sells Steam, Rockstar, Ubisoft &amp; EA accounts with lifetime warranty.
+              </p>
+              <div className="fuel-project-tags-row">
+                <span className="fuel-ptag">HTML5</span>
+                <span className="fuel-ptag">Vanilla CSS</span>
+                <span className="fuel-ptag">JavaScript</span>
+                <span className="fuel-ptag">Cyberpunk UI</span>
+              </div>
             </div>
             <a
               href="https://cheappcresident.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
-              style={{
-                padding: "12px 28px",
-                fontSize: "0.9rem",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "linear-gradient(135deg, #0891b2, #7c3aed)",
-              }}
+              className="fuel-project-cta"
+              id="cheappc-btn"
             >
-              <span>Visit Live Website</span>
-              <ExternalLink size={16} />
+              Visit Live Site
+              <span>↗</span>
             </a>
           </div>
         </div>
       </section>
 
-      {/* Direct Contact & Inquiry Section */}
-      <section style={{ padding: "40px 24px 80px", maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
-        <div
-          style={{
-            padding: "48px 36px",
-            borderRadius: "28px",
-            background: "linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(6,182,212,0.1) 100%)",
-            border: "1px solid rgba(99,102,241,0.35)",
-            boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          <div className="section-label" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-            <Sparkles size={14} color="#6366f1" /> GET IN TOUCH
-          </div>
-          <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 800, fontFamily: "var(--font-heading)", color: "#fff", margin: 0 }}>
-            Have a Project in Mind? Let's Talk.
-          </h2>
-          <p style={{ color: "var(--text-muted)", maxWidth: "600px", fontSize: "0.98rem", lineHeight: 1.7, margin: 0 }}>
-            Whether you need a custom e-commerce store, a full-stack SaaS platform, or high-performance web engineering — reach out directly:
-          </p>
-
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center", marginTop: "12px" }}>
-            <a
-              href="mailto:shauryashashi30@gmail.com"
-              className="btn-primary"
-              style={{
-                padding: "14px 28px",
-                fontSize: "0.95rem",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                textDecoration: "none",
-              }}
-            >
-              <span>✉️ Email: shauryashashi30@gmail.com</span>
-            </a>
-
-            <a
-              href="https://wa.me/919992145372?text=Hi%20Shaurya,%20I%20saw%20your%20portfolio%20on%20QuikCode%20and%20want%20to%20discuss%20a%20project!"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                padding: "14px 28px",
-                borderRadius: "var(--r-sm)",
-                background: "rgba(16, 185, 129, 0.15)",
-                border: "1px solid rgba(16, 185, 129, 0.4)",
-                color: "#34d399",
-                fontWeight: 700,
-                fontSize: "0.95rem",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <span>💬 WhatsApp: +91 9992145372</span>
-            </a>
-          </div>
+      {/* ─── SERVICES ─── */}
+      <section id="services" className="fuel-services-section">
+        <div className="fuel-services-header fuel-reveal">
+          <span className="fuel-services-header-label">(03) Services &amp; Capabilities</span>
+          <h2 className="fuel-services-header-title">What I Build</h2>
         </div>
-      </section>
 
-      {/* Terminal Profile Card */}
-      <section style={{ padding: "0 24px 100px", maxWidth: "800px", margin: "0 auto", width: "100%" }}>
-        <div
-          style={{
-            borderRadius: "20px",
-            overflow: "hidden",
-            background: "#080812",
-            border: "1px solid rgba(99,102,241,0.3)",
-            boxShadow: "0 24px 60px rgba(0,0,0,0.6)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 20px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#ef4444" }} />
-            <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#f59e0b" }} />
-            <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#10b981" }} />
-            <span style={{ marginLeft: "auto", fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--text-dim)" }}>
-              shaurya@quikcode ~ dev.config.ts
-            </span>
+        <div className="fuel-services-list">
+          {/* Service 01 */}
+          <div className="fuel-service-row fuel-reveal">
+            <div className="fuel-service-num">01</div>
+            <div className="fuel-service-image">
+              <img src="/portfolio/homechef.jpg" alt="Web Applications" />
+            </div>
+            <div className="fuel-service-content">
+              <div className="fuel-service-subtitle">Engineering</div>
+              <h3 className="fuel-service-name">Full-Stack Web Apps</h3>
+              <p className="fuel-service-desc">
+                End-to-end applications built with Next.js, React, Node.js, and TypeScript. From database architecture to
+                seamless deployment on Vercel or cloud platforms.
+              </p>
+            </div>
           </div>
 
-          <div style={{ padding: "28px", fontFamily: "var(--font-mono)", fontSize: "0.85rem", lineHeight: 1.9 }}>
-            <div><span style={{ color: "#a855f7" }}>const</span> <span style={{ color: "#06b6d4" }}>developer</span> = &#123;</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>name</span>: <span style={{ color: "#fff" }}>"Shaurya Shashi"</span>,</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>email</span>: <span style={{ color: "#fff" }}>"shauryashashi30@gmail.com"</span>,</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>whatsapp</span>: <span style={{ color: "#fff" }}>"+91 9992145372"</span>,</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>role</span>: <span style={{ color: "#fff" }}>"Full Stack Web Developer &amp; Founder"</span>,</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>studio</span>: <span style={{ color: "#fff" }}>"QuikCode"</span>,</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>shippedProjects</span>: [<span style={{ color: "#fff" }}>"Homechef Bakery"</span>, <span style={{ color: "#fff" }}>"Cheap PC Resident"</span>],</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>techArsenal</span>: [<span style={{ color: "#fff" }}>"Next.js"</span>, <span style={{ color: "#fff" }}>"React"</span>, <span style={{ color: "#fff" }}>"TypeScript"</span>, <span style={{ color: "#fff" }}>"Node.js"</span>, <span style={{ color: "#fff" }}>"Tailwind"</span>],</div>
-            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>status</span>: <span style={{ color: "#10b981" }}>"Accepting New Client Projects"</span>,</div>
-            <div>&#125;;</div>
-            <div style={{ marginTop: "12px" }}>
-              <span style={{ color: "#a855f7" }}>console</span>.<span style={{ color: "#06b6d4" }}>log</span>(<span style={{ color: "#10b981" }}>"Let's build something exceptional! 🚀"</span>);
+          {/* Service 02 */}
+          <div className="fuel-service-row fuel-reveal">
+            <div className="fuel-service-num">02</div>
+            <div className="fuel-service-image">
+              <img src="/portfolio/cheappc.jpg" alt="UI/UX & Design" />
+            </div>
+            <div className="fuel-service-content">
+              <div className="fuel-service-subtitle">Creative</div>
+              <h3 className="fuel-service-name">UI / UX Design</h3>
+              <p className="fuel-service-desc">
+                Distinctive, high-conversion visual design that refuses to look like a generic template. Bespoke
+                typography, custom micro-interactions, and fluid 60fps animations.
+              </p>
+            </div>
+          </div>
+
+          {/* Service 03 */}
+          <div className="fuel-service-row fuel-reveal">
+            <div className="fuel-service-num">03</div>
+            <div className="fuel-service-image">
+              <img src="/portfolio/homechef.jpg" alt="E-Commerce & Portals" />
+            </div>
+            <div className="fuel-service-content">
+              <div className="fuel-service-subtitle">Commerce</div>
+              <h3 className="fuel-service-name">E-Commerce &amp; Portals</h3>
+              <p className="fuel-service-desc">
+                Custom storefronts with payment gateways, automated messaging, WhatsApp Business integrations, and customer
+                dashboards engineered to convert visitors into buyers.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <Footer />
-      <CatBot />
-    </main>
+      {/* ─── SKILLS GRID ─── */}
+      <section id="skills" className="fuel-skills-section">
+        <div className="fuel-skills-header fuel-reveal">
+          <div className="fuel-section-label">(Tech Stack)</div>
+          <h2 className="fuel-skills-title">Core Competencies</h2>
+        </div>
+
+        <div className="fuel-skills-cats fuel-reveal">
+          {/* Cat 1 */}
+          <div className="fuel-skill-cat">
+            <span className="fuel-skill-cat-icon">⚡</span>
+            <div className="fuel-skill-cat-name">Frontend</div>
+            <div className="fuel-skill-list">
+              <div className="fuel-skill-item">
+                <span>React / Next.js</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "95%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>TypeScript</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "90%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>Tailwind CSS</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "92%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>HTML5 / CSS3</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "98%" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cat 2 */}
+          <div className="fuel-skill-cat">
+            <span className="fuel-skill-cat-icon">🛠️</span>
+            <div className="fuel-skill-cat-name">Backend</div>
+            <div className="fuel-skill-list">
+              <div className="fuel-skill-item">
+                <span>Node.js</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "88%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>PostgreSQL / Prisma</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "85%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>REST &amp; GraphQL APIs</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "90%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>Firebase Firestore</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "87%" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cat 3 */}
+          <div className="fuel-skill-cat">
+            <span className="fuel-skill-cat-icon">🚀</span>
+            <div className="fuel-skill-cat-name">DevOps &amp; Tools</div>
+            <div className="fuel-skill-list">
+              <div className="fuel-skill-item">
+                <span>Vercel / Cloud</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "95%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>Git &amp; GitHub</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "92%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>Figma UI/UX</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "86%" }} />
+                </div>
+              </div>
+              <div className="fuel-skill-item">
+                <span>Linux / CLI</span>
+                <div className="fuel-skill-item-bar">
+                  <div className="fuel-skill-item-fill" style={{ width: "80%" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CONTACT ─── */}
+      <section id="contact" className="fuel-contact-section">
+        <div className="fuel-contact-inner">
+          <div className="fuel-reveal">
+            <div className="fuel-section-label" style={{ marginBottom: "1rem" }}>
+              (04) Get in Touch
+            </div>
+            <h2 className="fuel-contact-title">
+              Let's build
+              <br />
+              something
+              <br />
+              great.
+            </h2>
+            <p className="fuel-contact-subtitle">
+              Available for freelance projects, full-time opportunities, and collaborations. Drop a message and I'll get
+              back to you within 24 hours.
+            </p>
+
+            <div className="fuel-contact-links-list">
+              <a href="mailto:shauryashashi30@gmail.com" className="fuel-contact-link-item" id="contact-email">
+                <span className="fuel-contact-link-name">Email: shauryashashi30@gmail.com</span>
+                <span className="fuel-contact-link-arrow">→</span>
+              </a>
+              <a
+                href="https://github.com/BadVan1tas"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fuel-contact-link-item"
+                id="contact-github"
+              >
+                <span className="fuel-contact-link-name">GitHub: BadVan1tas</span>
+                <span className="fuel-contact-link-arrow">→</span>
+              </a>
+              <a
+                href="https://wa.me/919992145372?text=Hi%20Shaurya,%20I'm%20interested%20in%20working%20with%20you!"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fuel-contact-link-item"
+                id="contact-whatsapp"
+              >
+                <span className="fuel-contact-link-name">WhatsApp: +91 9992145372</span>
+                <span className="fuel-contact-link-arrow">→</span>
+              </a>
+              <Link href="/resume" className="fuel-contact-link-item">
+                <span className="fuel-contact-link-name">View &amp; Download Resume (PDF)</span>
+                <span className="fuel-contact-link-arrow">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="fuel-contact-right fuel-reveal">
+            <div className="fuel-contact-terminal">
+              <div className="fuel-ct-bar">
+                <div className="fuel-ct-dot fuel-ct-red" />
+                <div className="fuel-ct-dot fuel-ct-yellow" />
+                <div className="fuel-ct-dot fuel-ct-green" />
+                <span className="fuel-ct-title">shaur@quikcode ~ portfolio.ts</span>
+              </div>
+              <div className="fuel-ct-body">
+                <div>
+                  <span className="fuel-ct-muted">1 </span>
+                  <span className="fuel-ct-purple">const</span> <span className="fuel-ct-cyan">me</span> = &#123;
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">2 </span>&nbsp; <span className="fuel-ct-amber">name</span>:{" "}
+                  <span className="fuel-ct-white">"Shaurya Shashi"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">3 </span>&nbsp; <span className="fuel-ct-amber">email</span>:{" "}
+                  <span className="fuel-ct-white">"shauryashashi30@gmail.com"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">4 </span>&nbsp; <span className="fuel-ct-amber">whatsapp</span>:{" "}
+                  <span className="fuel-ct-white">"+91 9992145372"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">5 </span>&nbsp; <span className="fuel-ct-amber">role</span>:{" "}
+                  <span className="fuel-ct-white">"Full Stack Dev"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">6 </span>&nbsp; <span className="fuel-ct-amber">studio</span>:{" "}
+                  <span className="fuel-ct-white">"QuikCode"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">7 </span>&nbsp; <span className="fuel-ct-amber">stack</span>: [
+                  <span className="fuel-ct-white">"Next.js"</span>, <span className="fuel-ct-white">"React"</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">8 </span>&nbsp; &nbsp; &nbsp; &nbsp;{" "}
+                  <span className="fuel-ct-white">"TypeScript"</span>, <span className="fuel-ct-white">"Node"</span>],
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">9 </span>&nbsp; <span className="fuel-ct-amber">available</span>:{" "}
+                  <span className="fuel-ct-cyan">true</span>,
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">10 </span>&nbsp; <span className="fuel-ct-amber">passion</span>:{" "}
+                  <span className="fuel-ct-pink">Infinity</span>
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">11 </span>&#125;;
+                </div>
+                <div>&nbsp;</div>
+                <div>
+                  <span className="fuel-ct-muted">12 </span>
+                  <span className="fuel-ct-purple">console</span>.<span className="fuel-ct-cyan">log</span>(
+                  <span className="fuel-ct-white">"Ready to ship 🚀"</span>);
+                </div>
+                <div>
+                  <span className="fuel-ct-muted">13 </span>
+                  <span className="fuel-ct-cursor" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FOOTER ─── */}
+      <footer className="fuel-footer">
+        <span className="fuel-footer-logo">QuikCode©</span>
+        <span className="fuel-footer-copy">© 2026 Shaurya Shashi — QuikCode Studio</span>
+      </footer>
+
+      {/* ─── FUEL INLINE STYLES ─── */}
+      <style jsx global>{`
+        .fuel-portfolio-root {
+          --white: #ffffff;
+          --off: #f4f4f2;
+          --light: #e8e8e4;
+          --mid: #999990;
+          --dark: #111110;
+          --black: #0a0a09;
+          --accent: #ff3d00;
+          --border: rgba(0, 0, 0, 0.1);
+          --font: 'Inter', sans-serif;
+          --display: 'Syne', sans-serif;
+
+          font-family: var(--font);
+          background: var(--off);
+          color: var(--dark);
+          overflow-x: hidden;
+          cursor: none;
+          min-height: 100vh;
+        }
+
+        #fuel-cursor-dot {
+          position: fixed;
+          width: 8px;
+          height: 8px;
+          background: var(--dark);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9999;
+          transform: translate(-50%, -50%);
+          transition: transform 0.05s;
+        }
+
+        #fuel-cursor-ring {
+          position: fixed;
+          width: 40px;
+          height: 40px;
+          border: 1.5px solid var(--dark);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9998;
+          transform: translate(-50%, -50%);
+          transition: width 0.3s, height 0.3s, opacity 0.3s;
+          opacity: 0.4;
+        }
+
+        .fuel-portfolio-root:has(a:hover) #fuel-cursor-ring,
+        .fuel-portfolio-root:has(button:hover) #fuel-cursor-ring {
+          width: 64px;
+          height: 64px;
+          opacity: 0.2;
+        }
+
+        .fuel-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.6rem 2.5rem;
+          mix-blend-mode: difference;
+        }
+
+        .fuel-nav-logo {
+          font-family: var(--display);
+          font-size: 0.95rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--white);
+          text-decoration: none;
+        }
+
+        .fuel-nav-links {
+          display: flex;
+          gap: 2.5rem;
+          list-style: none;
+        }
+
+        .fuel-nav-links a {
+          font-size: 0.78rem;
+          font-weight: 400;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--white);
+          text-decoration: none;
+          opacity: 0.8;
+          transition: opacity 0.2s;
+        }
+
+        .fuel-nav-links a:hover {
+          opacity: 1;
+        }
+
+        .fuel-nav-num {
+          font-size: 0.65rem;
+          opacity: 0.5;
+          margin-right: 0.3rem;
+          vertical-align: super;
+        }
+
+        .fuel-nav-card {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: rgba(255, 255, 255, 0.95);
+          padding: 0.5rem 1rem 0.5rem 0.5rem;
+          border-radius: 8px;
+          text-decoration: none;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .fuel-nav-card img {
+          width: 36px;
+          height: 36px;
+          border-radius: 4px;
+          object-fit: cover;
+        }
+
+        .fuel-nav-card-text {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .fuel-nav-card-name {
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: var(--dark);
+          line-height: 1.2;
+        }
+
+        .fuel-nav-card-role {
+          font-size: 0.7rem;
+          color: var(--mid);
+        }
+
+        .fuel-hero {
+          position: relative;
+          height: 100vh;
+          min-height: 600px;
+          overflow: hidden;
+        }
+
+        .fuel-hero-bg {
+          position: absolute;
+          inset: 0;
+          background: var(--black);
+        }
+
+        .fuel-hero-bg img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.75;
+          display: block;
+        }
+
+        .fuel-hero-bg::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to right,
+            rgba(10, 10, 9, 0.85) 0%,
+            rgba(10, 10, 9, 0.3) 50%,
+            rgba(255, 61, 0, 0.15) 100%
+          );
+        }
+
+        .fuel-hero-content {
+          position: relative;
+          z-index: 2;
+          height: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: end;
+          padding: 3rem 2.5rem;
+        }
+
+        .fuel-hero-left {
+          padding-bottom: 0.5rem;
+        }
+
+        .fuel-hero-tagline {
+          font-size: 0.78rem;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.6);
+          line-height: 1.6;
+          max-width: 260px;
+          margin-bottom: 2rem;
+        }
+
+        .fuel-hero-tagline strong {
+          font-style: italic;
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        .fuel-hero-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.82rem;
+          font-weight: 400;
+          color: white;
+          text-decoration: none;
+          letter-spacing: 0.04em;
+          padding-bottom: 0.4rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+          transition: border-color 0.2s;
+        }
+
+        .fuel-hero-cta:hover {
+          border-color: white;
+        }
+
+        .fuel-hero-cta-arrow {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 16px;
+          height: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          font-size: 0.65rem;
+        }
+
+        .fuel-hero-wordmark {
+          position: absolute;
+          bottom: -0.15em;
+          left: 0;
+          right: 0;
+          font-family: var(--display);
+          font-size: clamp(100px, 18vw, 220px);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 1;
+          color: transparent;
+          -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.18);
+          text-align: center;
+          pointer-events: none;
+          z-index: 1;
+          white-space: nowrap;
+        }
+
+        .fuel-hero-services {
+          position: absolute;
+          bottom: 3rem;
+          right: 2.5rem;
+          z-index: 2;
+          text-align: right;
+        }
+
+        .fuel-hero-services-tag {
+          font-size: 0.7rem;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.45);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          margin-bottom: 0.5rem;
+        }
+
+        .fuel-hero-services-list {
+          font-size: 0.82rem;
+          color: rgba(255, 255, 255, 0.75);
+          line-height: 1.8;
+        }
+
+        .fuel-hero-year {
+          position: absolute;
+          bottom: 3rem;
+          left: 2.5rem;
+          z-index: 2;
+          font-size: 0.7rem;
+          color: rgba(255, 255, 255, 0.4);
+          letter-spacing: 0.05em;
+        }
+
+        .fuel-section-label {
+          font-size: 0.68rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: var(--mid);
+          font-weight: 400;
+        }
+
+        .fuel-about-strip {
+          background: var(--white);
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          padding: 4rem 2.5rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+          align-items: center;
+        }
+
+        .fuel-about-strip-num {
+          font-family: var(--display);
+          font-size: clamp(60px, 10vw, 120px);
+          font-weight: 800;
+          line-height: 1;
+          color: var(--off);
+          -webkit-text-stroke: 1.5px var(--light);
+          margin-bottom: 1.5rem;
+        }
+
+        .fuel-about-strip-title {
+          font-family: var(--display);
+          font-size: clamp(1.8rem, 3.5vw, 3rem);
+          font-weight: 800;
+          line-height: 1.1;
+          margin-bottom: 1.5rem;
+        }
+
+        .fuel-about-strip-text {
+          font-size: 1rem;
+          line-height: 1.8;
+          color: #444;
+          margin-bottom: 1.5rem;
+        }
+
+        .fuel-stats-row {
+          display: flex;
+          gap: 3rem;
+          padding-top: 2rem;
+          border-top: 1px solid var(--border);
+        }
+
+        .fuel-stat-val {
+          font-family: var(--display);
+          font-size: 2rem;
+          font-weight: 800;
+          line-height: 1;
+          display: block;
+          margin-bottom: 0.3rem;
+        }
+
+        .fuel-stat-lbl {
+          font-size: 0.75rem;
+          color: var(--mid);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        .fuel-stat-bar {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 0.5rem;
+        }
+
+        .fuel-stat-bar-track {
+          flex: 1;
+          height: 1px;
+          background: var(--light);
+          position: relative;
+        }
+
+        .fuel-stat-bar-fill {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          background: var(--dark);
+        }
+
+        .fuel-stat-bar-val {
+          font-size: 0.75rem;
+          color: var(--mid);
+          font-weight: 400;
+          white-space: nowrap;
+        }
+
+        .fuel-clients {
+          padding: 1.5rem 0;
+          background: var(--off);
+          border-bottom: 1px solid var(--border);
+          overflow: hidden;
+        }
+
+        .fuel-clients-track {
+          display: flex;
+          gap: 4rem;
+          animation: fuelMarquee 24s linear infinite;
+          width: max-content;
+        }
+
+        @keyframes fuelMarquee {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        .fuel-client-item {
+          font-family: var(--display);
+          font-size: 0.9rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--mid);
+          white-space: nowrap;
+        }
+
+        .fuel-portfolio-section {
+          background: var(--off);
+          padding: 5rem 0 0;
+        }
+
+        .fuel-portfolio-header {
+          padding: 0 2.5rem 3rem;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+        }
+
+        .fuel-portfolio-title {
+          font-family: var(--display);
+          font-size: clamp(2rem, 5vw, 4rem);
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .fuel-portfolio-action {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.82rem;
+          color: var(--dark);
+          text-decoration: none;
+          border-bottom: 1px solid var(--dark);
+          padding-bottom: 0.2rem;
+          transition: opacity 0.2s;
+        }
+
+        .fuel-portfolio-action:hover {
+          opacity: 0.6;
+        }
+
+        .fuel-project-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          border-top: 1px solid var(--border);
+        }
+
+        .fuel-project-row:last-child {
+          border-bottom: 1px solid var(--border);
+        }
+
+        .fuel-project-image-wrap {
+          position: relative;
+          overflow: hidden;
+          aspect-ratio: 4/3;
+        }
+
+        .fuel-project-image-wrap img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fuel-project-row:hover .fuel-project-image-wrap img {
+          transform: scale(1.04);
+        }
+
+        .fuel-project-meta-footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 1.2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+        }
+
+        .fuel-project-meta-footer-name {
+          font-size: 0.7rem;
+          color: rgba(255, 255, 255, 0.75);
+          letter-spacing: 0.06em;
+        }
+
+        .fuel-project-meta-footer-year {
+          font-size: 0.7rem;
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .fuel-project-info {
+          padding: 3rem 2.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          border-left: 1px solid var(--border);
+        }
+
+        .fuel-project-num {
+          font-family: var(--display);
+          font-size: clamp(80px, 12vw, 160px);
+          font-weight: 800;
+          line-height: 1;
+          color: var(--off);
+          -webkit-text-stroke: 1.5px var(--light);
+          display: block;
+          margin-bottom: 1rem;
+        }
+
+        .fuel-project-name {
+          font-family: var(--display);
+          font-size: clamp(1.6rem, 3vw, 2.4rem);
+          font-weight: 800;
+          line-height: 1.1;
+          margin-bottom: 0.75rem;
+        }
+
+        .fuel-project-type {
+          font-size: 0.78rem;
+          color: var(--mid);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin-bottom: 1.5rem;
+        }
+
+        .fuel-project-desc {
+          font-size: 0.9rem;
+          line-height: 1.7;
+          color: #555;
+          margin-bottom: 2rem;
+        }
+
+        .fuel-project-tags-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          margin-bottom: 2rem;
+        }
+
+        .fuel-ptag {
+          font-size: 0.68rem;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 0.3rem 0.8rem;
+          border: 1px solid var(--border);
+          border-radius: 2px;
+          color: var(--mid);
+        }
+
+        .fuel-project-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.82rem;
+          font-weight: 400;
+          color: var(--dark);
+          text-decoration: none;
+          padding-bottom: 0.3rem;
+          border-bottom: 1px solid var(--dark);
+          width: fit-content;
+          transition: opacity 0.2s;
+        }
+
+        .fuel-project-cta:hover {
+          opacity: 0.5;
+        }
+
+        .fuel-project-row.fuel-reverse .fuel-project-image-wrap {
+          order: 2;
+        }
+        .fuel-project-row.fuel-reverse .fuel-project-info {
+          order: 1;
+          border-left: none;
+          border-right: 1px solid var(--border);
+        }
+
+        .fuel-services-section {
+          background: var(--black);
+          padding: 6rem 2.5rem;
+        }
+
+        .fuel-services-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 5rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding-bottom: 2rem;
+        }
+
+        .fuel-services-header-label {
+          font-size: 0.7rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.4);
+        }
+
+        .fuel-services-header-title {
+          font-family: var(--display);
+          font-size: clamp(1.5rem, 3vw, 2.5rem);
+          font-weight: 800;
+          color: white;
+        }
+
+        .fuel-service-row {
+          display: grid;
+          grid-template-columns: 260px 1fr 1fr;
+          gap: 3rem;
+          align-items: start;
+          padding: 3rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          position: relative;
+        }
+
+        .fuel-service-num {
+          font-family: var(--display);
+          font-size: clamp(100px, 14vw, 180px);
+          font-weight: 800;
+          color: transparent;
+          -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.12);
+          line-height: 0.85;
+        }
+
+        .fuel-service-image {
+          aspect-ratio: 4/3;
+          overflow: hidden;
+          border-radius: 4px;
+        }
+
+        .fuel-service-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: grayscale(20%);
+          transition: filter 0.4s;
+        }
+
+        .fuel-service-row:hover .fuel-service-image img {
+          filter: grayscale(0%);
+        }
+
+        .fuel-service-content {
+          padding-top: 1rem;
+        }
+
+        .fuel-service-name {
+          font-family: var(--display);
+          font-size: clamp(1.8rem, 3vw, 2.8rem);
+          font-weight: 800;
+          color: white;
+          margin-bottom: 1rem;
+        }
+
+        .fuel-service-subtitle {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.7);
+          margin-bottom: 0.5rem;
+        }
+
+        .fuel-service-desc {
+          font-size: 0.85rem;
+          line-height: 1.7;
+          color: rgba(255, 255, 255, 0.4);
+        }
+
+        .fuel-skills-section {
+          background: var(--white);
+          padding: 6rem 2.5rem;
+        }
+
+        .fuel-skills-header {
+          margin-bottom: 4rem;
+        }
+
+        .fuel-skills-title {
+          font-family: var(--display);
+          font-size: clamp(2rem, 4vw, 3.5rem);
+          font-weight: 800;
+          line-height: 1.1;
+          margin-top: 0.5rem;
+        }
+
+        .fuel-skills-cats {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0;
+          border: 1px solid var(--border);
+        }
+
+        .fuel-skill-cat {
+          padding: 2.5rem;
+          border-right: 1px solid var(--border);
+        }
+
+        .fuel-skill-cat:last-child {
+          border-right: none;
+        }
+
+        .fuel-skill-cat-icon {
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+          display: block;
+        }
+
+        .fuel-skill-cat-name {
+          font-family: var(--display);
+          font-size: 1.1rem;
+          font-weight: 800;
+          margin-bottom: 1.5rem;
+        }
+
+        .fuel-skill-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+
+        .fuel-skill-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.82rem;
+          color: #555;
+        }
+
+        .fuel-skill-item-bar {
+          width: 60px;
+          height: 1px;
+          background: var(--light);
+          position: relative;
+        }
+
+        .fuel-skill-item-fill {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          background: var(--dark);
+        }
+
+        .fuel-contact-section {
+          background: var(--off);
+          padding: 6rem 2.5rem;
+          border-top: 1px solid var(--border);
+        }
+
+        .fuel-contact-inner {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 5rem;
+          align-items: center;
+        }
+
+        .fuel-contact-title {
+          font-family: var(--display);
+          font-size: clamp(2.5rem, 6vw, 5rem);
+          font-weight: 800;
+          line-height: 1;
+          margin-bottom: 2rem;
+        }
+
+        .fuel-contact-subtitle {
+          font-size: 1rem;
+          color: #666;
+          line-height: 1.7;
+          margin-bottom: 3rem;
+        }
+
+        .fuel-contact-links-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .fuel-contact-link-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.25rem 0;
+          border-top: 1px solid var(--border);
+          text-decoration: none;
+          color: var(--dark);
+          transition: opacity 0.2s;
+        }
+
+        .fuel-contact-link-item:last-child {
+          border-bottom: 1px solid var(--border);
+        }
+        .fuel-contact-link-item:hover {
+          opacity: 0.5;
+        }
+
+        .fuel-contact-link-name {
+          font-family: var(--display);
+          font-size: 1.1rem;
+          font-weight: 800;
+        }
+
+        .fuel-contact-link-arrow {
+          font-size: 1.2rem;
+          transform: rotate(-45deg);
+          display: inline-block;
+        }
+
+        .fuel-contact-terminal {
+          background: var(--black);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
+        .fuel-ct-bar {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1rem 1.4rem;
+          background: rgba(255, 255, 255, 0.04);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .fuel-ct-dot {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+        }
+        .fuel-ct-red {
+          background: #ff5f57;
+        }
+        .fuel-ct-yellow {
+          background: #febc2e;
+        }
+        .fuel-ct-green {
+          background: #28c840;
+        }
+        .fuel-ct-title {
+          margin-left: auto;
+          font-size: 0.72rem;
+          color: rgba(255, 255, 255, 0.3);
+          font-family: monospace;
+        }
+
+        .fuel-ct-body {
+          padding: 1.75rem;
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 0.8rem;
+          line-height: 2;
+        }
+
+        .fuel-ct-purple {
+          color: #a855f7;
+        }
+        .fuel-ct-cyan {
+          color: #06b6d4;
+        }
+        .fuel-ct-amber {
+          color: #f59e0b;
+        }
+        .fuel-ct-white {
+          color: rgba(255, 255, 255, 0.9);
+        }
+        .fuel-ct-muted {
+          color: rgba(255, 255, 255, 0.3);
+        }
+        .fuel-ct-pink {
+          color: #ec4899;
+        }
+
+        .fuel-ct-cursor {
+          display: inline-block;
+          width: 7px;
+          height: 1em;
+          background: #06b6d4;
+          vertical-align: text-bottom;
+          animation: fuelBlink 1s step-end infinite;
+        }
+        @keyframes fuelBlink {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
+        }
+
+        .fuel-footer {
+          background: var(--black);
+          padding: 2rem 2.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .fuel-footer-logo {
+          font-family: var(--display);
+          font-size: 0.8rem;
+          font-weight: 800;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        .fuel-footer-copy {
+          font-size: 0.72rem;
+          color: rgba(255, 255, 255, 0.3);
+          letter-spacing: 0.05em;
+        }
+
+        .fuel-reveal {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fuel-reveal.fuel-up {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+          .fuel-nav {
+            padding: 1.2rem 1.5rem;
+          }
+          .fuel-nav-links {
+            display: none;
+          }
+          .fuel-nav-card {
+            display: none;
+          }
+
+          .fuel-hero-wordmark {
+            display: none;
+          }
+          .fuel-hero-content {
+            grid-template-columns: 1fr;
+          }
+          .fuel-hero-services {
+            display: none;
+          }
+
+          .fuel-about-strip {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .fuel-project-row {
+            grid-template-columns: 1fr;
+          }
+          .fuel-project-row.fuel-reverse .fuel-project-image-wrap {
+            order: 0;
+          }
+          .fuel-project-row.fuel-reverse .fuel-project-info {
+            order: 0;
+            border-right: none;
+            border-left: none;
+            border-top: 1px solid var(--border);
+          }
+          .fuel-project-info {
+            border-left: none;
+            border-top: 1px solid var(--border);
+          }
+
+          .fuel-service-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          .fuel-service-num {
+            font-size: 80px;
+          }
+
+          .fuel-skills-cats {
+            grid-template-columns: 1fr;
+          }
+          .fuel-skill-cat {
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+          }
+
+          .fuel-contact-inner {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
