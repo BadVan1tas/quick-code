@@ -1,108 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Sparkles, CheckCircle2 } from "lucide-react";
-
-const projects = [
-  {
-    id: "homechef",
-    title: "Homechef Bakery",
-    category: "E-Commerce & Food",
-    metric: "100% Eggless",
-    metricColor: "#f59e0b",
-    image: "/portfolio/homechef.jpg",
-    liveUrl: "https://homechef-bakery.vercel.app/",
-    description:
-      "Artisanal e-commerce bakery platform built for Hebbal, Bangalore. Features interactive product showcase, custom bespoke cake ordering with direct WhatsApp business API integration.",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "WhatsApp API"],
-    gradientFrom: "rgba(245,158,11,0.35)",
-    gradientTo: "rgba(234,88,12,0.2)",
-    accentLine: "#f59e0b",
-    year: "2026",
-    featured: true,
-  },
-  {
-    id: "cheappc",
-    title: "Cheap PC Resident",
-    category: "Gaming & Storefront",
-    metric: "Permanent Warranty",
-    metricColor: "#06b6d4",
-    image: "/portfolio/cheappc.jpg",
-    liveUrl: "https://cheappcresident.in/",
-    description:
-      "Cyberpunk-themed premium gaming accounts marketplace featuring custom 3D perspective scroll, holographic HUD animations, and automated instant delivery across Steam, Rockstar, Ubisoft & EA.",
-    tags: ["HTML5", "Vanilla CSS", "JavaScript", "3D Scroll", "HUD UI"],
-    gradientFrom: "rgba(6,182,212,0.35)",
-    gradientTo: "rgba(168,85,247,0.25)",
-    accentLine: "#06b6d4",
-    year: "2026",
-    featured: true,
-  },
-  {
-    id: "apex",
-    title: "Apex Crypto Analytics",
-    category: "SaaS Dashboard",
-    metric: "+340% User Growth",
-    metricColor: "#10b981",
-    image: "/portfolio/cheappc.jpg",
-    liveUrl: "https://github.com/BadVan1tas/quick-code",
-    description:
-      "Real-time crypto telemetry platform with live WebSocket price feeds, portfolio tracking, and tiered Stripe Pro subscriptions for 8,000+ active users.",
-    tags: ["Next.js", "TypeScript", "Stripe", "WebSockets", "Recharts"],
-    gradientFrom: "rgba(99,102,241,0.35)",
-    gradientTo: "rgba(168,85,247,0.25)",
-    accentLine: "#6366f1",
-    year: "2025",
-    featured: false,
-  },
-  {
-    id: "cybervault",
-    title: "CyberVault Security Suite",
-    category: "Enterprise SaaS",
-    metric: "$1.2M Payment Volume",
-    metricColor: "#06b6d4",
-    image: "/portfolio/homechef.jpg",
-    liveUrl: "https://github.com/BadVan1tas/quick-code",
-    description:
-      "Zero-trust credential manager with AES-256 encryption, automated billing via Stripe Connect, and multi-tenant PostgreSQL architecture.",
-    tags: ["React", "PostgreSQL", "Stripe Connect", "Auth.js", "Redis"],
-    gradientFrom: "rgba(6,182,212,0.3)",
-    gradientTo: "rgba(16,185,129,0.2)",
-    accentLine: "#06b6d4",
-    year: "2025",
-    featured: false,
-  },
-  {
-    id: "nova",
-    title: "Nova AI Agent Marketplace",
-    category: "E-Commerce & AI",
-    metric: "4.9 / 5 Rating",
-    metricColor: "#ec4899",
-    image: "/portfolio/cheappc.jpg",
-    liveUrl: "https://github.com/BadVan1tas/quick-code",
-    description:
-      "Interactive marketplace for buying/selling autonomous AI workflows with instant delivery, reputation scoring, and dispute resolution.",
-    tags: ["Next.js App Router", "OpenAI", "Stripe", "Zod", "Prisma"],
-    gradientFrom: "rgba(168,85,247,0.3)",
-    gradientTo: "rgba(236,72,153,0.2)",
-    accentLine: "#a855f7",
-    year: "2025",
-    featured: false,
-  },
-];
+import { ExternalLink, Sparkles, ArrowUpRight } from "lucide-react";
 
 export default function Portfolio() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
-  const [filter, setFilter] = useState<string>("All");
-
-  const categories = ["All", "E-Commerce & Food", "Gaming & Storefront", "SaaS Dashboard", "Enterprise SaaS", "E-Commerce & AI"];
-  const filtered = filter === "All" ? projects : projects.filter((p) => p.category === filter);
 
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.05 });
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.05 }
+    );
     if (sectionRef.current) obs.observe(sectionRef.current);
     return () => obs.disconnect();
   }, []);
@@ -111,293 +23,426 @@ export default function Portfolio() {
     <section
       id="portfolio"
       ref={sectionRef}
-      style={{ padding: "80px 16px", maxWidth: "1200px", margin: "0 auto", width: "100%" }}
+      style={{
+        padding: "100px 24px",
+        maxWidth: "1250px",
+        margin: "0 auto",
+        width: "100%",
+        position: "relative",
+      }}
     >
-      {/* Header */}
+      {/* Editorial Header */}
       <div
         style={{
-          textAlign: "center",
-          marginBottom: "48px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          flexWrap: "wrap",
+          gap: "24px",
+          marginBottom: "64px",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          paddingBottom: "32px",
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(24px)",
           transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        <div className="section-label" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-          <Sparkles size={14} color="#6366f1" /> SHIPPED PORTFOLIO
-        </div>
-        <h2 className="section-heading" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
-          Featured <span className="text-gradient">Production Work</span>
-        </h2>
-        <p className="section-subheading" style={{ margin: "0 auto", maxWidth: "600px" }}>
-          Real applications designed and deployed by QuikCode — engineered for performance, aesthetic excellence, and conversions.
-        </p>
-      </div>
-
-      {/* Filter tabs */}
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          marginBottom: "40px",
-          opacity: visible ? 1 : 0,
-          transition: "opacity 0.7s ease 0.2s",
-        }}
-      >
-        {["All", "E-Commerce & Food", "Gaming & Storefront", "SaaS Dashboard"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            style={{
-              padding: "8px 18px",
-              borderRadius: "var(--r-full)",
-              border: `1px solid ${filter === cat ? "rgba(99,102,241,0.6)" : "rgba(255,255,255,0.08)"}`,
-              background: filter === cat ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.03)",
-              color: filter === cat ? "#818cf8" : "var(--text-muted)",
-              fontSize: "0.82rem",
-              fontWeight: 600,
-              fontFamily: "var(--font-heading)",
-              cursor: "pointer",
-              transition: "all 0.25s ease",
-              letterSpacing: "0.01em",
-            }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Featured Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "28px",
-        }}
-      >
-        {filtered.map((proj, i) => (
-          <ProjectCard key={proj.id} project={proj} delay={i * 100} visible={visible} />
-        ))}
-      </div>
-
-      {/* Link to Full Portfolio Page */}
-      <div style={{ textAlign: "center", marginTop: "48px" }}>
-        <Link
-          href="/portfolio"
-          className="btn-primary"
-          style={{
-            padding: "12px 28px",
-            fontSize: "0.92rem",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <span>View Editorial Portfolio Page</span>
-          <ExternalLink size={16} />
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function ProjectCard({
-  project,
-  delay,
-  visible,
-}: {
-  project: (typeof projects)[0];
-  delay: number;
-  visible: boolean;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: "var(--r-lg)",
-        overflow: "hidden",
-        background: "rgba(11, 17, 35, 0.75)",
-        backdropFilter: "blur(20px)",
-        border: `1px solid ${hovered ? project.accentLine + "60" : "rgba(255,255,255,0.08)"}`,
-        boxShadow: hovered
-          ? `0 24px 60px rgba(0,0,0,0.6), 0 0 35px ${project.accentLine}25`
-          : "0 8px 32px rgba(0,0,0,0.4)",
-        transform: hovered ? "translateY(-6px)" : "translateY(0)",
-        transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
-        display: "flex",
-        flexDirection: "column",
-        opacity: visible ? 1 : 0,
-        animation: visible ? `slideUp 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` : "none",
-      }}
-      aria-label={`Project: ${project.title}`}
-    >
-      {/* Visual cover */}
-      <div
-        style={{
-          height: "220px",
-          position: "relative",
-          overflow: "hidden",
-          background: `linear-gradient(135deg, ${project.gradientFrom} 0%, ${project.gradientTo} 100%)`,
-        }}
-      >
-        <img
-          src={project.image}
-          alt={project.title}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-            transform: hovered ? "scale(1.06)" : "scale(1)",
-          }}
-        />
-
-        {/* Overlay gradient */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to top, rgba(11, 17, 35, 0.95) 0%, rgba(11, 17, 35, 0.2) 60%, rgba(0,0,0,0.5) 100%)",
-          }}
-        />
-
-        {/* Top bar */}
-        <div
-          style={{
-            position: "absolute",
-            top: "14px",
-            left: "14px",
-            right: "14px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            zIndex: 2,
-          }}
-        >
-          <span
-            style={{
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              fontFamily: "var(--font-mono)",
-              padding: "4px 10px",
-              background: "rgba(0,0,0,0.65)",
-              backdropFilter: "blur(8px)",
-              borderRadius: "var(--r-full)",
-              color: "#fff",
-              letterSpacing: "0.04em",
-              border: "1px solid rgba(255,255,255,0.12)",
-            }}
-          >
-            {project.category}
-          </span>
-          <span
-            style={{
-              fontSize: "0.8rem",
-              fontWeight: 700,
-              color: project.metricColor,
-              fontFamily: "var(--font-heading)",
-              background: "rgba(0,0,0,0.65)",
-              padding: "4px 10px",
-              borderRadius: "var(--r-full)",
-              border: `1px solid ${project.metricColor}40`,
-            }}
-          >
-            {project.metric}
-          </span>
-        </div>
-
-        {/* Title pinned over image bottom */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "14px",
-            left: "16px",
-            right: "16px",
-            zIndex: 2,
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "1.35rem",
-              fontWeight: 800,
-              color: "#fff",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-            }}
-          >
-            {project.title}
-          </h3>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div style={{ padding: "20px", display: "flex", flexDirection: "column", flexGrow: 1, gap: "16px" }}>
-        <p
-          style={{
-            color: "var(--text-muted)",
-            fontSize: "0.88rem",
-            lineHeight: 1.6,
-            margin: 0,
-            flexGrow: 1,
-          }}
-        >
-          {project.description}
-        </p>
-
-        {/* Tags */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              style={{
-                fontSize: "0.72rem",
-                fontFamily: "var(--font-mono)",
-                padding: "3px 8px",
-                borderRadius: "var(--r-xs)",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "var(--text-dim)",
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Action button */}
-        <div style={{ paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--text-dim)" }}>
-            Launched {project.year}
-          </span>
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+        <div>
+          <div
+            className="section-label"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "0.82rem",
-              fontWeight: 700,
-              color: "#818cf8",
-              textDecoration: "none",
-              padding: "6px 12px",
-              borderRadius: "8px",
-              background: "rgba(99,102,241,0.1)",
-              border: "1px solid rgba(99,102,241,0.3)",
-              transition: "all 0.2s ease",
+              marginBottom: "8px",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.8rem",
+              color: "#6366f1",
             }}
           >
-            <span>Live Site</span>
-            <ExternalLink size={13} />
-          </a>
+            <Sparkles size={14} /> (02) SELECTED WORK &amp; CASE STUDIES
+          </div>
+          <h2
+            style={{
+              fontSize: "clamp(2.4rem, 5vw, 4rem)",
+              fontWeight: 800,
+              fontFamily: "var(--font-heading)",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              color: "#fff",
+              margin: 0,
+            }}
+          >
+            Production <span className="text-gradient">Portfolio</span>
+          </h2>
+        </div>
+
+        {/* Lead Dev Profile Badge */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
+            background: "rgba(15, 20, 38, 0.8)",
+            padding: "10px 18px",
+            borderRadius: "16px",
+            border: "1px solid rgba(99, 102, 241, 0.3)",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+          }}
+        >
+          <img
+            src="/portfolio/avatar.jpg"
+            alt="Shaurya Shashi"
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "12px",
+              objectFit: "cover",
+              border: "1px solid rgba(99, 102, 241, 0.5)",
+            }}
+          />
+          <div>
+            <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#fff" }}>Shaurya Shashi</div>
+            <div style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>Lead Dev &amp; Founder</div>
+          </div>
+          <span style={{ fontSize: "0.7rem", padding: "4px 8px", borderRadius: "6px", background: "rgba(16,185,129,0.15)", color: "#34d399", fontWeight: 700, marginLeft: "4px" }}>
+            Available 🟢
+          </span>
         </div>
       </div>
-    </article>
+
+      {/* Project Rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "60px" }}>
+        
+        {/* Project 01: Homechef Bakery */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: "48px",
+            alignItems: "center",
+            padding: "48px 40px",
+            borderRadius: "32px",
+            background: "rgba(15, 20, 38, 0.65)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(245, 158, 11, 0.25)",
+            boxShadow: "0 24px 60px rgba(0,0,0,0.5), 0 0 40px rgba(245,158,11,0.08)",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(30px)",
+            transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s",
+          }}
+        >
+          {/* Image */}
+          <div
+            style={{
+              borderRadius: "24px",
+              overflow: "hidden",
+              height: "340px",
+              position: "relative",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <img
+              src="/portfolio/homechef.jpg"
+              alt="Homechef Bakery"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                transition: "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                padding: "16px 20px",
+                background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ fontSize: "0.78rem", color: "#fbbf24", fontWeight: 700, fontFamily: "var(--font-mono)" }}>
+                🎂 100% Eggless Gourmet Bakery
+              </span>
+              <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.6)", fontFamily: "var(--font-mono)" }}>
+                Bangalore, India
+              </span>
+            </div>
+          </div>
+
+          {/* Details */}
+          <div>
+            <div
+              style={{
+                fontSize: "clamp(3.5rem, 6vw, 5rem)",
+                fontWeight: 900,
+                fontFamily: "var(--font-heading)",
+                lineHeight: 0.9,
+                color: "rgba(255,255,255,0.08)",
+                marginBottom: "12px",
+              }}
+            >
+              01
+            </div>
+            <h3
+              style={{
+                fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
+                fontWeight: 800,
+                fontFamily: "var(--font-heading)",
+                color: "#fff",
+                letterSpacing: "-0.02em",
+                marginBottom: "12px",
+                lineHeight: 1.1,
+              }}
+            >
+              Homechef Bakery
+            </h3>
+            <div style={{ fontSize: "0.82rem", color: "#f59e0b", fontFamily: "var(--font-mono)", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "16px" }}>
+              E-Commerce Storefront · Next.js · WhatsApp API
+            </div>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.98rem", lineHeight: 1.75, marginBottom: "24px" }}>
+              A full-stack gourmet bakery platform handcrafted for Hebbal, Bangalore. Features animated interactive product showcases (Black Forest, Alphonso Mango, Belgian Chocolate Truffle), custom bespoke cake builders, and instant WhatsApp ordering.
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "32px" }}>
+              {["Next.js 15", "TypeScript", "Tailwind CSS", "Vercel", "WhatsApp API"].map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontSize: "0.76rem",
+                    padding: "6px 14px",
+                    borderRadius: "8px",
+                    background: "rgba(245, 158, 11, 0.12)",
+                    color: "#fbbf24",
+                    border: "1px solid rgba(245, 158, 11, 0.25)",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <a
+              href="https://homechef-bakery.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{
+                padding: "14px 32px",
+                fontSize: "0.92rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                background: "linear-gradient(135deg, #d97706, #b45309)",
+                textDecoration: "none",
+              }}
+            >
+              <span>Visit Live Website</span>
+              <ExternalLink size={16} />
+            </a>
+          </div>
+        </div>
+
+        {/* Project 02: Cheap PC Resident */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: "48px",
+            alignItems: "center",
+            padding: "48px 40px",
+            borderRadius: "32px",
+            background: "rgba(15, 20, 38, 0.65)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(6, 182, 212, 0.25)",
+            boxShadow: "0 24px 60px rgba(0,0,0,0.5), 0 0 40px rgba(6,182,212,0.08)",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(30px)",
+            transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
+          }}
+        >
+          {/* Details (Left on desktop) */}
+          <div style={{ order: 1 }}>
+            <div
+              style={{
+                fontSize: "clamp(3.5rem, 6vw, 5rem)",
+                fontWeight: 900,
+                fontFamily: "var(--font-heading)",
+                lineHeight: 0.9,
+                color: "rgba(255,255,255,0.08)",
+                marginBottom: "12px",
+              }}
+            >
+              02
+            </div>
+            <h3
+              style={{
+                fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
+                fontWeight: 800,
+                fontFamily: "var(--font-heading)",
+                color: "#fff",
+                letterSpacing: "-0.02em",
+                marginBottom: "12px",
+                lineHeight: 1.1,
+              }}
+            >
+              Cheap PC Resident
+            </h3>
+            <div style={{ fontSize: "0.82rem", color: "#06b6d4", fontFamily: "var(--font-mono)", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "16px" }}>
+              Gaming Marketplace · 3D Scroll · Cyberpunk UI
+            </div>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.98rem", lineHeight: 1.75, marginBottom: "24px" }}>
+              A futuristic cyberpunk-themed gaming accounts store with custom 3D perspective rotation scrolling, holographic HUD indicators, and permanent warranty support across Steam, Rockstar, Ubisoft, and EA.
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "32px" }}>
+              {["HTML5", "Vanilla CSS", "JavaScript", "3D Perspective Scroll", "HUD Interface"].map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontSize: "0.76rem",
+                    padding: "6px 14px",
+                    borderRadius: "8px",
+                    background: "rgba(6, 182, 212, 0.12)",
+                    color: "#67e8f9",
+                    border: "1px solid rgba(6, 182, 212, 0.25)",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <a
+              href="https://cheappcresident.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{
+                padding: "14px 32px",
+                fontSize: "0.92rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                background: "linear-gradient(135deg, #0891b2, #7c3aed)",
+                textDecoration: "none",
+              }}
+            >
+              <span>Visit Live Website</span>
+              <ExternalLink size={16} />
+            </a>
+          </div>
+
+          {/* Image (Right on desktop) */}
+          <div
+            style={{
+              order: 2,
+              borderRadius: "24px",
+              overflow: "hidden",
+              height: "340px",
+              position: "relative",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <img
+              src="/portfolio/cheappc.jpg"
+              alt="Cheap PC Resident"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                transition: "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                padding: "16px 20px",
+                background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ fontSize: "0.78rem", color: "#67e8f9", fontWeight: 700, fontFamily: "var(--font-mono)" }}>
+                🎮 Steam / Rockstar / EA / Ubisoft
+              </span>
+              <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.6)", fontFamily: "var(--font-mono)" }}>
+                Lifetime Warranty
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Quick Contact Action Bar */}
+      <div
+        style={{
+          marginTop: "60px",
+          padding: "36px",
+          borderRadius: "24px",
+          background: "linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.08))",
+          border: "1px solid rgba(99,102,241,0.3)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "20px",
+        }}
+      >
+        <div>
+          <h4 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fff", margin: "0 0 6px 0", fontFamily: "var(--font-heading)" }}>
+            Want a website like these for your business?
+          </h4>
+          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", margin: 0 }}>
+            Direct contact: <strong style={{ color: "#fff" }}>shauryashashi30@gmail.com</strong> · WhatsApp: <strong style={{ color: "#34d399" }}>+91 9992145372</strong>
+          </p>
+        </div>
+
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <a
+            href="https://wa.me/919992145372?text=Hi%20Shaurya,%20I%20saw%20your%20portfolio%20on%20QuikCode%20and%20want%20to%20build%20a%20project!"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: "12px 24px",
+              borderRadius: "var(--r-sm)",
+              background: "#10b981",
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              textDecoration: "none",
+            }}
+          >
+            Chat on WhatsApp 💬
+          </a>
+          <Link
+            href="/portfolio"
+            style={{
+              padding: "12px 24px",
+              borderRadius: "var(--r-sm)",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              textDecoration: "none",
+            }}
+          >
+            Full Portfolio Page →
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
