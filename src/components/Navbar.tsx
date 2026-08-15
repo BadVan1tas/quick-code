@@ -10,7 +10,7 @@ import { CurrencyToggle } from "./ui/CurrencyToggle";
 
 const navLinks = [
   { label: "Services", href: "/#services" },
-  { label: "Work", href: "/#portfolio" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
   { label: "About", href: "/about" },
