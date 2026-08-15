@@ -67,6 +67,24 @@ export default function PortfolioPage() {
                 Explore Shipped Work ↓
               </a>
               <Link
+                href="/resume"
+                style={{
+                  padding: "14px 28px",
+                  borderRadius: "var(--r-sm)",
+                  background: "rgba(99,102,241,0.15)",
+                  border: "1px solid rgba(99,102,241,0.4)",
+                  color: "#a5b4fc",
+                  fontWeight: 700,
+                  fontSize: "0.95rem",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <span>📄 View Resume</span>
+              </Link>
+              <Link
                 href="/book"
                 style={{
                   padding: "14px 28px",
@@ -79,7 +97,7 @@ export default function PortfolioPage() {
                   textDecoration: "none",
                 }}
               >
-                Hire / Contact Me
+                Hire / Contact
               </Link>
             </div>
 

@@ -11,7 +11,7 @@ import { CurrencyToggle } from "./ui/CurrencyToggle";
 const navLinks = [
   { label: "Services", href: "/#services" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Process", href: "/#process" },
+  { label: "Resume", href: "/resume" },
   { label: "Pricing", href: "/#pricing" },
   { label: "About", href: "/about" },
 ];
