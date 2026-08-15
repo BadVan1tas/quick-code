@@ -42,7 +42,27 @@ export default function ResumePage() {
           <span>Back to Portfolio</span>
         </Link>
 
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <a
+            href="/Shaurya_Shashi_Resume.pdf"
+            download="Shaurya_Shashi_Resume.pdf"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              background: "#10b981",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              boxShadow: "0 0 20px rgba(16,185,129,0.35)",
+            }}
+          >
+            <span>⬇️ Download PDF</span>
+          </a>
+
           <button
             onClick={handlePrint}
             style={{
@@ -51,17 +71,16 @@ export default function ResumePage() {
               gap: "8px",
               padding: "10px 20px",
               borderRadius: "8px",
-              background: "#6366f1",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
               color: "#fff",
-              border: "none",
               fontWeight: 700,
               fontSize: "0.9rem",
               cursor: "pointer",
-              boxShadow: "0 0 20px rgba(99,102,241,0.4)",
             }}
           >
             <Printer size={16} />
-            <span>Print / Save as PDF</span>
+            <span>Print</span>
           </button>
         </div>
       </div>
