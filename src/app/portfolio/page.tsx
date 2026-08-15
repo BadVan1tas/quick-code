@@ -288,8 +288,75 @@ export default function PortfolioPage() {
         </div>
       </section>
 
+      {/* Direct Contact & Inquiry Section */}
+      <section style={{ padding: "40px 24px 80px", maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
+        <div
+          style={{
+            padding: "48px 36px",
+            borderRadius: "28px",
+            background: "linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(6,182,212,0.1) 100%)",
+            border: "1px solid rgba(99,102,241,0.35)",
+            boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          <div className="section-label" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+            <Sparkles size={14} color="#6366f1" /> GET IN TOUCH
+          </div>
+          <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 800, fontFamily: "var(--font-heading)", color: "#fff", margin: 0 }}>
+            Have a Project in Mind? Let's Talk.
+          </h2>
+          <p style={{ color: "var(--text-muted)", maxWidth: "600px", fontSize: "0.98rem", lineHeight: 1.7, margin: 0 }}>
+            Whether you need a custom e-commerce store, a full-stack SaaS platform, or high-performance web engineering — reach out directly:
+          </p>
+
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center", marginTop: "12px" }}>
+            <a
+              href="mailto:shauryashashi30@gmail.com"
+              className="btn-primary"
+              style={{
+                padding: "14px 28px",
+                fontSize: "0.95rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                textDecoration: "none",
+              }}
+            >
+              <span>✉️ Email: shauryashashi30@gmail.com</span>
+            </a>
+
+            <a
+              href="https://wa.me/919992145372?text=Hi%20Shaurya,%20I%20saw%20your%20portfolio%20on%20QuikCode%20and%20want%20to%20discuss%20a%20project!"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                padding: "14px 28px",
+                borderRadius: "var(--r-sm)",
+                background: "rgba(16, 185, 129, 0.15)",
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+                color: "#34d399",
+                fontWeight: 700,
+                fontSize: "0.95rem",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <span>💬 WhatsApp: +91 9992145372</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Terminal Profile Card */}
-      <section style={{ padding: "60px 24px 100px", maxWidth: "800px", margin: "0 auto", width: "100%" }}>
+      <section style={{ padding: "0 24px 100px", maxWidth: "800px", margin: "0 auto", width: "100%" }}>
         <div
           style={{
             borderRadius: "20px",
@@ -311,6 +378,8 @@ export default function PortfolioPage() {
           <div style={{ padding: "28px", fontFamily: "var(--font-mono)", fontSize: "0.85rem", lineHeight: 1.9 }}>
             <div><span style={{ color: "#a855f7" }}>const</span> <span style={{ color: "#06b6d4" }}>developer</span> = &#123;</div>
             <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>name</span>: <span style={{ color: "#fff" }}>"Shaurya Shashi"</span>,</div>
+            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>email</span>: <span style={{ color: "#fff" }}>"shauryashashi30@gmail.com"</span>,</div>
+            <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>whatsapp</span>: <span style={{ color: "#fff" }}>"+91 9992145372"</span>,</div>
             <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>role</span>: <span style={{ color: "#fff" }}>"Full Stack Web Developer &amp; Founder"</span>,</div>
             <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>studio</span>: <span style={{ color: "#fff" }}>"QuikCode"</span>,</div>
             <div>&nbsp;&nbsp;<span style={{ color: "#f59e0b" }}>shippedProjects</span>: [<span style={{ color: "#fff" }}>"Homechef Bakery"</span>, <span style={{ color: "#fff" }}>"Cheap PC Resident"</span>],</div>
