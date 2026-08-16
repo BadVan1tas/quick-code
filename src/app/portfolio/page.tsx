@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Script from "next/script";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function FuelPortfolioPage() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -71,6 +73,9 @@ export default function FuelPortfolioPage() {
 
   return (
     <div className="fuel-portfolio-root">
+      {/* Official QuikCode Navbar */}
+      <Navbar />
+
       {/* Google Fonts */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -83,52 +88,15 @@ export default function FuelPortfolioPage() {
       <div id="fuel-cursor-dot" ref={cursorDotRef} />
       <div id="fuel-cursor-ring" ref={cursorRingRef} />
 
-      {/* ─── NAV ─── */}
-      <nav className="fuel-nav">
-        <Link href="/" className="fuel-nav-logo">
-          QuikCode©
-        </Link>
-        <ul className="fuel-nav-links">
-          <li>
-            <a href="#hero">
-              <span className="fuel-nav-num">01</span>Home
-            </a>
-          </li>
-          <li>
-            <a href="#portfolio">
-              <span className="fuel-nav-num">02</span>Work
-            </a>
-          </li>
-          <li>
-            <a href="#services">
-              <span className="fuel-nav-num">03</span>Services
-            </a>
-          </li>
-          <li>
-            <Link href="/resume">
-              <span className="fuel-nav-num">04</span>Resume
-            </Link>
-          </li>
-          <li>
-            <a href="#contact">
-              <span className="fuel-nav-num">05</span>Contact
-            </a>
-          </li>
-        </ul>
-        <a href="#contact" className="fuel-nav-card" id="nav-meetme">
-          <img
-            src="/portfolio/avatar.jpg"
-            alt="Shaurya Shashi"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = "/logo.png";
-            }}
-          />
-          <div className="fuel-nav-card-text">
-            <span className="fuel-nav-card-name">Meet Shaurya</span>
-            <span className="fuel-nav-card-role">Full Stack Dev</span>
-          </div>
-        </a>
-      </nav>
+      {/* ─── FLOATING BACK TO QUIKCODE PILL ─── */}
+      <Link
+        href="/"
+        className="fuel-floating-back-btn"
+        title="Return to QuikCode Main Website"
+      >
+        <span style={{ fontSize: "1.1rem" }}>←</span>
+        <span>Back to QuikCode Home</span>
+      </Link>
 
       {/* ─── HERO ─── */}
       <section id="hero" className="fuel-hero">
@@ -635,9 +603,72 @@ export default function FuelPortfolioPage() {
         </div>
       </section>
 
+      {/* ─── RETURN TO MAIN SITE BANNER ─── */}
+      <section style={{ padding: "4rem 2rem 2rem", background: "var(--black)", color: "var(--white)", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "24px", padding: "2.5rem", borderRadius: "16px", background: "linear-gradient(135deg, rgba(255,61,0,0.15) 0%, rgba(99,102,241,0.15) 100%)", border: "1px solid rgba(255,61,0,0.3)" }}>
+          <div>
+            <div style={{ fontSize: "0.8rem", color: "#ff3d00", fontFamily: "var(--font-mono, monospace)", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "6px" }}>
+              QUIKCODE STUDIO
+            </div>
+            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, margin: "0 0 8px 0", color: "#fff" }}>
+              Ready to build something extraordinary?
+            </h3>
+            <p style={{ margin: 0, color: "#999990", fontSize: "0.95rem" }}>
+              Return to our main agency platform to explore full pricing, packages, or request an instant quote.
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <Link
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "#fff",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                textDecoration: "none",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <span>← Back to QuikCode Home</span>
+            </Link>
+            <Link
+              href="/book"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                background: "#ff3d00",
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                textDecoration: "none",
+                boxShadow: "0 0 20px rgba(255,61,0,0.4)",
+              }}
+            >
+              <span>Book a Project ⚡</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── FOOTER ─── */}
       <footer className="fuel-footer">
-        <span className="fuel-footer-logo">QuikCode©</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <Link href="/" className="fuel-footer-logo" style={{ textDecoration: "none", color: "inherit" }}>
+            QuikCode©
+          </Link>
+          <Link href="/" style={{ fontSize: "0.8rem", color: "#ff3d00", textDecoration: "underline" }}>
+            (Return to Main Website)
+          </Link>
+        </div>
         <span className="fuel-footer-copy">© 2026 Shaurya Shashi — QuikCode Studio</span>
       </footer>
 
@@ -708,6 +739,47 @@ export default function FuelPortfolioPage() {
           mix-blend-mode: difference;
         }
 
+        .fuel-floating-back-btn {
+          position: fixed;
+          bottom: 2rem;
+          left: 2rem;
+          z-index: 9990;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.8rem 1.4rem;
+          background: #111110;
+          color: #ffffff;
+          border: 1px solid rgba(255, 61, 0, 0.4);
+          border-radius: 9999px;
+          font-family: var(--font);
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-decoration: none;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 61, 0, 0.2);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fuel-floating-back-btn:hover {
+          transform: translateY(-3px) scale(1.03);
+          background: #ff3d00;
+          box-shadow: 0 14px 40px rgba(255, 61, 0, 0.4);
+        }
+
+        .fuel-nav-badge {
+          display: inline-block;
+          font-size: 0.62rem;
+          font-weight: 700;
+          background: #ff3d00;
+          color: #fff;
+          padding: 2px 8px;
+          border-radius: 9999px;
+          margin-left: 8px;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          vertical-align: middle;
+        }
+
         .fuel-nav-logo {
           font-family: var(--display);
           font-size: 0.95rem;
@@ -716,6 +788,8 @@ export default function FuelPortfolioPage() {
           text-transform: uppercase;
           color: var(--white);
           text-decoration: none;
+          display: inline-flex;
+          align-items: center;
         }
 
         .fuel-nav-links {

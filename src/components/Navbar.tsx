@@ -124,36 +124,48 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <nav
           className="hide-mobile"
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          style={{ display: "flex", alignItems: "center", gap: "6px" }}
           aria-label="Main navigation"
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              style={{
-                padding: "8px 16px",
-                borderRadius: "var(--r-sm)",
-                color: "var(--text-muted)",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                transition: "all 0.2s ease",
-                background: "transparent",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--text-main)";
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
-                (e.currentTarget as HTMLElement).style.background = "transparent";
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/" && !link.href.startsWith("/#") && pathname.startsWith(link.href));
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "9999px",
+                  color: isActive ? "#ffffff" : "var(--text-muted)",
+                  fontSize: "0.9rem",
+                  fontWeight: isActive ? 600 : 500,
+                  transition: "all 0.25s ease",
+                  background: isActive ? "rgba(99, 102, 241, 0.15)" : "transparent",
+                  border: isActive ? "1px solid rgba(99, 102, 241, 0.35)" : "1px solid transparent",
+                  boxShadow: isActive ? "0 0 16px rgba(99, 102, 241, 0.2)" : "none",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLElement).style.color = "var(--text-main)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
+                    (e.currentTarget as HTMLElement).style.background = "transparent";
+                  }
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Desktop CTA & Profile State */}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import { Printer, ArrowLeft, Mail, Phone, Globe, ExternalLink, Sparkles, Code2, Briefcase, GraduationCap } from "lucide-react";
 
 export default function ResumePage() {
@@ -9,8 +10,14 @@ export default function ResumePage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#05070d", color: "#f0f0ff", padding: "40px 16px" }}>
-      {/* Top Action Bar (Hidden on Print) */}
+    <div style={{ minHeight: "100vh", background: "#05070d", color: "#f0f0ff" }}>
+      {/* Official QuikCode Navbar (Hidden on Print) */}
+      <div className="no-print">
+        <Navbar />
+      </div>
+
+      <div style={{ padding: "40px 16px" }}>
+        {/* Top Action Bar (Hidden on Print) */}
       <div
         className="no-print"
         style={{
@@ -23,24 +30,66 @@ export default function ResumePage() {
           gap: "12px",
         }}
       >
-        <Link
-          href="/portfolio"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            color: "var(--text-muted)",
-            textDecoration: "none",
-            fontSize: "0.9rem",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.1)",
-          }}
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Portfolio</span>
-        </Link>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+          <Link
+            href="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              fontWeight: 700,
+              padding: "9px 18px",
+              borderRadius: "8px",
+              background: "linear-gradient(135deg, rgba(99,102,241,0.25) 0%, rgba(236,72,153,0.2) 100%)",
+              border: "1px solid rgba(99,102,241,0.45)",
+              boxShadow: "0 0 15px rgba(99,102,241,0.25)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <ArrowLeft size={16} color="#a5b4fc" />
+            <span>← Back to QuikCode</span>
+          </Link>
+
+          <Link
+            href="/portfolio"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "var(--text-muted)",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              padding: "9px 16px",
+              borderRadius: "8px",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <span>View Portfolio</span>
+          </Link>
+
+          <Link
+            href="/book"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "#a5b4fc",
+              textDecoration: "none",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              padding: "9px 14px",
+              borderRadius: "8px",
+              background: "rgba(99,102,241,0.1)",
+              border: "1px solid rgba(99,102,241,0.2)",
+            }}
+          >
+            <span>⚡ Book Project</span>
+          </Link>
+        </div>
 
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <a
@@ -443,6 +492,66 @@ export default function ResumePage() {
         </section>
       </div>
 
+      {/* Bottom Return Banner (Hidden on Print) */}
+      <div
+        className="no-print"
+        style={{
+          maxWidth: "850px",
+          margin: "32px auto 0",
+          padding: "24px",
+          borderRadius: "16px",
+          background: "linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(236,72,153,0.08) 100%)",
+          border: "1px solid rgba(99,102,241,0.25)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
+      >
+        <div>
+          <div style={{ fontWeight: 800, fontSize: "1.1rem", color: "#fff", marginBottom: "4px" }}>
+            Interested in working together with QuikCode?
+          </div>
+          <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
+            Explore full service packages, verified client testimonials, and book custom development.
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <Link
+            href="/"
+            style={{
+              padding: "10px 20px",
+              borderRadius: "8px",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: "0.88rem",
+            }}
+          >
+            ← QuikCode Home
+          </Link>
+          <Link
+            href="/book"
+            style={{
+              padding: "10px 22px",
+              borderRadius: "8px",
+              background: "#6366f1",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: "0.88rem",
+              boxShadow: "0 0 20px rgba(99,102,241,0.35)",
+            }}
+          >
+            Book Project →
+          </Link>
+        </div>
+      </div>
+
       {/* Print Styles */}
       <style jsx global>{`
         @media print {
@@ -475,6 +584,7 @@ export default function ResumePage() {
           }
         }
       `}</style>
+      </div>
     </div>
   );
 }
