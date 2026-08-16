@@ -20,58 +20,9 @@ export function LiquidEffectAnimation() {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    /* ── Build a QuikCode gradient texture via an off-screen canvas ── */
-    const tex = document.createElement("canvas");
-    tex.width  = 1024;
-    tex.height = 1024;
-    const tc = tex.getContext("2d")!;
-
-    // Base: dark navy
-    tc.fillStyle = "#05070d";
-    tc.fillRect(0, 0, 1024, 1024);
-
-    // Main diagonal gradient — indigo → pink → cyan
-    const diag = tc.createLinearGradient(0, 0, 1024, 1024);
-    diag.addColorStop(0.00, "#1e1b4b"); // deep indigo
-    diag.addColorStop(0.20, "#4338ca"); // indigo
-    diag.addColorStop(0.40, "#6366f1"); // brand indigo
-    diag.addColorStop(0.60, "#ec4899"); // brand pink
-    diag.addColorStop(0.80, "#06b6d4"); // brand cyan
-    diag.addColorStop(1.00, "#a855f7"); // violet
-    tc.fillStyle = diag;
-    tc.fillRect(0, 0, 1024, 1024);
-
-    // Radial glow — indigo top-left
-    const r1 = tc.createRadialGradient(150, 150, 0, 150, 150, 500);
-    r1.addColorStop(0, "rgba(99,102,241,0.85)");
-    r1.addColorStop(1, "transparent");
-    tc.fillStyle = r1;
-    tc.fillRect(0, 0, 1024, 1024);
-
-    // Radial glow — pink centre-right
-    const r2 = tc.createRadialGradient(820, 400, 0, 820, 400, 450);
-    r2.addColorStop(0, "rgba(236,72,153,0.75)");
-    r2.addColorStop(1, "transparent");
-    tc.fillStyle = r2;
-    tc.fillRect(0, 0, 1024, 1024);
-
-    // Radial glow — cyan bottom
-    const r3 = tc.createRadialGradient(400, 900, 0, 400, 900, 420);
-    r3.addColorStop(0, "rgba(6,182,212,0.70)");
-    r3.addColorStop(1, "transparent");
-    tc.fillStyle = r3;
-    tc.fillRect(0, 0, 1024, 1024);
-
-    // Violet accent — top-right
-    const r4 = tc.createRadialGradient(950, 80, 0, 950, 80, 380);
-    r4.addColorStop(0, "rgba(168,85,247,0.65)");
-    r4.addColorStop(1, "transparent");
-    tc.fillStyle = r4;
-    tc.fillRect(0, 0, 1024, 1024);
-
-    const textureUrl = tex.toDataURL("image/png");
-
     /* ── Inject the Three.js liquid engine ── */
+    const imageUrl = `${window.location.origin}/og-image.png`;
+
     const script = document.createElement("script");
     script.type  = "module";
     script.id    = "qc-liquid-script";
@@ -82,10 +33,10 @@ export function LiquidEffectAnimation() {
       if (canvas && !window.__qcLiquidApp) {
         const app = LiquidBackground(canvas);
 
-        // Feed the QuikCode gradient texture
-        app.loadImage(${JSON.stringify(textureUrl)});
+        // Use og-image.png as the liquid surface texture
+        app.loadImage(${JSON.stringify(imageUrl)});
 
-        // Tune material for a premium metallic liquid look
+        // Premium metallic liquid look
         app.liquidPlane.material.metalness  = 0.82;
         app.liquidPlane.material.roughness  = 0.18;
         app.liquidPlane.uniforms.displacementScale.value = 4.5;
@@ -128,7 +79,7 @@ export function LiquidEffectAnimation() {
         />
       </div>
 
-      {/* Vignette scrim — keeps text legible */}
+      {/* Vignette scrim — toned down so text always wins */}
       <div
         aria-hidden="true"
         style={{
@@ -136,7 +87,7 @@ export function LiquidEffectAnimation() {
           inset: 0,
           zIndex: -2,
           background:
-            "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(5,7,13,0.45) 0%, rgba(5,7,13,0.72) 80%, rgba(5,7,13,0.88) 100%)",
+            "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(5,7,13,0.62) 0%, rgba(5,7,13,0.82) 70%, rgba(5,7,13,0.94) 100%)",
           pointerEvents: "none",
         }}
       />
