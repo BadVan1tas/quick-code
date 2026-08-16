@@ -105,7 +105,7 @@ export default function Portfolio() {
             <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#fff" }}>Shaurya Shashi</div>
             <div style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>Lead Dev &amp; Founder</div>
           </div>
-          <span style={{ fontSize: "0.7rem", padding: "4px 8px", borderRadius: "6px", background: "rgba(16,185,129,0.15)", color: "#34d399", fontWeight: 700, marginLeft: "4px" }}>
+          <span style={{ fontSize: "0.75rem", padding: "4px 8px", borderRadius: "6px", background: "rgba(16,185,129,0.15)", color: "#34d399", fontWeight: 700, marginLeft: "4px" }}>
             Available 🟢
           </span>
         </div>

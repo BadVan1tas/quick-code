@@ -192,8 +192,8 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label={s.label}
                 style={{
-                  width: "36px",
-                  height: "36px",
+                  width: "48px",
+                  height: "48px",
                   borderRadius: "var(--r-sm)",
                   background: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -223,9 +223,9 @@ export default function Footer() {
         {/* Link columns */}
         {Object.entries(footerLinks).map(([title, links]) => (
           <div key={title}>
-            <h4 style={{ fontSize: "0.8rem", fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--text-main)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "0.8rem", fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--text-main)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "20px" }}>
               {title}
-            </h4>
+            </h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
               {links.map((link) => (
                 <li key={link.label}>

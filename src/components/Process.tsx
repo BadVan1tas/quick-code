@@ -237,7 +237,7 @@ function StepCard({ step, hovered }: { step: (typeof steps)[0]; hovered: boolean
       >
         <span
           style={{
-            fontSize: "0.72rem",
+            fontSize: "0.75rem",
             fontFamily: "var(--font-mono)",
             fontWeight: 600,
             color: step.color,
@@ -248,7 +248,7 @@ function StepCard({ step, hovered }: { step: (typeof steps)[0]; hovered: boolean
         </span>
         <span
           style={{
-            fontSize: "0.7rem",
+            fontSize: "0.75rem",
             fontFamily: "var(--font-mono)",
             padding: "2px 10px",
             background: step.color + "15",

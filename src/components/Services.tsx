@@ -163,7 +163,7 @@ export default function Services() {
                 {s.badge && (
                   <span
                     style={{
-                      fontSize: "0.72rem",
+                      fontSize: "0.75rem",
                       fontWeight: 700,
                       fontFamily: "var(--font-mono)",
                       padding: "4px 12px",

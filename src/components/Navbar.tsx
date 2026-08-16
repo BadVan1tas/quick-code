@@ -75,10 +75,11 @@ export default function Navbar() {
           maxWidth: "1200px",
           margin: "0 auto",
           padding: "0 24px",
-          height: "68px",
+          height: scrolled ? "56px" : "68px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          transition: "height 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
         {/* Logo */}

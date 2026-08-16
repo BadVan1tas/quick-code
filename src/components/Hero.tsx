@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FlipWords } from "./ui/FlipWords";
 import { CodeTerminal } from "./ui/CodeTerminal";
 import { ConfettiButton } from "./ui/ConfettiButton";
@@ -161,11 +162,12 @@ export default function Hero() {
             transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s",
           }}
         >
-          <Link href="/book" style={{ textDecoration: "none" }}>
-            <ConfettiButton style={{ fontSize: "0.95rem", padding: "14px 28px", width: "100%" }}>
-              Get Instant Quote & Book <ArrowRight size={18} />
-            </ConfettiButton>
-          </Link>
+          <ConfettiButton
+            href="/book"
+            style={{ fontSize: "0.95rem", padding: "14px 28px", width: "100%" }}
+          >
+            Get Instant Quote &amp; Book <ArrowRight size={18} />
+          </ConfettiButton>
           <a href="#portfolio" className="btn-secondary" style={{ fontSize: "0.95rem", padding: "14px 28px" }}>
             Explore Our Work
           </a>

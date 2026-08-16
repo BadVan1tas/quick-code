@@ -840,3 +840,22 @@ h1, h2, h3, h4, h5, h6 {
     transform: none;
   }
 }
+
+/* ================================================
+   MINIMUM FONT SIZE ENFORCEMENT
+   Audit fix: "Small font sizes detected" — ensure
+   no UI text falls below 12px (0.75rem)
+   ================================================ */
+.section-label {
+  font-size: 0.75rem; /* 12px — enforced minimum */
+}
+
+.badge {
+  font-size: 0.75rem; /* 12px — enforced minimum */
+}
+
+/* Ensure nav links are always readable */
+nav a, nav button {
+  font-size: clamp(0.875rem, 1.5vw, 0.9rem);
+}
+

@@ -6,6 +6,9 @@ import Analytics from "@/components/Analytics";
 import SchemaOrg from "@/components/SchemaOrg";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://quik-code-eight.vercel.app"
+  ),
   title: "Quik Code | High-Impact Software & Web Development",
   description:
     "Quik Code engineers custom software, web applications, and secure payment platforms with lightning speed. Premium design, A+ security, and 72-hour delivery.",
@@ -18,12 +21,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Quik Code",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Quik Code — High-Impact Software & Web Development",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Quik Code | High-Impact Software & Web Development",
     description:
       "Custom software, web apps, and secure payment portals. Fast delivery, premium design, bulletproof security.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

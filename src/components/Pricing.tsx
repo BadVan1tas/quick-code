@@ -170,7 +170,7 @@ export default function Pricing() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                 <span
                   style={{
-                    fontSize: "0.72rem",
+                    fontSize: "0.75rem",
                     fontWeight: 700,
                     fontFamily: "var(--font-mono)",
                     padding: "4px 10px",
@@ -185,7 +185,7 @@ export default function Pricing() {
                   {plan.badge}
                 </span>
                 {plan.isOdd && (
-                  <span style={{ fontSize: "0.7rem", color: "#6ee7b7", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
+                  <span style={{ fontSize: "0.75rem", color: "#6ee7b7", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
                     ★ Highlighted
                   </span>
                 )}
