@@ -4,6 +4,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import Analytics from "@/components/Analytics";
 import SchemaOrg from "@/components/SchemaOrg";
+import { QuikCodeBackground } from "@/components/ui/QuikCodeBackground";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -62,7 +63,7 @@ export default function RootLayout({
           <CurrencyProvider>
             <Analytics />
             <SchemaOrg />
-            <div className="ambient-bg" aria-hidden="true" />
+            <QuikCodeBackground />
             <div className="grid-overlay" aria-hidden="true" />
             {children}
           </CurrencyProvider>
